@@ -1,0 +1,338 @@
+{% load widget_tweaks %}
+<input type="text" class="hidden ve-sh-hidden-field" name="selected-room-id" value="{{room_id}}">
+<div class="form-group ">
+  <label class="control-label col-md-3 col-sm-3 col-xs-12"> {{ selected_room_form.room_name.label }}</label>
+  <div class="col-md-6 col-sm-6 col-xs-12">
+    {{ selected_room_form.room_name|add_error_class:"ve-sh-error-block" }} {{ selected_room_form.room_name.help_text }}
+  </div>
+  {% if selected_room_form.errors %}
+    {% for error in selected_room_form.room_name.errors %}
+      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+        {{ error|escape }}
+      </div>
+    {% endfor %}
+  {% endif %}
+</div>
+<div class="form-group ">
+  <label class="control-label col-md-3 col-sm-3 col-xs-12"> {{ selected_room_form.start_date.label }}</label>
+  <div class="col-md-6 col-sm-6 col-xs-12">
+    {{ selected_room_form.start_date|add_error_class:"ve-sh-error-block" }} {{ selected_room_form.start_date.help_text }}
+  </div>
+  {% if selected_room_form.errors %}
+    {% for error in selected_room_form.start_date.errors %}
+      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+        {{ error|escape }}
+      </div>
+    {% endfor %}
+  {% endif %}
+</div>
+<div class="form-group ">
+  <label class="control-label col-md-3 col-sm-3 col-xs-12"> {{ selected_room_form.completion_date.label }}</label>
+  <div class="col-md-6 col-sm-6 col-xs-12">
+    {{ selected_room_form.completion_date|add_error_class:"ve-sh-error-block" }} {{ selected_room_form.completion_date.help_text }}
+  </div>
+  {% if selected_room_form.errors %}
+    {% for error in selected_room_form.completion_date.errors %}
+      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+        {{ error|escape }}
+      </div>
+    {% endfor %}
+  {% endif %}
+</div>
+<div class="form-group ">
+  <label class="control-label col-md-3 col-sm-3 col-xs-12"> {{ selected_room_form.duration.label }} <small>(Days)</small> </label>
+  <div class="col-md-6 col-sm-6 col-xs-12">
+    {{ selected_room_form.duration|add_error_class:"ve-sh-error-block" }} {{ selected_room_form.duration.help_text }}
+  </div>
+  {% if selected_room_form.errors %}
+    {% for error in selected_room_form.duration.errors %}
+      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+        {{ error|escape }}
+      </div>
+    {% endfor %}
+  {% endif %}
+</div>
+<div class="form-group ">
+  <label class="control-label col-md-3 col-sm-3 col-xs-12"> {{ selected_room_form.room_budget.label }} <small>($)</small> </label>
+  <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js" title="Enter Value">
+    {{ selected_room_form.room_budget|add_error_class:"ve-sh-error-block" }} {{ selected_room_form.room_budget.help_text }}
+  </div>
+  {% if selected_room_form.errors %}
+    {% for error in selected_room_form.room_budget.errors %}
+      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+        {{ error|escape }}
+      </div>
+    {% endfor %}
+  {% endif %}
+</div>
+<div class="form-group ">
+  <label class="control-label col-md-3 col-sm-3 col-xs-12"> {{ selected_room_form.status.label }} </label>
+  <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js" title="Enter Value">
+    {{ selected_room_form.status|add_error_class:"ve-sh-error-block" }} {{ selected_room_form.status.help_text }}
+  </div>
+  {% if selected_room_form.errors %}
+    {% for error in selected_room_form.status.errors %}
+      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+        {{ error|escape }}
+      </div>
+    {% endfor %}
+  {% endif %}
+</div>
+{% include 'deals/renovation/renovation_room_navbar.html' %}
+<br>
+<div class="x_title">
+  <h2>Room Material</h2>
+  <div class="clearfix"></div>
+</div>
+<div class="form-group ">
+  <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+      <div class="col-md-6 col-sm-6 col-xs-12">
+        <strong>Description</strong>
+      </div>
+      <div class="col-md-2 col-sm-2 col-xs-12">
+        <strong>Quantity</strong>
+      </div>
+      <div class="col-md-2 col-sm-2 col-xs-12">
+        <strong>Price ($)</strong>
+      </div>
+      <div class="col-md-2 col-sm-2 col-xs-12">
+        <strong>Total ($)</strong>
+      </div>
+    </div>
+  </div>
+</div><hr class="ve-sh-margin-null">
+<div class="form-group">
+  <div class="col-md-12 col-sm-12 col-xs-12 materials-div">
+    {{ materials_formset.management_form }}
+    {% for form in materials_formset %}
+
+    <div class="ve-sh-materials-form">
+    <div class="hidden">{{ form.id }}</div>
+      <div class="task_form_div col-sm-12 col-xs-12">
+        <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-pad-bottom">
+          {{ form.description|default_if_none:""|add_error_class:"ve-sh-error-block" }}
+          {% if form.errors %}
+            {% for error in form.description.errors %}
+              <div class="ve-sh-error-text">
+                {{ error|escape }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+        <div class="col-md-2 col-sm-2 col-xs-12 ve-sh-align-center ve-sh-pad-bottom ve-sh-total-calc">
+          {{ form.quantity|default_if_none:""|add_error_class:"ve-sh-error-block" }}
+          {% if form.errors %}
+            {% for error in form.quantity.errors %}
+              <div class="ve-sh-error-text">
+                {{ error|escape }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+        <div class="col-md-2 col-sm-2 col-xs-12 ve-sh-pad-bottom ve-sh-number-js ve-sh-total-calc">
+          {{ form.price|default_if_none:""|add_error_class:"ve-sh-error-block" }}
+          {% if form.errors %}
+            {% for error in form.price.errors %}
+              <div class="ve-sh-error-text">
+                {{ error|escape }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+        <div class="col-md-2 col-sm-2 col-xs-12 ve-sh-pad-bottom ve-sh-total-calc">
+          {{ form.total|default_if_none:""|add_error_class:"ve-sh-error-block" }}
+          {% if form.errors %}
+            {% for error in form.total.errors %}
+              <div class="ve-sh-error-text">
+                {{ error|escape }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    {% endfor %}
+    <div class="form-group">
+      <div class='col-xs-12'>
+        <div class="col-md-2 col-sm-2 col-xs-12 col-sm-offset-10 ve-sh-number-js materials-total">
+            <input type="text" name="" class="form-control" placeholder="Materials Total" />
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-xs-12">
+        <div class="col-xs-12">
+          <a class="btn btn-primary add-task-button ve-sh-media-bottom-margin">Add Material</a>
+          <a class="btn btn-primary remove-task-button ve-sh-material-padding">Remove Material</a>
+        </div>
+      </div>
+    </div>
+    {% if prime_cost_items_formset %}
+    {% else %}
+      <div class="col-sm-12 col-xs-12 ve-sh-margin">
+        <div class="form-group">
+          <div class="col-md-6 col-sm-6 col-xs-12">
+            <input type="submit" value="Submit" class="btn btn-success" />
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% if prime_cost_items_formset %}
+  <br>
+  <div class="x_title">
+    <h2>Prime Cost Items</h2>
+    <div class="clearfix"></div>
+  </div>
+  <div class="form-group ">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="col-md-2 col-sm-2 col-xs-12">
+          <strong>Name</strong>
+        </div>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+          <strong>Description</strong>
+        </div>
+        <div class="col-md-1 col-sm-1 col-xs-12">
+          <strong>Item #</strong>
+          <strong>Item #</strong>
+        </div>
+        <div class="col-md-1 col-sm-1 col-xs-12">
+          <strong>Quantity</strong>
+        </div>
+        <div class="col-md-1 col-sm-1 col-xs-12">
+          <strong>Price ($)</strong>
+        </div>
+        <div class="col-md-1 col-sm-1 col-xs-12">
+          <strong>Total ($)</strong>
+        </div>
+      </div>
+    </div>
+  </div><hr class="ve-sh-margin-null">
+  <div class="form-group">
+    <div class="col-md-12 col-sm-12 col-xs-12 prime-cost-div">
+      {{ prime_cost_items_formset.management_form }}
+      {% for form in prime_cost_items_formset %}
+
+        <div class="hidden">{{ form.id }}</div>
+        <div class="task_form_div col-sm-12 col-xs-12">
+          <div class="col-md-2 col-sm-2 col-xs-12 ve-sh-pad-bottom">
+            {{ form.name|default_if_none:""|add_error_class:"ve-sh-error-block" }}
+            {% if form.errors %}
+              {% for error in form.name.errors %}
+                <div class="ve-sh-error-text">
+                  {{ error|escape }}
+                </div>
+              {% endfor %}
+            {% endif %}
+          </div>
+          <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-pad-bottom">
+            {{ form.description|default_if_none:""|add_error_class:"ve-sh-error-block" }}
+            {% if form.errors %}
+              {% for error in form.description.errors %}
+                <div class="ve-sh-error-text">
+                  {{ error|escape }}
+                </div>
+              {% endfor %}
+            {% endif %}
+          </div>
+          <div class="col-md-1 col-sm-1 col-xs-12 ve-sh-pad-bottom">
+            {{ form.item_number|default_if_none:""|add_error_class:"ve-sh-error-block" }}
+            {% if form.errors %}
+              {% for error in form.item_number.errors %}
+                <div class="ve-sh-error-text">
+                  {{ error|escape }}
+                </div>
+              {% endfor %}
+            {% endif %}
+          </div>
+          <div class="col-md-1 col-sm-1 col-xs-12 ve-sh-align-center ve-sh-pad-bottom ve-sh-total-calc">
+            {{ form.quantity|default_if_none:""|add_error_class:"ve-sh-error-block" }}
+            {% if form.errors %}
+              {% for error in form.quantity.errors %}
+                <div class="ve-sh-error-text">
+                  {{ error|escape }}
+                </div>
+              {% endfor %}
+            {% endif %}
+          </div>
+          <div class="col-md-1 col-sm-1 col-xs-12 ve-sh-pad-bottom ve-sh-number-js ve-sh-total-calc">
+            {{ form.price|default_if_none:""|add_error_class:"ve-sh-error-block" }}
+            {% if form.errors %}
+              {% for error in form.price.errors %}
+                <div class="ve-sh-error-text">
+                  {{ error|escape }}
+                </div>
+              {% endfor %}
+            {% endif %}
+          </div>
+          <div class="col-md-1 col-sm-1 col-xs-12 ve-sh-pad-bottom ve-sh-total-calc">
+            {{ form.total|default_if_none:""|add_error_class:"ve-sh-error-block" }}
+            {% if form.errors %}
+              {% for error in form.total.errors %}
+                <div class="ve-sh-error-text">
+                  {{ error|escape }}
+                </div>
+              {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+        <hr class='ve-sh-full-width'>
+      {% endfor %}
+      <div class="col-sm-12 col-xs-12 ve-sh-margin">
+        <div class="col-md-1 col-sm-1 col-xs-12 pull-right prime-cost-total">
+          <input type="text" class="form-control prime-cost-total" placeholder="Prime Total" />
+        </div>
+      </div>
+      <div class="col-sm-12 col-xs-12 ve-sh-margin">
+        <div class="form-group">
+          <div class="col-md-6 col-sm-6 col-xs-12">
+            <input type="submit" value="Submit" class="btn btn-success" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+{% block extra_javascripts %}
+
+  <script type="text/javascript">
+    $("#renovation-room-material").addClass("active");
+  </script>
+
+  <!-- To separate the numbers in a number fields with comma whenever user enters digits -->
+  <script src="/static/custom/custom_js.js"></script>
+
+  <script type="text/javascript">
+    // On page load
+    var total = 0;
+    $(".materials-div").children().find("input[placeholder='Total']").each(function(){
+      var value = parseInt($(this).val().replace(/(\,)/g, ''));
+      if ($.isNumeric(value)) {
+        total = total + value;
+      }
+    });
+    total = total.toString();
+    $(".materials-total > input").val(total.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+
+    total = 0;
+    $(".prime-cost-div").children().find("input[placeholder='Total']").each(function(){
+      var value = parseInt($(this).val().replace(/(\,)/g, ''));
+      if ($.isNumeric(value)) {
+        total = total + value;
+      }
+    });
+    total = total.toString();
+    $(".prime-cost-total > input").val(total.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+
+    $('#id_start_date, #id_completion_date').datepicker({
+      dateFormat: "dd-mm-yy"
+    });
+
+  </script>
+
+{% endblock extra_javascripts %}

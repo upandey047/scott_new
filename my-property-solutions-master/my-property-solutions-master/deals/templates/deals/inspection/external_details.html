@@ -1,0 +1,729 @@
+ {% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Inspection Details {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <style type="text/css">
+    form > .x_panel {
+      border-top: 0px !important;
+    }
+  </style>
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="x_content">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              {% include 'deals/deals_navbar.html' with deal_id=deal_id lead_id=lead_id %}
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <div class="container">
+
+                {% include 'deals/inspection/inspection_details_navbar.html' %}
+
+                <div class="tab-content">
+                  <div id="external-details-div" class="tab-pane fade in active">
+                    {% if messages %}
+                      <ul class="messages">
+                          {% for message in messages %}
+                            {% ifequal message.tags "submitted success" %}
+                              <div class="alert alert-success col-xs-12">
+                                <strong class="{{ message.tags }}">{{ message }}</strong>
+                              </div>
+                            {% endifequal %}
+                          {% endfor %}
+                      </ul>
+                    {% endif %}
+                    <form method="POST" action="" class="form-horizontal form-label-left">
+                      {% csrf_token %}
+                      <div class="x_panel">
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <div class="col-sm-offset-3 col-md-6 col-sm-6 col-xs-12">
+                            <h2 class="form-title">Construction</h2>
+                          </div>
+                          <div class="x_content">
+                            <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Building Area</p>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ construction_form.building_area.label }} <small>(m<sup>2</sup>)</small>
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ construction_form.building_area|add_error_class:"ve-sh-error-block" }} {{ construction_form.building_area.help_text }}
+                              </div>
+                              {% if construction_form.errors %}
+                                {% for error in construction_form.building_area.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                            <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Levels</p>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ construction_form.levels.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ construction_form.levels|add_error_class:"ve-sh-error-block" }} {{ construction_form.levels.help_text }}
+                              </div>
+                              {% if construction_form.errors %}
+                                {% for error in construction_form.levels.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                            <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Foundation</p>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ construction_form.foundation_description.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ construction_form.foundation_description|add_error_class:"ve-sh-error-block" }} {{ construction_form.foundation_description.help_text }}
+                              </div>
+                              {% if construction_form.errors %}
+                                {% for error in construction_form.foundation_description.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ construction_form.foundation_condition.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ construction_form.foundation_condition|add_error_class:"ve-sh-error-block" }} {{ construction_form.foundation_condition.help_text }}
+                              </div>
+                              {% if construction_form.errors %}
+                                {% for error in construction_form.foundation_condition.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ construction_form.foundation_comments.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ construction_form.foundation_comments|add_error_class:"ve-sh-error-block" }} {{ construction_form.foundation_comments.help_text }}
+                              </div>
+                              {% if construction_form.errors %}
+                                {% for error in construction_form.foundation_comments.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                            <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>External Walls</p>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ construction_form.external_walls.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ construction_form.external_walls|add_error_class:"ve-sh-error-block" }} {{ construction_form.external_walls.help_text }}
+                              </div>
+                              {% if construction_form.errors %}
+                                {% for error in construction_form.external_walls.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ construction_form.external_walls_condition.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ construction_form.external_walls_condition|add_error_class:"ve-sh-error-block" }} {{ construction_form.external_walls_condition.help_text }}
+                              </div>
+                              {% if construction_form.errors %}
+                                {% for error in construction_form.external_walls_condition.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ construction_form.external_walls_comments.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ construction_form.external_walls_comments|add_error_class:"ve-sh-error-block" }} {{ construction_form.external_walls_comments.help_text }}
+                              </div>
+                              {% if construction_form.errors %}
+                                {% for error in construction_form.external_walls_comments.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                            <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Roof</p>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ construction_form.roof_description.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ construction_form.roof_description|add_error_class:"ve-sh-error-block" }} {{ construction_form.roof_description.help_text }}
+                              </div>
+                              {% if construction_form.errors %}
+                                {% for error in construction_form.roof_description.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ construction_form.roof_condition.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ construction_form.roof_condition|add_error_class:"ve-sh-error-block" }} {{ construction_form.roof_condition.help_text }}
+                              </div>
+                              {% if construction_form.errors %}
+                                {% for error in construction_form.roof_condition.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ construction_form.roof_comments.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ construction_form.roof_comments|add_error_class:"ve-sh-error-block" }} {{ construction_form.roof_comments.help_text }}
+                              </div>
+                              {% if construction_form.errors %}
+                                {% for error in construction_form.roof_comments.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12" style="float: right;">
+                          <div class="col-sm-offset-3 col-md-6 col-sm-6 col-xs-12">
+                            <h2 class="form-title">Features</h2>
+                          </div>
+                          <div class="x_content">
+                            <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Pool</p>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ features_form.pool_present.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ features_form.pool_present|add_error_class:"ve-sh-error-block" }} {{ features_form.pool_present.help_text }}
+                              </div>
+                              {% if features_form.errors %}
+                                {% for error in features_form.pool_present.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ features_form.pool_material.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ features_form.pool_material|add_error_class:"ve-sh-error-block" }} {{ features_form.pool_material.help_text }}
+                              </div>
+                              {% if features_form.errors %}
+                                {% for error in features_form.pool_material.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ features_form.pool_condition.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ features_form.pool_condition|add_error_class:"ve-sh-error-block" }} {{ features_form.pool_condition.help_text }}
+                              </div>
+                              {% if features_form.errors %}
+                                {% for error in features_form.pool_condition.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ features_form.registerd.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ features_form.registerd|add_error_class:"ve-sh-error-block" }} {{ features_form.registerd.help_text }}
+                              </div>
+                              {% if features_form.errors %}
+                                {% for error in features_form.registerd.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ features_form.registeration_number.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ features_form.registeration_number|add_error_class:"ve-sh-error-block" }} {{ features_form.registeration_number.help_text }}
+                              </div>
+                              {% if features_form.errors %}
+                                {% for error in features_form.registeration_number.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ features_form.pool_comments.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ features_form.pool_comments|add_error_class:"ve-sh-error-block" }} {{ features_form.pool_comments.help_text }}
+                              </div>
+                              {% if features_form.errors %}
+                                {% for error in features_form.pool_comments.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                            <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Fencing</p>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ features_form.fencing_material.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ features_form.fencing_material|add_error_class:"ve-sh-error-block" }} {{ features_form.fencing_material.help_text }}
+                              </div>
+                              {% if features_form.errors %}
+                                {% for error in features_form.fencing_material.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ features_form.fencing_condition.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ features_form.fencing_condition|add_error_class:"ve-sh-error-block" }} {{ features_form.fencing_condition.help_text }}
+                              </div>
+                              {% if features_form.errors %}
+                                {% for error in features_form.fencing_condition.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ features_form.fencing_comments.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ features_form.fencing_comments|add_error_class:"ve-sh-error-block" }} {{ features_form.fencing_comments.help_text }}
+                              </div>
+                              {% if features_form.errors %}
+                                {% for error in features_form.fencing_comments.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                            <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Deck</p>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ features_form.deck_present.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ features_form.deck_present|add_error_class:"ve-sh-error-block" }} {{ features_form.deck_present.help_text }}
+                              </div>
+                              {% if features_form.errors %}
+                                {% for error in features_form.deck_present.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ features_form.deck_material.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ features_form.deck_material|add_error_class:"ve-sh-error-block" }} {{ features_form.deck_material.help_text }}
+                              </div>
+                              {% if features_form.errors %}
+                                {% for error in features_form.deck_material.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ features_form.deck_condition.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ features_form.deck_condition|add_error_class:"ve-sh-error-block" }} {{ features_form.deck_condition.help_text }}
+                              </div>
+                              {% if features_form.errors %}
+                                {% for error in features_form.deck_condition.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ features_form.deck_length.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ features_form.deck_length|add_error_class:"ve-sh-error-block" }} {{ features_form.deck_length.help_text }}
+                              </div>
+                              {% if features_form.errors %}
+                                {% for error in features_form.deck_length.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ features_form.deck_width.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ features_form.deck_width|add_error_class:"ve-sh-error-block" }} {{ features_form.deck_width.help_text }}
+                              </div>
+                              {% if features_form.errors %}
+                                {% for error in features_form.deck_width.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ features_form.deck_height.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ features_form.deck_height|add_error_class:"ve-sh-error-block" }} {{ features_form.deck_height.help_text }}
+                              </div>
+                              {% if features_form.errors %}
+                                {% for error in features_form.deck_height.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ features_form.deck_comments.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ features_form.deck_comments|add_error_class:"ve-sh-error-block" }} {{ features_form.deck_comments.help_text }}
+                              </div>
+                              {% if features_form.errors %}
+                                {% for error in features_form.deck_comments.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                            <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Walls</p>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ features_form.retaining_walls_material.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ features_form.retaining_walls_material|add_error_class:"ve-sh-error-block" }} {{ features_form.retaining_walls_material.help_text }}
+                              </div>
+                              {% if features_form.errors %}
+                                {% for error in features_form.retaining_walls_material.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ features_form.retaining_walls_condition.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ features_form.retaining_walls_condition|add_error_class:"ve-sh-error-block" }} {{ features_form.retaining_walls_condition.help_text }}
+                              </div>
+                              {% if features_form.errors %}
+                                {% for error in features_form.retaining_walls_condition.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ features_form.retaining_walls_comments.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ features_form.retaining_walls_comments|add_error_class:"ve-sh-error-block" }} {{ features_form.retaining_walls_comments.help_text }}
+                              </div>
+                              {% if features_form.errors %}
+                                {% for error in features_form.retaining_walls_comments.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <div class="col-sm-offset-3 col-md-6 col-sm-6 col-xs-12">
+                            <h2 class="form-title">Parking</h2>
+                          </div>
+                          <div class="x_content">
+                            {% for field in parking_form %}
+                              <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ field.label }}
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                  {{ field|add_error_class:"ve-sh-error-block" }} {{ field.help_text }}
+                                </div>
+                                {% if parking_form.errors %}
+                                  {% for error in field.errors %}
+                                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                      {{ error|escape }}
+                                    </div>
+                                  {% endfor %}
+                                {% endif %}
+                              </div>
+                            {% endfor %}
+                          </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <div class="col-sm-offset-3 col-md-6 col-sm-6 col-xs-12">
+                            <h2 class="form-title">Street Appeal</h2>
+                          </div>
+                          <div class="x_content">
+                            {% for field in street_appeal_form %}
+                              <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ field.label }}
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                  {{ field|add_error_class:"ve-sh-error-block" }} {{ field.help_text }}
+                                </div>
+                                {% if street_appeal_form.errors %}
+                                  {% for error in field.errors %}
+                                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                      {{ error|escape }}
+                                    </div>
+                                  {% endfor %}
+                                {% endif %}
+                              </div>
+                            {% endfor %}
+                          </div>
+                        </div>
+                        <div class="col-xs-12">
+                          <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-left-pad-null">
+                            <div class="col-xs-12 col-sm-offset-3">
+                              <input type="submit" value="Submit" class="btn btn-success" />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+  <script type="text/javascript">
+    $('#property-details, #deal-card, #external').addClass('active');
+
+    // On page load
+    var id = '#id_features_form-pool_present';
+    var count = 0;
+    if ($(id).val() == 'Yes'){
+      $(id).parent().parent().nextAll().each(function(){
+        if (count == 4){
+          return false;
+        }
+        $(this).children().eq(1).children().eq(0).attr('disabled', false);
+        count += 1;
+      });
+      if ($('#id_features_form-registerd').val() == 'NO'){
+          $('#id_features_form-registeration_number').val('').attr('disabled', true);
+      }
+      else{
+        $('#id_features_form-registeration_number').attr('disabled', false);
+      }
+    }
+    else{
+      $(id).parent().parent().nextAll().each(function(){
+        if (count == 4){
+          return false;
+        }
+        $(this).children().eq(1).children().eq(0).attr('disabled', true);
+        count += 1;
+      });
+      $('#id_features_form-registeration_number').val('').attr('disabled', true);
+    };
+
+    if ($('#id_features_form-retaining_walls_material').val() == 'None') {
+      $('#id_features_form-retaining_walls_material').parent().parent().next().children().eq(1).children().eq(0).attr('disabled', true);
+    } else {
+      $('#id_features_form-retaining_walls_material').parent().parent().next().children().eq(1).children().eq(0).attr('disabled', false);
+    };
+
+    if ($('#id_parking_form-carport').val() == 'None') {
+        $('#id_parking_form-carport').parent().parent().next().children().eq(1).children().eq(0).attr('disabled', true);
+    } else {
+        $('#id_parking_form-carport').parent().parent().next().children().eq(1).children().eq(0).attr('disabled', false);
+    };
+
+    if ($('#id_parking_form-garage').val() == 'None') {
+      $('#id_parking_form-garage').parent().parent().next().children().eq(1).children().eq(0).attr('disabled', true);
+    } else {
+      $('#id_parking_form-garage').parent().parent().next().children().eq(1).children().eq(0).attr('disabled', false);
+    };
+
+    var count = 0;
+    if ($('#id_features_form-deck_present').val() == 'Yes') {
+      $('#id_features_form-deck_present').parent().parent().nextAll().each(function(){
+        if (count == 5){
+          return false;
+        }
+        $(this).children().eq(1).children().eq(0).attr('disabled', false);
+        count += 1;
+      });
+    } else {
+      $('#id_features_form-deck_present').parent().parent().nextAll().each(function(){
+        if (count == 5){
+          return false;
+        }
+        $(this).children().eq(1).children().eq(0).attr('disabled', true);
+        if (count >= 2){
+          $(this).children().eq(1).children().eq(0).val('');
+        }
+        count += 1;
+      });
+    }
+
+    // on change functionalities
+    $('#id_features_form-pool_present').on('change', function(){
+      var count = 0;
+      if ($(this).val() == 'Yes'){
+        $(this).parent().parent().nextAll().each(function(){
+          if (count == 4){
+            return false;
+          }
+          $(this).children().eq(1).children().eq(0).attr('disabled', false);
+          count += 1;
+        });
+        if ($('#id_features_form-registerd').val() == 'NO'){
+          $('#id_features_form-registeration_number').val('').attr('disabled', true);
+        }
+      }
+      else{
+        $(this).parent().parent().nextAll().each(function(){
+          if (count == 4){
+            return false;
+          }
+          $(this).children().eq(1).children().eq(0).attr('disabled', true);
+          if (count >= 3){
+            $(this).children().eq(1).children().eq(0).val('');
+          }
+          count += 1;
+        });
+      }
+    });
+
+    $('#id_features_form-registerd').on('change', function(){
+      if ($(this).val() == 'NO'){
+        $('#id_features_form-registeration_number').val('').attr('disabled', true);
+      }
+      else{
+        $('#id_features_form-registeration_number').attr('disabled', false);
+      }
+    });
+
+    $('#id_features_form-retaining_walls_material').on('change', function() {
+      if ($(this).val() == 'None') {
+        $(this).parent().parent().next().children().eq(1).children().eq(0).attr('disabled', true);
+      } else {
+        $(this).parent().parent().next().children().eq(1).children().eq(0).attr('disabled', false);
+      }
+    })
+
+    $('#id_parking_form-carport').on('change', function() {
+      if ($(this).val() == 'None') {
+        $(this).parent().parent().next().children().eq(1).children().eq(0).attr('disabled', true);
+        $(this).parent().parent().next().children().eq(1).children().eq(0).val('');
+      } else {
+        $(this).parent().parent().next().children().eq(1).children().eq(0).attr('disabled', false);
+      }
+    })
+
+    $('#id_parking_form-garage').on('change', function() {
+      if ($(this).val() == 'None') {
+        $(this).parent().parent().next().children().eq(1).children().eq(0).attr('disabled', true);
+        $(this).parent().parent().next().children().eq(1).children().eq(0).val('');
+      } else {
+        $(this).parent().parent().next().children().eq(1).children().eq(0).attr('disabled', false);
+      }
+    })
+
+    $('#id_features_form-deck_present').on('change', function(){
+      var count = 0;
+      if ($(this).val() == 'Yes'){
+        $(this).parent().parent().nextAll().each(function(){
+          if (count == 5){
+            return false;
+          }
+          $(this).children().eq(1).children().eq(0).attr('disabled', false);
+          count += 1;
+        });
+      }
+      else{
+        $(this).parent().parent().nextAll().each(function(){
+          if (count == 5){
+            return false;
+          }
+          $(this).children().eq(1).children().eq(0).attr('disabled', true);
+          if (count >= 2){
+            $(this).children().eq(1).children().eq(0).val('');
+          }
+          count += 1;
+        });
+      }
+    });
+
+  </script>
+
+  <!-- if user clicks on Renovation in deals navbar then it is handled by an ajax call -->
+  <script src="/static/custom/custom_js.js"></script>
+
+  <script>
+    $(document).on("click", "#renovation-details", function() {
+      name("{{deal_id}}", "{{lead_id}}");
+    });
+  </script>
+{% endblock javascripts %}

@@ -1,0 +1,194 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Deal Card {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">
+  <style type="text/css">
+    .tab-content > div > .x_panel {
+      border-top: 0px !important;
+    }
+    a, a label {
+      cursor: pointer;
+    }
+    #internal-navbar-panel, #internal-details-panel{
+      border-top: 0px !important;
+    }
+  </style>
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="x_content">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              {% include 'deals/deals_navbar.html' with deal_id=deal_id lead_id=lead_id %}
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <div class="container">
+                <ul class="nav nav-tabs">
+                  <li id="deal_info"><a href="#deal-info-div">Purchase Details</a></li>
+                  <li id="deal_info1"><a href="#deal-info1-div">Sale Details</a></li>
+                  <li id="active_checklist" class="active"><a>Check List</a></li>
+                </ul>
+                <!-- new code -->
+                <div id="internal-navbar-panel" class="x_panel">
+                  <br>
+                  <div class="tab-content">
+                    <div id="internal-div" class="tab-pane fade in active">
+                      <ul class="nav nav-tabs">
+                        <!-- <li><a href="/initial/initial-research/">Initial Research</a></li>
+                        <li><a href="/initial/letter/">Letter</a></li>
+                        <li><a href="/initial/inspection/">Inspection</a></li>
+                        <li><a href="/initial/duedilligence/">Due Dilligence</a></li>
+                        <li><a href="/initial/propertyserach/">Property Search</a></li>
+                        <li><a href="/initial/marketresearch/">Market Research</a></li>
+                        <li><a href="/initial/offerfinance/">Offer/Finance</a></li>
+                        <li><a href="/initial/exchangesettlement/">Exchange/Settlement</a></li>
+                        <li><a href="/initial/renovation/">Renovation</a></li>
+                        <li><a href="/initial/listingforsale/">Listing For Sale</a></li>
+                        <li><a href="/initial/saleexchangesettlement/">Sale - Exchange/Settlement</a></li> -->
+                        <li id="initial_research" class="checklist"><a>Initial Research</a></li>
+                        <li id="letters" class="checklist"><a>Letters</a></li>
+                        <li id="inspection" class="checklist"><a>Inspection</a></li>
+                        <li id="due_diligence" class="checklist"><a>Due Diligence</a></li>
+                        <li id="property_searches" class="checklist"><a>Property Searches</a></li>
+                        <li id="market_research" class="checklist"><a>Market Research</a></li>
+                        <li id="offer_or_finance" class="checklist"><a>Offer/Finance</a></li>
+                        <li id="exchange_or_settlement" class="checklist"><a>Exchange/Settlement</a></li>
+                        <li id="renovation" class="checklist"><a>Renovation</a></li>
+                        <li id="listing_for_sale" class="checklist"><a>Listing For Sale</a></li>
+                        <li id="sale-exchange_or_settlement" class="checklist"><a>Sale-Exchange/Settlement</a></li>
+                      </ul>
+                      <div id="internal-details-panel" class="x_panel">
+                <!-- new code -->
+                        <div class="tab-content">
+                          <div id="checklist-div" class="tab-pane fade in active">
+                            <div class="x_content">
+                              <form id="checklist-form" method="POST" action="" class="form-horizontal form-label-left">
+                                {% csrf_token %}
+                                {{ formset.management_form }}
+
+                                <table class="table checklist-table">
+                                  <thead>
+                                    <tr>
+                                      <th class="hidden">ID</th>
+                                      <th>Event Name</th>
+                                      <th>Date</th>
+                                      <th>Complete</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+
+                                    {% if messages %}
+                                      <ul class="messages">
+                                          {% for message in messages %}
+                                            {% ifequal message.tags "submitted success" %}
+                                              <div class="alert alert-success col-xs-12">
+                                                <strong class="{{ message.tags }}">{{ message }}</strong>
+                                              </div>
+                                            {% endifequal %}
+                                          {% endfor %}
+                                      </ul>
+                                    {% endif %}
+
+                                    {% for form in formset %}
+                                      <tr>
+                                        <td class="hidden">{{ form.id }}</td>
+                                        <td class='col-md-6 col-sm-6 col-xs-6'>{{ form.event|add_error_class:'ve-sh-error-block' }}</td>
+                                        <td class='col-md-3 col-sm-3 col-xs-3'>{{ form.date|add_error_class:'ve-sh-error-block' }}</td>
+                                        <td class='col-md-3 col-sm-3 col-xs-3'>{{ form.complete|add_error_class:'ve-sh-error-block' }}</td>
+                                      </tr>
+                                      <tr>
+                                        {% if form.errors %}
+                                        <td class="col-md-6 col-sm-6 col-xs-6 ve-sh-error-text">
+                                          {% for error in form.event.errors %}
+                                            {{ error|escape }}
+                                          {% endfor %}
+                                        </td>
+                                        <td class="col-md-3 col-sm-3 col-xs-3 ve-sh-error-text">
+                                          {% for error in form.date.errors %}
+                                            {{ error|escape }}
+                                          {% endfor %}
+                                        </td>
+                                        <td class="col-md-3 col-sm-3 col-xs-3 ve-sh-error-text">
+                                          {% for error in form.complete.errors %}
+                                            {{ error|escape }}
+                                          {% endfor %}
+                                        </td>
+                                        {% endif %}
+                                      </tr>
+                                    {% endfor %}
+                                  </tbody>
+                                </table>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                  <input id="form-submit" type="submit" value="Save" class="btn btn-success" />
+                                  <a class="btn btn-primary" href="{% url 'dashboard:settings:checklist' category %}">Edit Checklist</a>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+  <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+  <script type="text/javascript">
+    $('#deal-card').addClass('active');
+    $('#overview').addClass('active');
+    // Use Jquery datepicker for date fields
+
+    $('#{{ category }}').addClass('active');
+    var id_of_corresponding_div = $('#{{ category }} a').attr('href');
+    $(id_of_corresponding_div).addClass('active in');
+
+    $('#deal_info').on('click', function(){
+      window.location.href = '/dashboard/deals/deal/{{ lead_id }}/'
+    });
+
+    $('#deal_info1').on('click', function(){
+      window.location.href = '/dashboard/deals/dealsale/{{ lead_id }}/'
+    });
+
+    $('.checklist').on('click', function(){
+      window.location.href = '/dashboard/deals/{{ deal_id }}/checklist/' + $(this).attr('id');
+    });
+
+    $('.checklist-table tbody tr').each(function(){
+      $(this).children().eq(2).children().eq(0).datepicker({
+      dateFormat: "dd-mm-yy"
+      });
+    });
+
+    $('#form-submit').on('click', function(){
+      $("#checklist-form :disabled").removeAttr('disabled');
+    });
+  </script>
+
+  <!-- if user clicks on Renovation in deals navbar then it is handled by an ajax call -->
+  <script src="/static/custom/custom_js.js"></script>
+
+  <script>
+    $(document).on("click", "#renovation-details", function() {
+      name("{{deal_id}}", "{{lead_id}}");
+    });
+  </script>
+{% endblock javascripts %}

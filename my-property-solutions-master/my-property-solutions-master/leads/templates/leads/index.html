@@ -1,0 +1,587 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% load lead_tags %}
+
+{% block title %} Dashboard{% endblock title %}
+
+{% block stylesheets %}
+{{ block.super }}
+<style type="text/css">
+  #myTabContent>.tab-pane>.x_panel {
+    border-top: 0px !important;
+  }
+
+  td {
+    cursor: pointer;
+  }
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="right_col" role="main">
+  <!-- top tiles -->
+  <div class="">
+    <div class="x_panel">
+      <div class="x_title">
+
+        <div class="container-fluid">
+          <div class="card-header card-header-tabs card-header-primary bg1">
+            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+              <li class="nav-item" id="overview">
+                <a class="nav-link" href="{% url 'dashboard:index' %}">Overview</a>
+              </li>
+              <li class="nav-item" id="bankruptcy">
+                <a class="nav-link" href="{% url 'dashboard:leads:index' 'bankruptcy' %}">Bankruptcy</a>
+              </li>
+              <li class="nav-item" id="deceased">
+                <a class="nav-link" href="{% url 'dashboard:leads:index' 'deceased' %}">Deceased Estate</a>
+              </li>
+              <li class="nav-item" id="divorce">
+                <a class="nav-link" href="{% url 'dashboard:leads:index' 'divorce' %}">Divorce</a>
+              </li>
+              <li class="nav-item" id="liquidation">
+                <a class="nav-link" href="{% url 'dashboard:leads:index' 'liquidation' %}">Liquidation</a>
+              </li>
+              <li class="nav-item" id="mortgagee">
+                <a class="nav-link" href="{% url 'dashboard:leads:index' 'mortgagee' %}">Mortgagee</a>
+              </li>
+              <li class="nav-item" id="sheriff">
+                <a class="nav-link" href="{% url 'dashboard:leads:index' 'sheriff' %}">Sheriff</a>
+              </li>
+              <li class="nav-item" id="withdrawn">
+                <a class="nav-link" href="{% url 'dashboard:leads:index' 'withdrawn' %}">Withdrawn</a>
+              </li>
+              <li class="nav-item" id="sixty-days-over">
+                <a class="nav-link" href="{% url 'dashboard:leads:index' 'sixty-days-over' %}">60 Days Over</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="clearfix"></div>
+      </div>
+      <div class="x_content table-responsive">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item active">
+            <a class="nav-link" id="pending-tab" data-toggle="tab" href="#pending" role="tab" aria-controls="pending"
+              aria-selected="false">Pending</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="active-tab" data-toggle="tab" href="#active" role="tab" aria-controls="active"
+              aria-selected="false">Active</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="purchased-tab" data-toggle="tab" href="#purchased" role="tab"
+              aria-controls="purchased" aria-selected="false">Purchased</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="listed-tab" data-toggle="tab" href="#listed" role="tab" aria-controls="listed"
+              aria-selected="false">Listed</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="sold-tab" data-toggle="tab" href="#sold" role="tab" aria-controls="sold"
+              aria-selected="false">Sold</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="not-proceeding-tab" data-toggle="tab" href="#not-proceeding" role="tab"
+              aria-controls="not-proceeding" aria-selected="false">Not Proceeding</a>
+          </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade in active" id="pending" role="tabpanel" aria-labelledby="pending-tab">
+            <div class="x_panel table-responsive">
+              <div class="x_title">
+                <h2>Pending</h2>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      {% if category == 'liquidation' %}
+                      <th>Company</th>
+                      {% else %}
+                      <th>Owner</th>
+                      {% endif %}
+                      <th>Address</th>
+                      <th>{% if category == 'liquidation' %} Liquidator {% else %} Solicitor {% endif %}</th>
+                      <th>Agent</th>
+                      {% if category == 'withdrawn' or category == 'sixty-days-over' %}
+                      <th>DOM</th>
+                      {% endif %}
+                      {% if category == 'deceased' %}
+                      <th>Executor</th>
+                      {% endif %}
+                      {% if category == 'withdrawn' %}
+                      <th>End List Date</th>
+                      <th>End List Price</th>
+                      {% endif %}
+                      {% if category == 'liquidation' %}
+                      <th>Listed Price</th>
+                      {% endif %}
+                      <th>AFCA</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for lead in pending_leads %}
+                    <tr id="{{ lead.pk }}" data-toggle="tooltip" title="Open Deal Card!" data-placement="bottom">
+                      {% if category == 'liquidation' %}
+                      <td>{% for owner in lead.property.property_owner.all %} {{ owner.company_name|default_if_none:""
+                        }} <br> {% endfor %}</td>
+                      {% else %}
+                      <td>{% for owner in lead.property.property_owner.all %} {{ owner|default_if_none:"" }} <br> {%
+                        endfor %}</td>
+                      {% endif %}
+                      <td>{{ lead.property.unit|default_if_none:"" }} {{ lead.property.number|default_if_none:"" }} {{
+                        lead.property.street|default_if_none:"" }} {{ lead.property.suburb|default_if_none:"" }} {{
+                        lead.property.state|default_if_none:"" }} {{ lead.property.post_code|default_if_none:"" }}</td>
+                      <td>{{ lead|filter_contact:"legal"|default_if_none:"" }}</td>
+                      <td>{{ lead|filter_contact:"real-estate"|default_if_none:"" }}</td>
+
+                      {% if category == 'withdrawn' or category == 'sixty-days-over' %}
+                      <td>{{ lead.property.dom|default_if_none:"" }}</td>
+                      {% endif %}
+                      {% if category == 'deceased' %}
+                      <td>{{ lead|filter_contact:"executor"|default_if_none:"" }}</td>
+                      {% endif %}
+                      {% if category == 'withdrawn' %}
+                      <td>{{ lead.property.end_list_date|default_if_none:"" }}</td>
+                      <td>{{ lead.property.end_list_price|default_if_none:"" }}</td>
+                      {% endif %}
+                      {% if category == 'liquidation' %}
+                      <td>{{ lead.property.start_list_price|default_if_none:"" }}</td>
+                      {% endif %}
+                      <td>{% if lead.deal.afca_complaint_lodged %} {{
+                        lead.deal.afca_complaint_lodged.complaint_lodged_status }} {% else %} No {% endif %}</td>
+                      <td><a class="btn btn-primary btn-xs"
+                          href="{% url 'dashboard:leads:edit_lead_status' lead.pk %}">Edit</a></td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="active" role="tabpanel" aria-labelledby="active-tab">
+            <div class="x_panel table-responsive">
+              <div class="x_title">
+                <h2>Active</h2>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      {% if category == 'liquidation' %}
+                      <th>Company</th>
+                      {% else %}
+                      <th>Owner</th>
+                      {% endif %}
+                      <th>Address</th>
+                      <th>{% if category == 'liquidation' %} Liquidator {% else %} Solicitor {% endif %}</th>
+                      <th>Agent</th>
+                      {% if category == 'withdrawn' or category == 'sixty-days-over' %}
+                      <th>DOM</th>
+                      {% endif %}
+                      {% if category == 'deceased' %}
+                      <th>Executor</th>
+                      {% endif %}
+                      {% if category == 'withdrawn' %}
+                      <th>End List Date</th>
+                      <th>End List Price</th>
+                      {% endif %}
+                      {% if category == 'liquidation' %}
+                      <th>Listed Price</th>
+                      {% endif %}
+                      <th>AFCA</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for lead in active_leads %}
+                    <tr id="{{ lead.pk }}" data-toggle="tooltip" title="Open Deal Card!" data-placement="bottom">
+                      {% if category == 'liquidation' %}
+                      <td>{% for owner in lead.property.property_owner.all %} {{ owner.company_name|default_if_none:""
+                        }} <br> {% endfor %}</td>
+                      {% else %}
+                      <td>{% for owner in lead.property.property_owner.all %} {{ owner|default_if_none:"" }} <br> {%
+                        endfor %}</td>
+                      {% endif %}
+                      <td>{{ lead.property.unit|default_if_none:"" }} {{ lead.property.number|default_if_none:"" }} {{
+                        lead.property.street|default_if_none:"" }} {{ lead.property.suburb|default_if_none:"" }} {{
+                        lead.property.state|default_if_none:"" }} {{ lead.property.post_code|default_if_none:"" }}</td>
+                      <td>{{ lead|filter_contact:"legal"|default_if_none:"" }}</td>
+                      <td>{{ lead|filter_contact:"real-estate"|default_if_none:"" }}</td>
+                      {% if category == 'withdrawn' or category == 'sixty-days-over' %}
+                      <td>{{ lead.property.dom|default_if_none:"" }}</td>
+                      {% endif %}
+                      {% if category == 'deceased' %}
+                      <td>{{ lead|filter_contact:"executor"|default_if_none:"" }}</td>
+                      {% endif %}
+                      {% if category == 'withdrawn' %}
+                      <td>{{ lead.property.end_list_date|default_if_none:"" }}</td>
+                      <td>{{ lead.property.end_list_price|default_if_none:"" }}</td>
+                      {% endif %}
+                      {% if category == 'liquidation' %}
+                      <td>{{ lead.property.start_list_price|default_if_none:"" }}</td>
+                      {% endif %}
+                      <td>{% if lead.deal.afca_complaint_lodged %} {{
+                        lead.deal.afca_complaint_lodged.complaint_lodged_status }} {% else %} No {% endif %}</td>
+                      <td><a class="btn btn-primary btn-xs"
+                          href="{% url 'dashboard:leads:edit_lead_status' lead.pk %}">Edit</a></td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="purchased" role="tabpanel" aria-labelledby="purchased-tab">
+            <div class="x_panel table-responsive">
+              <div class="x_title">
+                <h2>Purchased</h2>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      {% if category == 'liquidation' %}
+                      <th>Company</th>
+                      {% else %}
+                      <th>Owner</th>
+                      {% endif %}
+                      <th>Address</th>
+                      <th>{% if category == 'liquidation' %} Liquidator {% else %} Solicitor {% endif %}</th>
+                      <th>Agent</th>
+                      {% if category == 'withdrawn' or category == 'sixty-days-over' %}
+                      <th>DOM</th>
+                      {% endif %}
+                      {% if category == 'deceased' %}
+                      <th>Executor</th>
+                      {% endif %}
+                      {% if category == 'withdrawn' %}
+                      <th>End List Date</th>
+                      <th>End List Price</th>
+                      {% endif %}
+                      {% if category == 'liquidation' %}
+                      <th>Listed Price</th>
+                      {% endif %}
+                      <th>AFCA</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for lead in purchased_leads %}
+                    <tr id="{{ lead.pk }}" data-toggle="tooltip" title="Open Deal Card!" data-placement="bottom">
+                      {% if category == 'liquidation' %}
+                      <td>{% for owner in lead.property.property_owner.all %} {{ owner.company_name|default_if_none:""
+                        }} <br> {% endfor %}</td>
+                      {% else %}
+                      <td>{% for owner in lead.property.property_owner.all %} {{ owner|default_if_none:"" }} <br> {%
+                        endfor %}</td>
+                      {% endif %}
+                      <td>{{ lead.property.unit|default_if_none:"" }} {{ lead.property.number|default_if_none:"" }} {{
+                        lead.property.street|default_if_none:"" }} {{ lead.property.suburb|default_if_none:"" }} {{
+                        lead.property.state|default_if_none:"" }} {{ lead.property.post_code|default_if_none:"" }}</td>
+                      <td>{{ lead|filter_contact:"legal"|default_if_none:"" }}</td>
+                      <td>{{ lead|filter_contact:"real-estate"|default_if_none:"" }}</td>
+                      {% if category == 'withdrawn' or category == 'sixty-days-over' %}
+                      <td>{{ lead.property.dom|default_if_none:"" }}</td>
+                      {% endif %}
+                      {% if category == 'deceased' %}
+                      <td>{{ lead|filter_contact:"executor"|default_if_none:"" }}</td>
+                      {% endif %}
+                      {% if category == 'withdrawn' %}
+                      <td>{{ lead.property.end_list_date|default_if_none:"" }}</td>
+                      <td>{{ lead.property.end_list_price|default_if_none:"" }}</td>
+                      {% endif %}
+                      {% if category == 'liquidation' %}
+                      <td>{{ lead.property.start_list_price|default_if_none:"" }}</td>
+                      {% endif %}
+                      <td>{% if lead.deal.afca_complaint_lodged %} {{
+                        lead.deal.afca_complaint_lodged.complaint_lodged_status }} {% else %} No {% endif %}</td>
+                      <td><a class="btn btn-primary btn-xs"
+                          href="{% url 'dashboard:leads:edit_lead_status' lead.pk %}">Edit</a></td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="listed" role="tabpanel" aria-labelledby="listed-tab">
+            <div class="x_panel table-responsive">
+              <div class="x_title">
+                <h2>Listed</h2>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      {% if category == 'liquidation' %}
+                      <th>Company</th>
+                      {% else %}
+                      <th>Owner</th>
+                      {% endif %}
+                      <th>Address</th>
+                      <th>{% if category == 'liquidation' %} Liquidator {% else %} Solicitor {% endif %}</th>
+                      <th>Agent</th>
+                      {% if category == 'withdrawn' or category == 'sixty-days-over' %}
+                      <th>DOM</th>
+                      {% endif %}
+                      {% if category == 'deceased' %}
+                      <th>Executor</th>
+                      {% endif %}
+                      {% if category == 'withdrawn' %}
+                      <th>End List Date</th>
+                      <th>End List Price</th>
+                      {% endif %}
+                      {% if category == 'liquidation' %}
+                      <th>Listed Price</th>
+                      {% endif %}
+                      <th>AFCA</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for lead in listed_leads %}
+                    <tr id="{{ lead.pk }}" data-toggle="tooltip" title="Open Deal Card!" data-placement="bottom">
+                      {% if category == 'liquidation' %}
+                      <td>{% for owner in lead.property.property_owner.all %} {{ owner.company_name|default_if_none:""
+                        }} <br> {% endfor %}</td>
+                      {% else %}
+                      <td>{% for owner in lead.property.property_owner.all %} {{ owner|default_if_none:"" }} <br> {%
+                        endfor %}</td>
+                      {% endif %}
+                      <td>{{ lead.property.unit|default_if_none:"" }} {{ lead.property.number|default_if_none:"" }} {{
+                        lead.property.street|default_if_none:"" }} {{ lead.property.suburb|default_if_none:"" }} {{
+                        lead.property.state|default_if_none:"" }} {{ lead.property.post_code|default_if_none:"" }}</td>
+                      <td>{{ lead|filter_contact:"legal"|default_if_none:"" }}</td>
+                      <td>{{ lead|filter_contact:"real-estate"|default_if_none:"" }}</td>
+                      {% if category == 'withdrawn' or category == 'sixty-days-over' %}
+                      <td>{{ lead.property.dom|default_if_none:"" }}</td>
+                      {% endif %}
+                      {% if category == 'deceased' %}
+                      <td>{{ lead|filter_contact:"executor"|default_if_none:"" }}</td>
+                      {% endif %}
+                      {% if category == 'withdrawn' %}
+                      <td>{{ lead.property.end_list_date|default_if_none:"" }}</td>
+                      <td>{{ lead.property.end_list_price|default_if_none:"" }}</td>
+                      {% endif %}
+                      {% if category == 'liquidation' %}
+                      <td>{{ lead.property.start_list_price|default_if_none:"" }}</td>
+                      {% endif %}
+                      <td>{% if lead.deal.afca_complaint_lodged %} {{
+                        lead.deal.afca_complaint_lodged.complaint_lodged_status }} {% else %} No {% endif %}</td>
+                      <td><a class="btn btn-primary btn-xs"
+                          href="{% url 'dashboard:leads:edit_lead_status' lead.pk %}">Edit</a></td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="sold" role="tabpanel" aria-labelledby="sold-tab">
+            <div class="x_panel table-responsive">
+              <div class="x_title">
+                <h2>Sold</h2>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      {% if category == 'liquidation' %}
+                      <th>Company</th>
+                      {% else %}
+                      <th>Owner</th>
+                      {% endif %}
+                      <th>Address</th>
+                      <th>{% if category == 'liquidation' %} Liquidator {% else %} Solicitor {% endif %}</th>
+                      <th>Agent</th>
+                      {% if category == 'withdrawn' or category == 'sixty-days-over' %}
+                      <th>DOM</th>
+                      {% endif %}
+                      {% if category == 'deceased' %}
+                      <th>Executor</th>
+                      {% endif %}
+                      {% if category == 'withdrawn' %}
+                      <th>End List Date</th>
+                      <th>End List Price</th>
+                      {% endif %}
+                      {% if category == 'liquidation' %}
+                      <th>Listed Price</th>
+                      {% endif %}
+                      <th>AFCA</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for lead in sold_leads %}
+                    <tr id="{{ lead.pk }}" data-toggle="tooltip" title="Open Deal Card!" data-placement="bottom">
+                      {% if category == 'liquidation' %}
+                      <td>{% for owner in lead.property.property_owner.all %} {{ owner.company_name|default_if_none:""
+                        }} <br> {% endfor %}</td>
+                      {% else %}
+                      <td>{% for owner in lead.property.property_owner.all %} {{ owner|default_if_none:"" }} <br> {%
+                        endfor %}</td>
+                      {% endif %}
+                      <td>{{ lead.property.unit|default_if_none:"" }} {{ lead.property.number|default_if_none:"" }} {{
+                        lead.property.street|default_if_none:"" }} {{ lead.property.suburb|default_if_none:"" }} {{
+                        lead.property.state|default_if_none:"" }} {{ lead.property.post_code|default_if_none:"" }}</td>
+                      <td>{{ lead|filter_contact:"legal"|default_if_none:"" }}</td>
+                      <td>{{ lead|filter_contact:"real-estate"|default_if_none:"" }}</td>
+                      {% if category == 'withdrawn' or category == 'sixty-days-over' %}
+                      <td>{{ lead.property.dom|default_if_none:"" }}</td>
+                      {% endif %}
+                      {% if category == 'deceased' %}
+                      <td>{{ lead|filter_contact:"executor"|default_if_none:"" }}</td>
+                      {% endif %}
+                      {% if category == 'withdrawn' %}
+                      <td>{{ lead.property.end_list_date|default_if_none:"" }}</td>
+                      <td>{{ lead.property.end_list_price|default_if_none:"" }}</td>
+                      {% endif %}
+                      {% if category == 'liquidation' %}
+                      <td>{{ lead.property.start_list_price|default_if_none:"" }}</td>
+                      {% endif %}
+                      <td>{% if lead.deal.afca_complaint_lodged %} {{
+                        lead.deal.afca_complaint_lodged.complaint_lodged_status }} {% else %} No {% endif %}</td>
+                      <td><a class="btn btn-primary btn-xs"
+                          href="{% url 'dashboard:leads:edit_lead_status' lead.pk %}">Edit</a></td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="not-proceeding" role="tabpanel" aria-labelledby="not-proceeding-tab">
+            <div class="x_panel table-responsive">
+              <div class="x_title">
+                <h2>Not Proceeding</h2>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      {% if category == 'liquidation' %}
+                      <th>Company</th>
+                      {% else %}
+                      <th>Owner</th>
+                      {% endif %}
+                      <th>Address</th>
+                      <th>{% if category == 'liquidation' %} Liquidator {% else %} Solicitor {% endif %}</th>
+                      <th>Agent</th>
+                      {% if category == 'withdrawn' or category == 'sixty-days-over' %}
+                      <th>DOM</th>
+                      {% endif %}
+                      {% if category == 'deceased' %}
+                      <th>Executor</th>
+                      {% endif %}
+                      {% if category == 'withdrawn' %}
+                      <th>End List Date</th>
+                      <th>End List Price</th>
+                      {% endif %}
+                      {% if category == 'liquidation' %}
+                      <th>Listed Price</th>
+                      {% endif %}
+                      <th>AFCA</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for lead in not_proceeding_leads %}
+                    <tr id="{{ lead.pk }}" data-toggle="tooltip" title="Open Deal Card!" data-placement="bottom">
+                      {% if category == 'liquidation' %}
+                      <td>{% for owner in lead.property.property_owner.all %} {{ owner.company_name|default_if_none:""
+                        }} <br> {% endfor %}</td>
+                      {% else %}
+                      <td>{% for owner in lead.property.property_owner.all %} {{ owner|default_if_none:"" }} <br> {%
+                        endfor %}</td>
+                      {% endif %}
+                      <td>{{ lead.property.unit|default_if_none:"" }} {{ lead.property.number|default_if_none:"" }} {{
+                        lead.property.street|default_if_none:"" }} {{ lead.property.suburb|default_if_none:"" }} {{
+                        lead.property.state|default_if_none:"" }} {{ lead.property.post_code|default_if_none:"" }}</td>
+                      <td>{{ lead|filter_contact:"legal"|default_if_none:"" }}</td>
+                      <td>{{ lead|filter_contact:"real-estate"|default_if_none:"" }}</td>
+                      {% if category == 'withdrawn' or category == 'sixty-days-over' %}
+                      <td>{{ lead.property.dom|default_if_none:"" }}</td>
+                      {% endif %}
+                      {% if category == 'deceased' %}
+                      <td>{{ lead|filter_contact:"executor"|default_if_none:"" }}</td>
+                      {% endif %}
+                      {% if category == 'withdrawn' %}
+                      <td>{{ lead.property.end_list_date|default_if_none:"" }}</td>
+                      <td>{{ lead.property.end_list_price|default_if_none:"" }}</td>
+                      {% endif %}
+                      {% if category == 'liquidation' %}
+                      <td>{{ lead.property.start_list_price|default_if_none:"" }}</td>
+                      {% endif %}
+                      <td>{% if lead.deal.afca_complaint_lodged %} {{
+                        lead.deal.afca_complaint_lodged.complaint_lodged_status }} {% else %} No {% endif %}</td>
+                      <td><a class="btn btn-primary btn-xs"
+                          href="{% url 'dashboard:leads:edit_lead_status' lead.pk %}">Edit</a></td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="" role="tabpanel" data-example-id="togglable-tabs">
+        </div>
+      </div>
+    </div>
+
+    <div class="x_panel">
+      <div class="x_title">
+        <h2>Add New {{ category|title }} Lead</h2>
+        <div class="clearfix"></div>
+      </div>
+      <div class="x_content">
+        <a href="{% url 'dashboard:leads:add_lead' category %}" class="btn btn-primary">Add Lead</a>
+      </div>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+</div>
+{% endblock content %}
+
+{% block javascripts %}
+{{ block.super}}
+
+<script type="text/javascript">
+  $('.side-menu').children().removeClass('active');
+  $('#home').addClass('active');
+  $('#{{ category }}').addClass('active');
+  $('.table-striped').DataTable();
+
+  // Tooltip on all rows of leads
+  $('[data-toggle="tooltip"]').tooltip();
+
+  $(document).on('click', '.table-striped tbody tr', function () {
+    if ($(this).attr('id') !== undefined) {
+      window.location.href = "/dashboard/deals/deal/" + $(this).attr('id');
+    }
+  });
+</script>
+{% endblock javascripts %}

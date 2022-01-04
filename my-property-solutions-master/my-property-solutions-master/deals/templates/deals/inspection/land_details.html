@@ -1,0 +1,360 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Inspection Details {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <style type="text/css">
+    form > .x_panel {
+      border-top: 0px !important;
+    }
+  </style>
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="x_content">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              {% include 'deals/deals_navbar.html' with deal_id=deal_id lead_id=lead_id %}
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <div class="container">
+
+                {% include 'deals/inspection/inspection_details_navbar.html' %}
+
+                <div class="tab-content">
+                  <div id="land-details-div" class="tab-pane fade in active">
+                    {% if messages %}
+                      <ul class="messages">
+                          {% for message in messages %}
+                            {% ifequal message.tags "submitted success" %}
+                              <div class="alert alert-success col-xs-12">
+                                <strong class="{{ message.tags }}">{{ message }}</strong>
+                              </div>
+                            {% endifequal %}
+                          {% endfor %}
+                      </ul>
+                    {% endif %}
+                    <form method="POST" action="" class="form-horizontal form-label-left">
+                      {% csrf_token %}
+                      <div class="x_panel">
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <div class="col-sm-offset-3 col-md-6 col-sm-6 col-xs-12">
+                            <h2 class="form-title">Land Details</h2>
+                          </div>
+                          <div class="x_content">
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12"> {{ land_details_form.type.label }}</label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ land_details_form.type|add_error_class:"ve-sh-error-block" }} {{ land_details_form.type.help_text }}
+                              </div>
+                              {% if land_details_form.errors %}
+                                {% for error in land_details_form.type.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12"> {{ land_details_form.lot.label }}</label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ land_details_form.lot|add_error_class:"ve-sh-error-block" }} {{ land_details_form.lot.help_text }}
+                              </div>
+                              {% if land_details_form.errors %}
+                                {% for error in land_details_form.lot.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12"> {{ land_details_form.dp_or_sp.label }}</label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ land_details_form.dp_or_sp|add_error_class:"ve-sh-error-block" }} {{ land_details_form.dp_or_sp.help_text }}
+                              </div>
+                              {% if land_details_form.errors %}
+                                {% for error in land_details_form.dp_or_sp.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12"> {{ land_details_form.section.label }}</label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ land_details_form.section|add_error_class:"ve-sh-error-block" }} {{ land_details_form.section.help_text }}
+                              </div>
+                              {% if land_details_form.errors %}
+                                {% for error in land_details_form.section.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12" style="float: right;">
+                          {% if council_form.errors %}
+                            {% for error in form.non_field_errors %}
+                                <div class="alert alert-danger">
+                                    <strong>{{ error|escape }}</strong>
+                                </div>
+                            {% endfor %}
+                          {% endif %}
+                          <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12">
+                            <h2 class="form-title">Council</h2>
+                          </div>
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Contact name
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              <select class='form-control' id='select-council-contact' required="">
+                                {% if not council_obj %}
+                                  <option value='{{contact.id}}' id='id_{{contact.id}}'>None</option>
+                                {% endif %}
+                                {% for contact in council_contact %}
+                                  <option value='{{contact.id}}' id='id_{{contact.id}}'>{{ contact.contact_name }}</option>
+                                {% endfor %}
+                              </select>
+                            </div>
+                          </div>
+                          {% if not council_contact %}
+                            <p class='h6 col-sm-offset-3 col-sm-9 col-xs-12'>Council Contact not available.</p>
+                            <p class='h6 col-sm-offset-3 col-sm-9 col-xs-12'>
+                              <!-- Please <a href='/dashboard/contacts/add/council/council' class="ve-sh-pointer">Click here</a> to add Council Contact -->
+                            </p>
+                          {% endif %}
+                               
+                          <div id='council-contact-div'>
+                            <div></div>
+                            <input type="text" class="hidden ve-sh-hidden-field" name="selected-contact-id" value="{{contact_id}}">
+                       
+                            <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12' style="display:none;">Street Address</p>
+                            <div class="form-group" style="display:none;">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12" >Unit
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="text" name="unit" disabled="" value="{{council_obj.unit|default_if_none:''}}" class="form-control">
+                              </div>
+                            </div>
+                            <div class="form-group" style="display:none;">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">Number
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="text" name="number" disabled="" value="{{council_obj.number|default_if_none:''}}" class="form-control">
+                              </div>
+                            </div>
+                            <div class="form-group" style="display:none;">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">Street
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="text" name="street" disabled="" value="{{council_obj.street|default_if_none:''}}" class="form-control">
+                              </div>
+                            </div>
+                            <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12' style="display:none;">Postal Address</p>
+                            <div class="form-group" style="display:none;">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">PO Box
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="text" name="po_box" disabled="" value="{{council_obj.po_box|default_if_none:''}}" class="form-control">
+                              </div>
+                            </div>
+                            <div class="form-group" style="display:none;">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">Suburb
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="text" name="suburb" disabled="" value="{{council_obj.suburb|default_if_none:''}}" class="form-control">
+                              </div>
+                            </div>
+                            <div class="form-group" style="display:none;">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">State
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="text" name="state" disabled="" value="{{council_obj.state|default_if_none:''}}" class="form-control">
+                              </div>
+                            </div>
+                            <div class="form-group" style="display:none;">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">Post Code
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12" style="display:none;">
+                                <input type="text" name="post_code" disabled="" value="{{council_obj.post_code|default_if_none:''}}" class="form-control">
+                              </div>
+                            </div>
+                          
+                            <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Contact Details</p>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">Mobile
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="text" name="mobile" disabled="" value="{{council_obj.mobile|default_if_none:''}}" class="form-control">
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">Email
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="text" name="email" disabled="" value="{{council_obj.email|default_if_none:''}}" class="form-control">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          {% if property_address_form.errors %}
+                            {% for error in form.non_field_errors %}
+                                <div class="alert alert-danger">
+                                    <strong>{{ error|escape }}</strong>
+                                </div>
+                            {% endfor %}
+                          {% endif %}
+                          <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Property Address</p>
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Type
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              {{ property_address_form.property_type|add_error_class:"ve-sh-error-block" }}
+                            </div>
+                            <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                              {% for error in property_address_form.property_type.errors %}
+                                {{ error|escape }}
+                              {% endfor %}
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ property_address_form.unit.label }}
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              {{ property_address_form.unit|add_error_class:"ve-sh-error-block" }}
+                            </div>
+                            <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                              {% for error in property_address_form.unit.errors %}
+                                {{ error|escape }}
+                              {% endfor %}
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ property_address_form.number.label }}
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              {{ property_address_form.number|add_error_class:"ve-sh-error-block" }}
+                            </div>
+                            <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                              {% for error in property_address_form.number.errors %}
+                                {{ error|escape }}
+                              {% endfor %}
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ property_address_form.street.label }}
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              {{ property_address_form.street|add_error_class:"ve-sh-error-block" }}
+                            </div>
+                            <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                              {% for error in property_address_form.street.errors %}
+                                {{ error|escape }}
+                              {% endfor %}
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Zoning</p>
+                          <div class="x_content">
+                            {% for field in zoning_form %}
+                              <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ field.label }}
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                  {{ field|add_error_class:"ve-sh-error-block" }} {{ field.help_text }}
+                                </div>
+                              </div>
+                              {% if zoning_form.errors %}
+                                {% for error in field.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            {% endfor %}
+                          </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12" style="float: right;">
+                          <div class="col-sm-offset-3 col-md-6 col-sm-6 col-xs-12">
+                            <h2 class="form-title">Shape</h2>
+                          </div>
+                          <div class="x_content">
+                            {% for field in shape_form %}
+                              <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ field.label }}
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                  {{ field|add_error_class:"ve-sh-error-block" }} {{ field.help_text }}
+                                </div>
+                                {% if shape_form.errors %}
+                                  {% for error in field.errors %}
+                                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                      {{ error|escape }}
+                                    </div>
+                                  {% endfor %}
+                                {% endif %}
+                              </div>
+                            {% endfor %}
+                          </div>
+                        </div>
+                        <div class="col-xs-12">
+                          <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-left-pad-null">
+                            <div class="col-sm-6 col-xs-12 col-sm-offset-3">
+                              <input type="submit" value="Submit" class="btn btn-success" />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+  <script type="text/javascript">
+    $('#property-details, #deal-card, #land-details').addClass('active');
+  </script>
+
+  <!-- if user clicks on Renovation in deals navbar then it is handled by an ajax call -->
+  <script src="/static/custom/custom_js.js"></script>
+
+  <script>
+
+    // For Contact's select option on page load
+    var contact_id = "{{contact_id}}";
+    ($("#select-council-contact").children()).each(function(index) {
+      if ($(this).attr("value") === contact_id) {
+        $(this).attr("selected", true);
+      }
+    });
+
+    $(document).on("click", "#renovation-details", function() {
+      name("{{deal_id}}", "{{lead_id}}");
+    });
+
+    $(document).on('change', '#select-council-contact', function() {
+      $('#council-contact-div').load('/dashboard/deals/' + '{{deal_id}}' + '/inspection-details/land/selected-council/' + $(this).val());
+    });
+  </script>
+{% endblock javascripts %}

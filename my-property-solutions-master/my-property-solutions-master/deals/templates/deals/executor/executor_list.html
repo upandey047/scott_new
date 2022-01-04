@@ -1,0 +1,47 @@
+ <div class="container">
+      <a data-toggle="modal" data-target="#myModal" class="btn btn-primary pull-right">Add Liquidator</a>
+        <table class="table table-striped table-bordered table-responsive table-hover" >
+          <thead class="thalpha">
+            <tr>
+
+              <th rowspan = "2" style="width:100px;">Executor Name</th>
+              <th rowspan = "2" style="width:100px;">Company</th>
+              <th rowspan = "2" style="width:100px;">Postal Address</th>
+              <th rowspan = "2" style="width:50px;">Mobile</th>
+
+              <th rowspan = "2" style="width:50px;">Email</th>
+              <th rowspan = "2" style="width:50px;">Edit</th>
+              <th rowspan = "2" style="width:50px;">Delete</th>
+            </tr>
+
+          </thead>
+
+          <tbody  class="tbalpha">
+
+
+          </tbody>
+          {% for executor in executor_list %}
+          <tr id="hide">
+
+            <td>{{executor.name}}</td>
+            <td>{{executor.company}}</td>
+            <td>{{executor.address}}</td>
+            <td>{{executor.phone}}</td>
+            <td>{{executor.email}}</td>
+
+
+
+            <td><a href="{% url 'dashboard:deals:executorupdate' executor.id %}" class="btn btn-primary btn-xs" >Edit</a></td>
+            <td><a href="{% url 'dashboard:deals:executordelete' executor.id %}" class="btn btn-danger btn-xs" >Delete</a></td>
+
+          </tr>
+          {% endfor %}
+
+
+
+          </table>
+ </div>
+
+ <script>
+   $(".modal-body").load("{% url 'dashboard:deals:executorcreate' %}");
+</script>

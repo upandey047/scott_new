@@ -1,0 +1,38 @@
+{% extends "dashboard/base.html" %}
+
+{% load widget_tweaks %}
+
+{% block title %} Verify Your E-mail Address {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <!-- Animate.css -->
+  <link href="/static/vendors/animate.css/animate.min.css" rel="stylesheet">
+{% endblock stylesheets %}
+
+{% block body_class %}login{% endblock body_class %}
+
+{% block body %}
+  <div>
+    <div class="login_wrapper">
+      <div class="animate form login_form">
+        <section class="login_content">
+            <img src="/static/images/logo.png" id="logo_img">
+
+            <form>
+              {% if request.user.is_authenticated %}
+                {% include "account/snippets/already_logged_in.html" %}
+              {% else %}
+                <h1>Verify E-mail</h1>
+                <p>We have sent an e-mail to you for verification. Follow the link provided to finalize the signup process. Please contact us if you do not receive it within a few minutes.</p>
+                <div class="field">
+                  <a href="{% url 'auth:login' %}"><button class="btn btn-default submit">Login Now</button></a>
+                </div>
+              {% endif %}
+            </form>
+        </section>
+      </div>
+
+    </div>
+  </div>
+{% endblock body %}

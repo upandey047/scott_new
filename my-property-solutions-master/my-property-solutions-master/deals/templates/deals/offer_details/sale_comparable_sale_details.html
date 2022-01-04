@@ -1,0 +1,117 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Comparable Sale {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <a href="{% url 'dashboard:deals:sale_comparable_sales' deal_id %}" class="btn btn-primary" id="go-back-btn">Go Back</a><h2>Comparable Sale Details</h2>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+
+            {% if images.count %}
+              <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                  <!-- Indicators -->
+                  <ol class="carousel-indicators">
+                      {% for image in images %}
+                          {% if forloop.counter == 1 %}
+                              <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                          {% else %}
+                              <li data-target="#myCarousel" data-slide-to="{{ forloop.counter }}"></li>
+                          {% endif %}
+                      {% endfor %}
+
+                  </ol>
+
+                  <!-- Wrapper for slides -->
+                  <div class="carousel-inner col-sm-offset-4" role="listbox">
+                  {% for image in images %}
+                      {% if forloop.counter == 1 %}
+                          <div class="item active">
+                      {% else %}
+                          <div class="item">
+                      {% endif %}
+                              <img src="{{ image.image.url }}" alt="Image" width="476px" height="317px">
+                          </div>
+                  {% endfor %}
+                  </div>
+
+                  <!-- Left and right controls -->
+                  <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+                  <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                  <span class="sr-only">Previous</span>
+                  </a>
+                  <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+                  <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                  <span class="sr-only">Next</span>
+                  </a>
+              </div><br>
+            {% endif %}
+
+            <!-- Other Details -->
+            <div class="col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Comparable Sale</h2>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content table-responsive">
+
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>Address</th>
+                          <th>Settlement</th>
+                          <th>Bed</th>
+                          <th>Bath</th>
+                          <th>Garage</th>
+                          <th>Land</th>
+                          <th>Sale Price</th>
+                          <th>Sale Date</th>
+                          <th>Location</th>
+                          <th>Construction</th>
+                          <th>Accommodation</th>
+                          <th>Overall Comparability</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                          <tr>
+                            <td>{{ comparable_sale.address|default_if_none:"" }}</td>
+                            <td>{{ comparable_sale.sale_date|default_if_none:"" }}</td>
+                            <td>{{ comparable_sale.beds|default_if_none:"" }}</td>
+                            <td>{{ comparable_sale.bath|default_if_none:"" }}</td>
+                            <td>{{ comparable_sale.garage|default_if_none:"" }}</td>
+                            <td>{{ comparable_sale.land|default_if_none:"" }}</td>
+                            <td>{{ comparable_sale.sale_price|default_if_none:"" }}</td>
+                            <td>{{ comparable_sale.sale_date|default_if_none:"" }}</td>
+                            <td>{{ comparable_sale.location|default_if_none:"" }}</td>
+                            <td>{{ comparable_sale.construction|default_if_none:"" }}</td>
+                            <td>{{ comparable_sale.accommodation|default_if_none:"" }}</td>
+                            <td>{{ comparable_sale.overall_comparability|default_if_none:"" }}</td>
+                          </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+{% endblock javascripts %}

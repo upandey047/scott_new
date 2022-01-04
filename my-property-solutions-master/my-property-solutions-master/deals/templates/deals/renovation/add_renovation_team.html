@@ -1,0 +1,126 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Add Team Member {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <style type="text/css">
+
+  </style>
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <a href="{% url 'dashboard:deals:renovation_team' deal_id %}" class="btn btn-primary" id="go-back-btn">Go Back</a><h2>Add New Renovation Team Member</h2>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+              <div class="alert alert-danger search-error col-sm-offset-3 col-md-6 col-sm-6 col-xs-12" style="display:none;">
+                <strong>Invalid Contact:</strong> Please select a contact from the contact directory only.
+              </div>
+              <form method="POST" action="" class="form-horizontal form-label-left">
+                {% csrf_token %}
+
+                {% if form.errors %}
+                  {% for error in form.non_field_errors %}
+                      <div class="alert alert-danger">
+                          <strong>{{ error|escape }}</strong>
+                      </div>
+                  {% endfor %}
+                {% endif %}
+
+                <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12">
+                  <h2 class="form-title"> Contacts</h2>
+                </div>
+                <div class="form-group">
+                  <label class="hidden control-label col-md-3 col-sm-3 col-xs-12">{{ form.search_contact_id.label }}
+                  </label>
+                  <div class="hidden col-md-6 col-sm-6 col-xs-12">
+                    {{ form.search_contact_id|add_error_class:"ve-sh-error-block" }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.search_contact.label }}
+                  </label>
+                  <div class="col-md-6 col-sm-6 col-xs-12">
+                    {{ form.search_contact|add_error_class:"ve-sh-error-block" }}
+                  </div>
+                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                    {% for error in form.search_contact.errors %}
+                      {{ error|escape }}
+                    {% endfor %}
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12 col-sm-offset-3">
+                  <input type="submit" value="Submit" class="btn btn-success" />
+                </div>
+              </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+  <script type="text/javascript">
+    $("#deal-card").addClass("active");
+
+    //  When user inputs a contact category then show the available contacts in those categories
+    $(document).on("keyup", "#id_search_contact", function() {
+      var search_query = $(this).val();
+      if (search_query){
+        $.ajax({
+          url : "/dashboard/deals/" + "{{ deal_id }}" + "/renovation-team/fetch",
+          type: "POST",
+          data: JSON.stringify({"search_query": search_query}),
+          contentType: "application/json",
+          dataType: "json",
+          beforeSend: function(xhr) {
+            xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+          },
+          success: function(data, status, xhr) {
+            $(".search-results").remove();
+            $.each(data, function(index, value){
+              $("#id_search_contact").after("<div class='col-md-12 col-sm-12 col-xs-12 form-control search-results'><p class='hidden'>" + value["id"] + "</p><p>" + value["details"] + "</p></div>");
+            });
+            $("#id_search_contact_id").val('');
+          },
+          error: function(data, status, xhr) {
+            $(".search-results").remove();
+            $.each(data, function(index, value){
+              $("#id_search_contact").after("<div class='col-md-12 col-sm-12 col-xs-12 form-control search-results'><p class='hidden'>" + value["id"] + "</p><p>" + "No Data Found!" + "</p></div>");
+            });
+          },
+        });
+      }
+      else{
+        $(".search-results").remove();
+      }
+    });
+
+    // When user clicks on a particular search result, that contact is being added to renovation team
+    $(document).on("click", ".search-results", function() {
+       $("#id_search_contact").val($(this).children().eq(1).text());
+       $("#id_search_contact_id").val($(this).children().eq(0).text());
+       $(".search-results").remove();
+    });
+
+    $("form").on("submit", function(event){
+      if ($("#id_search_contact_id").val() == ''){
+        $(".search-error").slideDown(500).delay(3000).slideUp();
+      }
+      else{
+        $("form").submit();
+      }
+      event.preventDefault();
+    });
+  </script>
+{% endblock javascripts %}

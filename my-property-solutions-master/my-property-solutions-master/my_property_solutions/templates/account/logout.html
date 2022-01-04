@@ -1,0 +1,42 @@
+{% extends "dashboard/base.html" %}
+
+{% load widget_tweaks %}
+
+{% block title %} Signout {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <!-- Animate.css -->
+  <link href="/static/vendors/animate.css/animate.min.css" rel="stylesheet">
+{% endblock stylesheets %}
+
+{% block body_class %}login{% endblock body_class %}
+
+{% block body %}
+  <div>
+    <div class="login_wrapper">
+      <div class="animate form login_form">
+        <section class="login_content">
+          <img src="/static/images/logo.png" id="logo_img">
+			<h2>Are you sure you want to sign out?</h2>
+
+			<form method="post" action="{% url 'account_logout' %}">
+			  {% csrf_token %}
+			  {% if redirect_field_value %}
+			  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+			  {% endif %}
+			  <div>
+	          	<button class="btn btn-default submit">Log Out</button>
+	          </div>
+			</form>
+        </section>
+      </div>
+
+    </div>
+  </div>
+{% endblock body %}
+
+
+
+
+

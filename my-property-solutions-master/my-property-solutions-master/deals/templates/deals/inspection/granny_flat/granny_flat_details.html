@@ -1,0 +1,377 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Inspection Details {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <style type="text/css">
+    #internal-navbar-panel, #granny-flat-panel{
+      border-top: 0px !important;
+    }
+  </style>
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="x_content">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              {% include 'deals/deals_navbar.html' with deal_id=deal_id lead_id=lead_id %}
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <div class="container">
+
+                {% include 'deals/inspection/inspection_details_navbar.html' %}
+
+                <div id="internal-navbar-panel" class="x_panel">
+                  <br>
+                  <div class="tab-content">
+                    <div id="internal-div" class="tab-pane fade in active">
+
+                      {% include 'deals/inspection/granny_flat/granny_internal_navbar.html' with deal_id=deal_id %}
+
+                      <div class="tab-content">
+                        <div id="granny-flat-div" class="tab-pane fade in active">
+                          {% if messages %}
+                            <ul class="messages">
+                                {% for message in messages %}
+                                  {% ifequal message.tags "submitted success" %}
+                                    <div class="alert alert-success col-xs-12">
+                                      <strong class="{{ message.tags }}">{{ message }}</strong>
+                                    </div>
+                                  {% endifequal %}
+                                {% endfor %}
+                            </ul>
+                          {% endif %}
+                          <form method="POST" action="" class="form-horizontal form-label-left">
+                            {% csrf_token %}
+                            <div id="granny-flat-panel" class="x_panel">
+                              <div class="col-sm-offset-3 col-md-6 col-sm-6 col-xs-12">
+                                <h2 class="form-title">Granny Flat</h2>
+                              </div>
+                              <div class="x_content">
+                                <div class="form-group">
+                                  <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ granny_flat_form.is_granny_flat.label }}
+                                  </label>
+                                  <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {{ granny_flat_form.is_granny_flat|add_error_class:"ve-sh-error-block" }} {{ granny_flat_form.is_granny_flat.help_text }}
+                                  </div>
+                                  {% if granny_flat_form.errors %}
+                                    {% for error in granny_flat_form.is_granny_flat.errors %}
+                                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                        {{ error|escape }}
+                                      </div>
+                                    {% endfor %}
+                                  {% endif %}
+                                </div>
+                                <p class="h5 col-sm-offset-3 col-sm-9 col-xs-12">Foundation</p>
+                                <div class="form-group">
+                                  <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ granny_flat_form.granny_foundation_description.label }}
+                                  </label>
+                                  <div class="col-md-2 col-sm-2 col-xs-12 ve-sh-width-twenty">
+                                    <div class="form-fields">
+                                      {{ granny_flat_form.granny_foundation_description|add_error_class:"ve-sh-error-block" }} {{ granny_flat_form.granny_foundation_description.help_text }}
+                                    </div>
+                                    {% if granny_flat_form.errors %}
+                                      {% for error in granny_flat_form.granny_foundation_description.errors %}
+                                        <div class="ve-sh-error-text">
+                                          {{ error|escape }}
+                                        </div>
+                                      {% endfor %}
+                                    {% endif %}
+                                  </div>
+                                  <label class="control-label col-md-2 col-sm-2 col-xs-12 ve-sh-width-ten">{{ granny_flat_form.granny_foundation_condition.label }}
+                                  </label>
+                                  <div class="col-md-2 col-sm-2 col-xs-12 ve-sh-width-twenty">
+                                    <div>
+                                      {{ granny_flat_form.granny_foundation_condition|add_error_class:"ve-sh-error-block" }} {{ granny_flat_form.granny_foundation_condition.help_text }}
+                                    </div>
+                                    {% if granny_flat_form.errors %}
+                                      {% for error in granny_flat_form.granny_foundation_condition.errors %}
+                                        <div class="ve-sh-error-text">
+                                          {{ error|escape }}
+                                        </div>
+                                      {% endfor %}
+                                    {% endif %}
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="control-label col-md-3 col-sm-3 col-xs-12 ve-sh-padding-null">{{ granny_flat_form.granny_foundation_comments.label }}
+                                  </label>
+                                  <div class="col-md-6 col-sm-6 col-xs-12 input-field">
+                                    {{ granny_flat_form.granny_foundation_comments|add_error_class:"ve-sh-error-block" }} {{ granny_flat_form.granny_foundation_comments.help_text }}
+                                  </div>
+                                  {% if granny_flat_form.errors %}
+                                    {% for error in granny_flat_form.granny_foundation_comments.errors %}
+                                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                        {{ error|escape }}
+                                      </div>
+                                    {% endfor %}
+                                  {% endif %}
+                                </div>
+                                <p class="h5 col-sm-offset-3 col-sm-9 col-xs-12">Walls</p>
+                                <div class="form-group">
+                                  <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ granny_flat_form.granny_walls_description.label }}
+                                  </label>
+                                  <div class="col-md-2 col-sm-2 col-xs-12 ve-sh-width-twenty">
+                                    <div class="form-fields">
+                                      {{ granny_flat_form.granny_walls_description|add_error_class:"ve-sh-error-block" }} {{ granny_flat_form.granny_walls_description.help_text }}
+                                    </div>
+                                    {% if granny_flat_form.errors %}
+                                      {% for error in granny_flat_form.granny_walls_description.errors %}
+                                        <div class="ve-sh-error-text">
+                                          {{ error|escape }}
+                                        </div>
+                                      {% endfor %}
+                                    {% endif %}
+                                  </div>
+                                  <label class="control-label col-md-2 col-sm-2 col-xs-12 ve-sh-width-ten">{{ granny_flat_form.granny_walls_condition.label }}
+                                  </label>
+                                  <div class="col-md-2 col-sm-2 col-xs-12 ve-sh-width-twenty">
+                                    <div>
+                                      {{ granny_flat_form.granny_walls_condition|add_error_class:"ve-sh-error-block" }} {{ granny_flat_form.granny_walls_condition.help_text }}
+                                    </div>
+                                    {% if granny_flat_form.errors %}
+                                      {% for error in granny_flat_form.granny_walls_condition.errors %}
+                                        <div class="ve-sh-error-text">
+                                          {{ error|escape }}
+                                        </div>
+                                      {% endfor %}
+                                    {% endif %}
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="control-label col-md-3 col-sm-3 col-xs-12 ve-sh-padding-null">{{ granny_flat_form.granny_walls_comments.label }}
+                                  </label>
+                                  <div class="col-md-6 col-sm-6 col-xs-12 input-field">
+                                    {{ granny_flat_form.granny_walls_comments|add_error_class:"ve-sh-error-block" }} {{ granny_flat_form.granny_walls_comments.help_text }}
+                                  </div>
+                                  {% if granny_flat_form.errors %}
+                                    {% for error in granny_flat_form.granny_walls_comments.errors %}
+                                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                        {{ error|escape }}
+                                      </div>
+                                    {% endfor %}
+                                  {% endif %}
+                                </div>
+                                <p class="h5 col-sm-offset-3 col-sm-9 col-xs-12">Roof</p>
+                                <div class="form-group">
+                                  <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ granny_flat_form.granny_roof_description.label }}
+                                  </label>
+                                  <div class="col-md-2 col-sm-2 col-xs-12 ve-sh-width-twenty">
+                                    <div class="form-fields">
+                                      {{ granny_flat_form.granny_roof_description|add_error_class:"ve-sh-error-block" }} {{ granny_flat_form.granny_roof_description.help_text }}
+                                    </div>
+                                    {% if granny_flat_form.errors %}
+                                      {% for error in granny_flat_form.granny_roof_description.errors %}
+                                        <div class="ve-sh-error-text">
+                                          {{ error|escape }}
+                                        </div>
+                                      {% endfor %}
+                                    {% endif %}
+                                  </div>
+                                  <label class="control-label col-md-2 col-sm-2 col-xs-12 ve-sh-width-ten">{{ granny_flat_form.granny_roof_condition.label }}
+                                  </label>
+                                  <div class="col-md-2 col-sm-2 col-xs-12 ve-sh-width-twenty">
+                                    <div>
+                                      {{ granny_flat_form.granny_roof_condition|add_error_class:"ve-sh-error-block" }} {{ granny_flat_form.granny_roof_condition.help_text }}
+                                    </div>
+                                    {% if granny_flat_form.errors %}
+                                      {% for error in granny_flat_form.granny_roof_condition.errors %}
+                                        <div class="ve-sh-error-text">
+                                          {{ error|escape }}
+                                        </div>
+                                      {% endfor %}
+                                    {% endif %}
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="control-label col-md-3 col-sm-3 col-xs-12 ve-sh-padding-null">{{ granny_flat_form.granny_roof_comments.label }}
+                                  </label>
+                                  <div class="col-md-6 col-sm-6 col-xs-12 input-field">
+                                    {{ granny_flat_form.granny_roof_comments|add_error_class:"ve-sh-error-block" }} {{ granny_flat_form.granny_roof_comments.help_text }}
+                                  </div>
+                                  {% if granny_flat_form.errors %}
+                                    {% for error in granny_flat_form.granny_roof_comments.errors %}
+                                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                        {{ error|escape }}
+                                      </div>
+                                    {% endfor %}
+                                  {% endif %}
+                                </div>
+                                <p class="h5 col-sm-offset-3 col-sm-9 col-xs-12">Measurements</p>
+                                <div class="form-group">
+                                  <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ granny_flat_form.building_area.label }} <small>(m<sup>2</sup>)</small>
+                                  </label>
+                                  <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <div class="input-field">
+                                      {{ granny_flat_form.building_area|add_error_class:"ve-sh-error-block" }} {{ granny_flat_form.building_area.help_text }}
+                                    </div>
+                                    {% if granny_flat_form.errors %}
+                                      {% for error in granny_flat_form.building_area.errors %}
+                                        <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                          {{ error|escape }}
+                                        </div>
+                                      {% endfor %}
+                                    {% endif %}
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ granny_flat_form.carport_area.label }} <small>(m<sup>2</sup>)</small>
+                                  </label>
+                                  <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <div class="input-field">
+                                      {{ granny_flat_form.carport_area|add_error_class:"ve-sh-error-block" }} {{ granny_flat_form.carport_area.help_text }}
+                                    </div>
+                                    {% if granny_flat_form.errors %}
+                                      {% for error in granny_flat_form.carport_area.errors %}
+                                        <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                          {{ error|escape }}
+                                        </div>
+                                      {% endfor %}
+                                    {% endif %}
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ granny_flat_form.garage_area.label }} <small>(m<sup>2</sup>)</small>
+                                  </label>
+                                  <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <div class="input-field">
+                                      {{ granny_flat_form.garage_area|add_error_class:"ve-sh-error-block" }} {{ granny_flat_form.garage_area.help_text }}
+                                    </div>
+                                    {% if granny_flat_form.errors %}
+                                      {% for error in granny_flat_form.garage_area.errors %}
+                                        <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                          {{ error|escape }}
+                                        </div>
+                                      {% endfor %}
+                                    {% endif %}
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-6 col-sm-6 col-xs-12 col-sm-offset-3">
+                                <input type="submit" value="Submit" class="btn btn-success" />
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+  <script type="text/javascript">
+    $('#property-details, #deal-card, #granny-flat, #granny-flat-details').addClass('active');
+  </script>
+
+  <!-- if user clicks on Renovation in deals navbar then it is handled by an ajax call -->
+  <script src="/static/custom/custom_js.js"></script>
+
+  <script>
+    $(document).on("click", "#renovation-details", function() {
+      name("{{deal_id}}", "{{lead_id}}");
+    });
+
+    $('select').on('change', function() {
+      if ($(this).parent().hasClass('form-fields')){
+        if ($(this).val() == 'None'){
+          $(this).parent().parent().next().next().children().children().attr('disabled', true);
+        } else{
+          $(this).parent().parent().next().next().children().children().attr('disabled', false);
+        }
+      }
+    });
+
+    // Event for disabling the whole form if 'Is There A Granny Flat' field is changed to option 'No'
+    $('select').on('change', function() {
+      if($(this).val() == "No") {
+        $('.form-control').each(function() {
+          $(this).attr('disabled', true);
+          if ($(this).attr('id') == 'id_is_granny_flat') {
+            $(this).attr('disabled', false);
+          } else if ($(this).parent().hasClass('form-fields')) {
+            $(this).val('None');
+          } else if ($(this).parent().hasClass('input-field')) {
+            $(this).val('');
+          }
+        });
+
+        $('.granny-flat-absent').each(function() {
+          $(this).addClass('disabled');
+          $(this).addClass('disabled-li');
+        });
+      } else {
+        $('.form-control').each(function() {
+          $(this).attr('disabled', false);
+        });
+
+        $('.form-fields').children().each(function(){
+          if ($(this).val() == 'None') {
+            $(this).parent().parent().next().next().children().children().attr('disabled', true);
+          } else {
+            $(this).parent().parent().next().next().children().children().attr('disabled', false);
+          }
+        });
+      };
+    });
+
+    // The below code will run on page load
+    $('.form-fields').children().each(function(){
+      if ($(this).val() == 'None') {
+        $(this).parent().parent().next().next().children().children().attr('disabled', true);
+      } else {
+        $(this).parent().parent().next().next().children().children().attr('disabled', false);
+      }
+    });
+
+    if($('#id_is_granny_flat').val() == "No") {
+      $('.form-control').each(function() {
+        $(this).attr('disabled', true);
+        if ($(this).attr('id') == 'id_is_granny_flat') {
+          $(this).attr('disabled', false);
+        } else if ($(this).parent().hasClass('form-fields')) {
+          $(this).val('None');
+        } else if ($(this).parent().hasClass('input-field')) {
+          $(this).val('');
+        }
+      });
+
+      $('.granny-flat-absent').each(function() {
+        $(this).addClass('disabled');
+        $(this).addClass('disabled-li');
+      });
+    } else {
+      $('.form-control').each(function() {
+        $(this).attr('disabled', false);
+      });
+
+      $('.form-fields').children().each(function(){
+        if ($(this).val() == 'None') {
+          $(this).parent().parent().next().next().children().children().attr('disabled', true);
+        } else {
+          $(this).parent().parent().next().next().children().children().attr('disabled', false);
+        }
+      });
+
+      $('.granny-flat-absent').each(function() {
+        $(this).removeClass('disabled');
+        $(this).removeClass('disabled-li');
+      });
+    };
+  </script>
+{% endblock javascripts %}

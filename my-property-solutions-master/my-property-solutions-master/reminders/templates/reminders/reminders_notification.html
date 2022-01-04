@@ -1,0 +1,34 @@
+<a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+  <i class="fa fa-bell"></i>
+  <span class="badge bg-green" id="notification-count">{% if reminders %} {{ reminders.count }} {% endif %}</span>
+</a>
+<ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+  {% for reminder in reminders %}
+  	  <li class="notification">
+	      <span class="message">
+	      	<h5>Reminder</h5>
+	      	<div>
+	      		<strong>Date: </strong>{{ reminder.datetime|date:"d-m-Y"|default_if_none:"" }}&nbsp;&nbsp;
+	      		<strong>Time: </strong>{{ reminder.datetime|date:"P"|default_if_none:"" }}<br>
+	      		<strong>Owner(s): </strong>{% for owner in reminder.deal.lead.property.property_owner.all %} {{ owner|default_if_none:"" }} {% endfor %}<br>
+	      		<strong>Address: </strong>{{ reminder.deal.lead.property.unit|default_if_none:"" }} {{ reminder.deal.lead.property.number|default_if_none:"" }} {{ reminder.deal.lead.property.street|default_if_none:"" }} {{ reminder.deal.lead.property.suburb|default_if_none:"" }} {{ reminder.deal.lead.property.state|default_if_none:"" }} {{ reminder.deal.lead.property.post_code|default_if_none:"" }}
+	      	</div>
+	      	<div>
+	        	<strong>Note: </strong>{{ reminder.notes }}
+	      	</div><br>
+	      	<div>
+	      		<button class="btn btn-xs btn-primary dismiss-reminder" id="{{ reminder.id }}">Dismiss</button>
+	      		<button class="btn btn-xs btn-primary snooze-reminder"  id="{{ reminder.id }}">Snooze</button>
+	      	</div>
+	      </span>
+	  </li>
+  {% empty %}
+	  <li>
+	    <a>
+	      <span class="message">
+	        <strong>No notifications to show right now!</strong>
+	      </span>
+	    </a>
+	  </li>
+  {% endfor %}
+</ul>

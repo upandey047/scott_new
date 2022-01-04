@@ -1,0 +1,43 @@
+<div class="container">
+     <a data-toggle="modal" data-target="#myModal" class="btn btn-primary pull-right">Add Family</a>
+    <table class="table table-striped table-bordered table-responsive table-hover">
+        <thead class="thalpha">
+        <tr>
+
+            <th rowspan="2" style="width:100px;">Family Name</th>
+            <th rowspan="2" style="width:100px;">Company</th>
+            <th rowspan="2" style="width:100px;">Postal Address</th>
+            <th rowspan="2" style="width:50px;">Mobile</th>
+
+            <th rowspan="2" style="width:50px;">Email</th>
+            <th rowspan="2" style="width:50px;">Edit</th>
+            <th rowspan="2" style="width:50px;">Delete</th>
+        </tr>
+
+        </thead>
+
+        <tbody class="tbalpha">
+
+        </tbody>
+        {% for family in family_list %}
+        <tr id="hide">
+
+            <td>{{family.name}}</td>
+            <td>{{family.company}}</td>
+            <td>{{family.address}}</td>
+            <td>{{family.phone}}</td>
+            <td>{{family.email}}</td>
+
+            <td><a href="{% url 'dashboard:deals:familyupdate' family.id %}" class="btn btn-primary btn-xs"
+                   style="float:right">Edit</a></td>
+            <td><a href="{% url 'dashboard:deals:familydelete' family.id %}" class="btn btn-danger btn-xs"
+                   style="float:right">Delete</a></td>
+
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<script>
+   $(".modal-body").load("{% url 'dashboard:deals:familycreate' %}");
+</script>

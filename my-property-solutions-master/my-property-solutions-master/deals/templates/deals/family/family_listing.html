@@ -1,0 +1,96 @@
+
+<a onclick="addFormAjax()" class="btn btn-primary pull-right">Add Family</a>
+
+{% if family_list %}
+<div class="w-20 pull-right" style="padding:0 2px;margin:0 4px;">
+    <select class="form-control" id="selectFamily" >
+        <option value="0"> Select Family </option>
+        {% for family in select_list %}
+         <option value="{{family.id}}">
+            {{ family.name }}
+          </option>
+        {% endfor %}
+
+    </select>
+    </div>
+<table id="table" class="table table-striped">
+      <thead>
+        <tr>
+         
+          <th>Contact Name</th>
+          <th>Company</th>
+          <th>Postal Address</th>
+          <th>Mobile</th>  
+          <th>Email</th>
+          <th>Edit</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for family in family_list %}
+        <tr>
+            
+            <td>{{family.name}}</td>
+            <td>{{family.company}}</td>
+            <td>{{family.address}}</td>
+            <td>{{family.phone}}</td>
+            <td>{{family.email}}</td>
+
+            <td><a onclick="editFamily(this)" title="{% url 'dashboard:deals:family_edit' family.id %}" class="btn btn-info btn-xs">
+                <i class="fa fa-pencil"></i> Edit</a></td>
+            <td><a onclick="deleteFamily(this)" title="{% url 'dashboard:deals:family_delete' family.id %}"
+                   class="btn btn-danger btn-xs ve-sh-del-contact">
+                <i class="fa fa-trash-o"></i> Delete</a></td>
+
+        </tr>
+      {% endfor %}
+
+
+
+
+      </tbody>
+
+</table>
+
+
+{% else %}
+  <div class="p-4">
+    No Family Found !
+</div>
+{% endif%}
+
+
+<script>
+
+    $('#selectFamily').on('change', function (e) {
+        loadFamily(this.value);
+    });
+</script>
+
+
+
+<script>
+    function addFormAjax(){
+    $('#myModal').modal('show');
+    urlPATH="{% url 'dashboard:deals:family_create' %}";
+    $('.modal-body').load(urlPATH);
+
+    }
+
+    function editFamily(tag){
+    $('#myModal').modal('show');
+    urlPATH=tag.title;
+    console.log(urlPATH);
+    $('.modal-body').load(urlPATH);
+    }
+
+    function deleteFamily(tag){
+    $('#myModal').modal('show');
+    urlPATH=tag.title;
+    console.log(urlPATH);
+    $('.modal-body').load(urlPATH);
+    }
+
+</script>
+
+

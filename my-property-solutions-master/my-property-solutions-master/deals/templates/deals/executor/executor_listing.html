@@ -1,0 +1,97 @@
+
+<a onclick="addFormAjax()" class="btn btn-primary pull-right">Add Executor</a>
+
+{% if executor_list %}
+<div class="w-20 pull-right" style="padding:0 2px;margin:0 4px;">
+    <select class="form-control" id="selectAgent" >
+        <option value="0"> Select Executor </option>
+        {% for executor in select_list %}
+         <option value="{{executor.id}}">
+            {{ executor.name }}
+          </option>
+        {% endfor %}
+
+    </select>
+    </div>
+    <table id="table" class="table table-striped">
+      <thead>
+        <tr>
+         
+          <th>Name</th>
+          <th>Company</th>
+          <th>Postal Address</th>
+          <th>Mobile</th>  
+          <th>Email</th>
+          <th>Edit</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for executor in executor_list %}
+        <tr>
+            
+            
+            <td>{{executor.name}}</td>
+            <td>{{executor.company}}</td>
+            <td>{{executor.address}}</td>
+            <td>{{executor.phone}}</td>
+            <td>{{executor.email}}</td>
+
+            <td><a onclick="editExecutor(this)" title="{% url 'dashboard:deals:executor_edit' executor.id %}" class="btn btn-info btn-xs">
+                <i class="fa fa-pencil"></i> Edit</a></td>
+            <td><a onclick="deleteExecutor(this)" title="{% url 'dashboard:deals:executor_delete' executor.id %}"
+                   class="btn btn-danger btn-xs ve-sh-del-contact">
+                <i class="fa fa-trash-o"></i> Delete</a></td>
+
+        </tr>
+      {% endfor %}
+
+
+
+
+      </tbody>
+
+    </table>
+
+
+{% else %}
+  <div class="p-4">
+    No Excutor Found !
+</div>
+{% endif%}
+
+
+<script>
+
+    $('#selectExecutor').on('change', function (e) {
+        loadExecutor(this.value);
+    });
+</script>
+
+
+
+<script>
+    function addFormAjax(){
+    $('#myModal').modal('show');
+    urlPATH="{% url 'dashboard:deals:executor_create' %}";
+    $('.modal-body').load(urlPATH);
+
+    }
+
+    function editExecutor(tag){
+    $('#myModal').modal('show');
+    urlPATH=tag.title;
+    console.log(urlPATH);
+    $('.modal-body').load(urlPATH);
+    }
+
+    function deleteExecutor(tag){
+    $('#myModal').modal('show');
+    urlPATH=tag.title;
+    console.log(urlPATH);
+    $('.modal-body').load(urlPATH);
+    }
+
+</script>
+
+

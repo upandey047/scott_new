@@ -1,0 +1,253 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Renovation Room {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <style type="text/css">
+    form > .x_panel {
+      border-top: 0px !important;
+    }
+  </style>
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="x_content">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              {% include 'deals/deals_navbar.html' with deal_id=deal_id lead_id=lead_id %}
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <div class="container">
+
+                {% include 'deals/renovation/renovation_details_navbar.html' %}
+
+                <div class="tab-content">
+                  <div id="land-details-div" class="tab-pane fade in active">
+                    {% if messages %}
+                      <ul class="messages">
+                          {% for message in messages %}
+                            {% ifequal message.tags "submitted success" %}
+                              <div class="alert alert-success col-xs-12">
+                                <strong class="{{ message.tags }}">{{ message }}</strong>
+                              </div>
+                            {% endifequal %}
+                          {% endfor %}
+                      </ul>
+                    {% endif %}
+                    <form method="POST" action="" class="form-horizontal form-label-left">
+                      {% csrf_token %}
+                      <div class="x_panel">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                          <div class="x_title">
+                            <a href="{% url 'dashboard:deals:renovation_rooms' deal_id %}" class="btn btn-primary" id="go-back-btn">Go Back</a>
+                            <h2>Renovation Rooms Details</h2>
+                            <div class="clearfix"></div>
+                          </div>
+                          <div class="x_content">
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12"> Room </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                <select class="form-control ve-sh-select-option">
+                                  {% for room in all_rooms %}
+                                    <option value="{{ room.id }}" id="id_{{ room.id }}">{{ room }}</option>
+                                  {% endfor %}
+                                </select>
+                              </div>
+                              <div class="ve-sh-select-details">
+                                <input type="text" class="hidden ve-sh-hidden-field" name="selected-room-id" value="{{room_id}}">
+                                <div class="form-group ">
+                                  <label class="control-label col-md-3 col-sm-3 col-xs-12"> {{ selected_room_form.room_name.label }}</label>
+                                  <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {{ selected_room_form.room_name|add_error_class:"ve-sh-error-block" }} {{ selected_room_form.room_name.help_text }}
+                                  </div>
+                                  {% if selected_room_form.errors %}
+                                    {% for error in selected_room_form.room_name.errors %}
+                                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                        {{ error|escape }}
+                                      </div>
+                                    {% endfor %}
+                                  {% endif %}
+                                </div>
+                                <div class="form-group ">
+                                  <label class="control-label col-md-3 col-sm-3 col-xs-12"> {{ selected_room_form.start_date.label }}</label>
+                                  <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {{ selected_room_form.start_date|add_error_class:"ve-sh-error-block" }} {{ selected_room_form.start_date.help_text }}
+                                  </div>
+                                  {% if selected_room_form.errors %}
+                                    {% for error in selected_room_form.start_date.errors %}
+                                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                        {{ error|escape }}
+                                      </div>
+                                    {% endfor %}
+                                  {% endif %}
+                                </div>
+                                <div class="form-group ">
+                                  <label class="control-label col-md-3 col-sm-3 col-xs-12"> {{ selected_room_form.completion_date.label }}</label>
+                                  <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {{ selected_room_form.completion_date|add_error_class:"ve-sh-error-block" }} {{ selected_room_form.completion_date.help_text }}
+                                  </div>
+                                  {% if selected_room_form.errors %}
+                                    {% for error in selected_room_form.completion_date.errors %}
+                                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                        {{ error|escape }}
+                                      </div>
+                                    {% endfor %}
+                                  {% endif %}
+                                </div>
+                                <div class="form-group ">
+                                  <label class="control-label col-md-3 col-sm-3 col-xs-12"> {{ selected_room_form.duration.label }} <small>(Days)</small> </label>
+                                  <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {{ selected_room_form.duration|add_error_class:"ve-sh-error-block" }} {{ selected_room_form.duration.help_text }}
+                                  </div>
+                                  {% if selected_room_form.errors %}
+                                    {% for error in selected_room_form.duration.errors %}
+                                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                        {{ error|escape }}
+                                      </div>
+                                    {% endfor %}
+                                  {% endif %}
+                                </div>
+                                <div class="form-group ">
+                                  <label class="control-label col-md-3 col-sm-3 col-xs-12"> {{ selected_room_form.room_budget.label }} <small>($)</small> </label>
+                                  <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js" title="Enter Value">
+                                    {{ selected_room_form.room_budget|add_error_class:"ve-sh-error-block" }} {{ selected_room_form.room_budget.help_text }}
+                                  </div>
+                                  {% if selected_room_form.errors %}
+                                    {% for error in selected_room_form.room_budget.errors %}
+                                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                        {{ error|escape }}
+                                      </div>
+                                    {% endfor %}
+                                  {% endif %}
+                                </div>
+                                <div class="form-group ">
+                                  <label class="control-label col-md-3 col-sm-3 col-xs-12"> {{ selected_room_form.status.label }} </label>
+                                  <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js" title="Enter Value">
+                                    {{ selected_room_form.status|add_error_class:"ve-sh-error-block" }} {{ selected_room_form.status.help_text }}
+                                  </div>
+                                  {% if selected_room_form.errors %}
+                                    {% for error in selected_room_form.status.errors %}
+                                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                        {{ error|escape }}
+                                      </div>
+                                    {% endfor %}
+                                  {% endif %}
+                                </div>
+                                {% include 'deals/renovation/renovation_room_navbar.html' %}
+                                <br>
+                                <div class="x_title">
+                                  <h2>Room Overview</h2>
+                                  <div class="clearfix"></div>
+                                </div>
+                                <div class="form-group ">
+                                  <label class="control-label col-md-3 col-sm-3 col-xs-12"> {{ selected_room_form.room_thoughts.label }} </label>
+                                  <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {{ selected_room_form.room_thoughts|add_error_class:"ve-sh-error-block" }} {{ selected_room_form.room_thoughts.help_text }}
+                                  </div>
+                                  {% if selected_room_form.errors %}
+                                    {% for error in selected_room_form.room_thoughts.errors %}
+                                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                        {{ error|escape }}
+                                      </div>
+                                    {% endfor %}
+                                  {% endif %}
+                                </div>
+                                <div class="col-xs-12">
+                                  <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <div class="col-sm-offset-3 col-sm-6 col-xs-12 ve-sh-left-pad-null">
+                                      <input type="submit" value="Submit" class="btn btn-success" />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+
+  <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+  <script type="text/javascript">
+    $("#renovation-rooms, #deal-card, #renovation-details, #renovation-room-overview").addClass("active");
+
+    $('#id_start_date, #id_completion_date').datepicker({
+      dateFormat: "dd-mm-yy"
+    });
+
+    // For Room's select option on page load
+    var room_id = "{{room_id}}";
+    ($(".ve-sh-select-option").children()).each(function(index){
+      if ($(this).attr("value") == room_id) {
+        $(this).attr("selected", true);
+      }
+    });
+
+    // If user selects any other room from drop-down
+    $(".ve-sh-select-option").change(function() {
+      var deal_id = "{{deal_id}}";
+      var room_id = $(this).val();
+      var current_url = "{{ request.path }}";
+      var whole_url = current_url.split("/");
+      var last_url = whole_url.pop();
+      if (last_url == "overview") {
+        $(".ve-sh-select-details").load("/dashboard/deals/" + deal_id + "/renovation-details/rooms/" + room_id + "/overview/select-details");
+      }
+      else if (last_url == "tasks") {
+        $(".ve-sh-select-details").load("/dashboard/deals/" + deal_id + "/renovation-details/rooms/" + room_id + "/tasks/select-details");
+      }
+      else if (last_url == "materials") {
+        $(".ve-sh-select-details").load("/dashboard/deals/" + deal_id + "/renovation-details/rooms/" + room_id + "/materials/select-details");
+      }
+    });
+
+    // Event for date Start Date and Completion Due fields
+    $(document).on('change', '#id_start_date, #id_completion_date', function() {
+      var start_date = $('#id_start_date').val();
+      var completion_date = $('#id_completion_date').val();
+      var start_date_array = start_date.toString().split('-');
+      var completion_date_array = completion_date.toString().split('-');
+      var new_start_date = new Date(start_date_array[2] + '-' + start_date_array[1] + '-' + start_date_array[0]);
+      var new_completion_date = new Date(completion_date_array[2] + '-' + completion_date_array[1] + '-' + completion_date_array[0]);
+      var duration = new Date(new_completion_date - new_start_date);
+      var days = duration/1000/60/60/24;
+      if ($.isNumeric(days)) {
+        days = days;
+      }
+      else {
+        days = 0;
+      }
+      $('#id_duration').val(days);
+    });
+
+  </script>
+
+  <!-- if user clicks on Renovation in deals navbar then it is handled by an ajax call -->
+  <!-- To separate the numbers in a number fields with comma whenever user enters digits -->
+  <script src="/static/custom/custom_js.js"></script>
+
+  <script>
+    $(document).on("click", "#renovation-details", function() {
+      name("{{deal_id}}", "{{lead_id}}");
+    });
+  </script>
+{% endblock javascripts %}

@@ -1,0 +1,170 @@
+
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Add Contact {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <a href="{% url 'dashboard:deals:inspection_bathroom_details' deal_id %}" class="btn btn-primary" id="go-back-btn">Go Back</a><h2>Add New Bathroom</h2>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+              <form method="POST" action="" class="form-horizontal form-label-left">
+                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                  </label>
+                  <div class="col-md-6 col-sm-6 col-xs-12">
+                  </div>
+                </div>
+                {% csrf_token %}
+
+                <div class="hidden">{{ form.id }}</div>
+                <div class="col-sm-offset-3 col-md-6 col-sm-6 col-xs-12">
+                  <h2 class="form-title">Bathroom Details</h2>
+                </div>
+                <div class="x_content">
+                  {% if form.errors %}
+                    {% for error in form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                    {% endfor %}
+                  {% endif %}
+
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.bath.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.bath|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.bath.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.hand_basin.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.hand_basin|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.hand_basin.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.shower.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.shower|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.shower.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.toilet.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.toilet|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.toilet.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.vanity.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.vanity|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.vanity.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.bathroom_comments.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.bathroom_comments|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.bathroom_comments.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Dimensions</p>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Dimentions <small>(mm)</small>
+                    </label>
+                    <div class="col-md-2 col-sm-2 col-xs-12">
+                      <div>
+                        {{ form.bathroom_length|add_error_class:"ve-sh-error-block" }}
+                      </div>
+                      <div class='ve-sh-error-text'>
+                        {% for error in form.bathroom_length.errors %}
+                          {{ error }}
+                        {% endfor %}
+                      </div>
+                    </div>
+                    <div class="col-md-2 col-sm-2 col-xs-12">
+                      <div>
+                        {{ form.bathroom_width|add_error_class:"ve-sh-error-block" }}
+                      </div>
+                      <div class='ve-sh-error-text'>
+                        {% for error in form.bathroom_width.errors %}
+                          {{ error }}
+                        {% endfor %}
+                      </div>
+                    </div>
+                    <div class="col-md-2 col-sm-2 col-xs-12">
+                      <div>
+                        {{ form.bathroom_height|add_error_class:"ve-sh-error-block" }}
+                      </div>
+                      <div class='ve-sh-error-text'>
+                        {% for error in form.bathroom_height.errors %}
+                          {{ error }}
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <br>
+                <div class="col-md-6 col-sm-6 col-xs-12 col-sm-offset-3">
+                  <input type="submit" value="Submit" class="btn btn-success" />
+                </div>
+              </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+   <script type="text/javascript">
+    $('#property-details, #deal-card, #internal, #bathroom-details').addClass('active');
+   </script>
+{% endblock javascripts %}

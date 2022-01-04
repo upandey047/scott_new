@@ -1,0 +1,151 @@
+<div class="left_col scroll-view">
+  <div class="navbar nav_title" style="border: 0;">
+    <a href="{% url 'dashboard:index' %}" class="site_title"><i class="fa fa-home"></i> <span style="font-size: 17px;">My Property System</span></a>
+  </div>
+
+  <div class="clearfix"></div>
+
+  <!-- menu profile quick info -->
+  <div class="profile clearfix">
+    <div class="profile_pic">
+      <img src="/static/images/anon_user.png" alt="..." class="img-circle profile_img">
+    </div>
+    <div class="profile_info">
+      <span style="color:white">Welcome {{user.username | upper}}</span>
+    </div>
+  </div>
+  <!-- /menu profile quick info -->
+
+  <br />
+
+  <!-- sidebar menu -->
+  <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+    <div class="menu_section">
+      <h3>General</h3>
+      <ul class="nav side-menu">
+        <li id="home"><a href="{% url 'dashboard:index' %}"><i class="fa fa-home"></i> Home </a></li>
+        <li id="contacts"><a><i class="fa fa-phone"></i> Contacts <span class="fa fa-chevron-down"></span></a>
+          <ul class="nav child_menu">
+            <li><a>Certifiers/Inspectors <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="{% url 'dashboard:contacts:index' 'certifiers-or-inspectors' 'building-inspectors' %}">Building Inspectors</a></li>
+                <li><a href="{% url 'dashboard:contacts:index' 'certifiers-or-inspectors' 'pest-inspectors' %}">Pest Inspectors</a></li>
+                <li><a href="{% url 'dashboard:contacts:index' 'certifiers-or-inspectors' 'private-certifiers' %}">Private Certifiers</a></li>
+              </ul>
+            </li>
+            <li><a>Construction/Trade <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="{% url 'dashboard:contacts:index' 'construction-or-trade' 'asbestos-removal' %}">Aesbestos Removal</a></li>
+                <li><a href="{% url 'dashboard:contacts:index' 'construction-or-trade' 'brick-layer' %}">Brick Layer</a></li>
+                <li><a href="{% url 'dashboard:contacts:index' 'construction-or-trade' 'builders' %}">Builders</a></li>
+                <li><a href="{% url 'dashboard:contacts:index' 'construction-or-trade' 'carpet-or-floor-layers' %}">Carpet / Floor Layers</a></li>
+                <li><a href="{% url 'dashboard:contacts:index' 'construction-or-trade' 'concretors' %}">Concretors</a></li>
+                <li><a href="{% url 'dashboard:contacts:index' 'construction-or-trade' 'demolition' %}">Demolition</a></li>
+                <li><a href="{% url 'dashboard:contacts:index' 'construction-or-trade' 'electricians' %}">Electricians</a></li>
+                <li><a href="{% url 'dashboard:contacts:index' 'construction-or-trade' 'excavators' %}">Excavators</a></li>
+                <li><a href="{% url 'dashboard:contacts:index' 'construction-or-trade' 'gyprockers' %}">Gyprockers</a></li>
+                <li><a href="{% url 'dashboard:contacts:index' 'construction-or-trade' 'kitchen-installers' %}">Kitchen Installers</a></li>
+                <li><a href="{% url 'dashboard:contacts:index' 'construction-or-trade' 'landscapers' %}">Landscapers</a></li>
+                <li><a href="{% url 'dashboard:contacts:index' 'construction-or-trade' 'painters' %}">Painters</a></li>
+                <li><a href="{% url 'dashboard:contacts:index' 'construction-or-trade' 'plumbers' %}">Plumbers</a></li>
+                <li><a href="{% url 'dashboard:contacts:index' 'construction-or-trade' 'renderers' %}">Renderers</a></li>
+                <li><a href="{% url 'dashboard:contacts:index' 'construction-or-trade' 'roofers' %}">Roofers</a></li>
+                <li><a href="{% url 'dashboard:contacts:index' 'construction-or-trade' 'tilers' %}">Tilers</a></li>
+                <li><a href="{% url 'dashboard:contacts:index' 'construction-or-trade' 'waterproofers' %}">Waterproofers</a></li>
+              </ul>
+            </li>
+            <li><a>Design <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="{% url 'dashboard:contacts:index' 'design' 'architects' %}">Architects</a></li>
+                <li><a href="{% url 'dashboard:contacts:index' 'design' 'interior-designers' %}">Interior Designers</a></li>
+              </ul>
+            </li>
+            <li><a href="{% url 'dashboard:contacts:index' 'developers' 'developers' %}">Developers</a></li>
+            <li><a>Finance <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="{% url 'dashboard:contacts:index' 'finance' 'bank' %}">Bank</a></li>
+                <li><a href="{% url 'dashboard:contacts:index' 'finance' 'book-keepers' %}">Book Keepers</a></li>
+                <li><a href="{% url 'dashboard:contacts:index' 'finance' 'brokers' %}">Brokers</a></li>
+                <li><a href="{% url 'dashboard:contacts:index' 'finance' 'fincancial-advisors' %}">Financial Advisors</a></li>
+                <li><a href="{% url 'dashboard:contacts:index' 'finance' 'money-backers' %}">Money Lenders</a></li>
+                <li><a href="{% url 'dashboard:contacts:index' 'finance' 'accountants' %}">Accountant</a></li>
+              </ul>
+            </li>
+            <li><a>Legal <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="{% url 'dashboard:contacts:index' 'legal' 'conveyancers' %}">Conveyancers</a></li>
+                <li><a href="{% url 'dashboard:contacts:index' 'legal' 'commercial-lawyers' %}">Commercial Lawyers</a></li>
+                <li><a href="{% url 'dashboard:contacts:index' 'legal' 'probate-and-wills' %}">Probate & Wills</a></li>
+              </ul>
+            </li>
+            <!-- <li><a>Real Estate <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="{% url 'dashboard:deals:agentlisting' %}">Agents</a></li>
+                <li><a href="{% url 'dashboard:contacts:index' 'real-estate' 'executor' %}">Executors</a></li>
+              </ul>
+            </li> -->
+            <li><a href="{% url 'dashboard:contacts:index' 'surveyors' 'surveyors' %}">Surveyors</a></li>
+            <li><a href="{% url 'dashboard:contacts:index' 'council' 'council' %}">Council</a></li>
+            <li><a href="{% url 'dashboard:contacts:index' 'others' 'others' %}">Others</a></li>
+          </ul>
+        </li>
+        <li><a><i class="fa fa-cog"></i>Settings <span class="fa fa-chevron-down"></span></a>
+          <ul class="nav child_menu">
+            <li><a>Entities <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="{% url 'dashboard:settings:individual_entity' %}">Individual</a></li>
+                <li><a href="{% url 'dashboard:settings:company_entity' %}">Company</a></li>
+                <li><a href="{% url 'dashboard:settings:trust_entity' %}">Trust</a></li>
+              </ul>
+            </li>
+            <li><a>Check List <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <!-- <li><a href="/initial/initial-research/">Initial Research</a></li>
+                <li><a href="/initial/letter/">Letter</a></li>
+                <li><a href="/initial/inspection/">Inspection</a></li>
+                <li><a href="/initial/duedilligence/">Due Dilligence</a></li>
+                <li><a href="/initial/propertyserach/">Property Search</a></li>
+                <li><a href="/initial/marketresearch/">Market Research</a></li>
+                <li><a href="/initial/offerfinance/">Offer/Finance</a></li>
+                <li><a href="/initial/exchangesettlement/">Exchange/Settlement</a></li>
+                <li><a href="/initial/renovation/">Renovation</a></li>
+                <li><a href="/initial/listingforsale/">Listing For Sale</a></li>
+                <li><a href="/initial/saleexchangesettlement/">Sale - Exchange/Settlement</a></li> -->   
+                <li><a href="{% url 'dashboard:settings:checklist' 'initial_research' %}">Initial Research</a></li>
+                <li><a href="{% url 'dashboard:settings:checklist' 'letters' %}">Letters</a></li>
+                <li><a href="{% url 'dashboard:settings:checklist' 'inspection' %}">Inspection</a></li>
+                <li><a href="{% url 'dashboard:settings:checklist' 'due_diligence' %}">Due Diligence</a></li>
+                <li><a href="{% url 'dashboard:settings:checklist' 'property_searches' %}">Property Searches</a></li>
+                <li><a href="{% url 'dashboard:settings:checklist' 'market_research' %}">Market Research</a></li>
+                <li><a href="{% url 'dashboard:settings:checklist' 'offer_or_finance' %}">Offer/Finance</a></li>
+                <li><a href="{% url 'dashboard:settings:checklist' 'exchange_or_settlement' %}">Exchange/Settlement</a></li>
+                <li><a href="{% url 'dashboard:settings:checklist' 'renovation' %}">Renovation</a></li>
+                <li><a href="{% url 'dashboard:settings:checklist' 'listing_for_sale' %}">Listing For Sale</a></li>
+                <li><a href="{% url 'dashboard:settings:checklist' 'sale-exchange_or_settlement' %}">Sale - Exchange/Settlement</a></li>
+                       
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!-- /sidebar menu -->
+
+  <!-- /menu footer buttons -->
+  <div class="sidebar-footer hidden-small" style="display: none;">
+    <a data-toggle="tooltip" data-placement="top" title="Settings">
+      <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+    </a>
+    <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+      <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+    </a>
+    <a data-toggle="tooltip" data-placement="top" title="Lock">
+      <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+    </a>
+    <a data-toggle="tooltip" data-placement="top" title="Logout">
+      <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+    </a>
+  </div>
+  <!-- /menu footer buttons -->
+</div>

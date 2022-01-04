@@ -1,0 +1,238 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Edit Lender {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <a href="{% url 'dashboard:deals:my_purchase_details' deal_id %}" class="btn btn-primary" id="go-back-btn">Go Back</a><h2>Edit {{ lender_obj.sub_category|title }} Payment Details</h2>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+              <form method="POST" action="" class="form-horizontal form-label-left">
+                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">
+                  </label>
+                  <div class="col-md-6 col-sm-6 col-xs-12">
+                  </div>
+                </div>
+                {% csrf_token %}
+
+                {% if form.errors %}
+                  {% for error in form.non_field_errors %}
+                      <div class="alert alert-danger">
+                          <strong>{{ error|escape }}</strong>
+                      </div>
+                  {% endfor %}
+                {% endif %}
+
+                <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12">
+                  <h2 class="form-title">Basic Info</h2>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-3 col-sm-3 col-xs-12 control-label">Lender Name
+                  </label>
+                  <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                    <input type="text" name="contact_name" disabled="" value='{{ lender_obj.contact_name|default_if_none:"" }}' class="form-control" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-3 col-sm-3 col-xs-12 control-label">Address
+                  </label>
+                  <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                    <input type="text" name="Address" disabled="" value='{{ lender_obj.unit|default_if_none:"" }} {{ lender_obj.number|default_if_none:"" }} {{ lender_obj.street|default_if_none:"" }} {{ lender_obj.suburb|default_if_none:"" }} {{ lender_obj.state|default_if_none:"" }} {{ lender_obj.post_code|default_if_none:"" }}' class="form-control" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-3 col-sm-3 col-xs-12 control-label">Phone
+                  </label>
+                  <div class="col-md-2 col-sm-2 col-xs-12 ve-sh-number-js">
+                    <input type="text" name="Phone" disabled="" value='{{ lender_obj.mobile|default_if_none:"" }}' class="form-control" />
+                  </div>
+                  <label class="col-md-1 col-sm-1 col-xs-12 control-label">Email
+                  </label>
+                  <div class="col-md-3 col-sm-3 col-xs-12 ve-sh-number-js">
+                    <input type="text" name="Email" disabled="" value='{{ lender_obj.email|default_if_none:"" }}' class="form-control" />
+                  </div>
+                </div>
+                <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12">
+                  <h2 class="form-title">Payment Info</h2>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-3 col-sm-3 col-xs-12 control-label">{{ form.payment_type.label_tag }}
+                  </label>
+                  <div class="col-md-6 col-sm-6 col-xs-12">
+                    {{ form.payment_type|add_error_class:"ve-sh-error-block" }}
+                  </div>
+                  {% if form.errors %}
+                    {% for error in form.payment_type.errors %}
+                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                        {{ error|escape }}
+                      </div>
+                    {% endfor %}
+                  {% endif %}
+                </div>
+                <div class="interest-roi-div">
+                  <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12 control-label">{{ form.investment_amount.label_tag }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                      {{ form.investment_amount|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    {% if form.errors %}
+                      {% for error in form.investment_amount.errors %}
+                        <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                          {{ error|escape }}
+                        </div>
+                      {% endfor %}
+                    {% endif %}
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12 control-label">{{ form.agreed_interest_rate_per_annum.label_tag }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                      {{ form.agreed_interest_rate_per_annum|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    {% if form.errors %}
+                      {% for error in form.agreed_interest_rate_per_annum.errors %}
+                        <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                          {{ error|escape }}
+                        </div>
+                      {% endfor %}
+                    {% endif %}
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12 control-label">{{ form.duration_in_months.label_tag }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                      {{ form.duration_in_months|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    {% if form.errors %}
+                      {% for error in form.duration_in_months.errors %}
+                        <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                          {{ error|escape }}
+                        </div>
+                      {% endfor %}
+                    {% endif %}
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12 control-label">{{ form.roi_approx.label_tag }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                      {{ form.roi_approx|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    {% if form.errors %}
+                      {% for error in form.roi_approx.errors %}
+                        <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                          {{ error|escape }}
+                        </div>
+                      {% endfor %}
+                    {% endif %}
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12 control-label">{{ form.total_approx.label_tag }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                      {{ form.total_approx|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    {% if form.errors %}
+                      {% for error in form.total_approx.errors %}
+                        <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                          {{ error|escape }}
+                        </div>
+                      {% endfor %}
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="profit-split-div">
+                  <div class="form-group">
+                    <label class="col-md-3 col-sm-3 col-xs-12 control-label">{{ form.profit_split.label_tag }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.profit_split|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    {% if form.errors %}
+                      {% for error in form.profit_split.errors %}
+                        <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                          {{ error|escape }}
+                        </div>
+                      {% endfor %}
+                    {% endif %}
+                  </div>
+                </div>
+                <br>
+                <div class="col-md-6 col-sm-6 col-xs-12 col-sm-offset-3">
+                  <input type="submit" value="Submit" class="btn btn-success" />
+                </div>
+              </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+    <script type="text/javascript">
+      // Event for handling select element changes
+      $(document).on('change', 'select', function(){
+        if ($(this).attr('class').split(' ')[1] == 'payment_type') {
+          if ($(this).val() == 'Interest ROI') {
+            $(this).parent().parent().next().next().hide();
+            $(this).parent().parent().next().show();
+          }
+          else {
+            $(this).parent().parent().next().next().show();
+            $(this).parent().parent().next().hide();
+          }
+        }
+      });
+
+      // Event handlers for calculating the total approx. amount
+      $(document).on("keyup", ".interest_roi_field", function(){
+        var container = $(this).parent().parent().parent();
+        var investment_amount = 0;
+        if ($(container).children().eq(0).children().eq(1).children().val()){
+          investment_amount = parseInt($(container).children().eq(0).children().eq(1).children().val().replace(/(\,)/g, ''));
+        }
+        var agreed_interest_rate_per_annum = 0;
+        if ($(container).children().eq(1).children().eq(1).children().val()){
+          agreed_interest_rate_per_annum = parseInt($(container).children().eq(1).children().eq(1).children().val().replace(/(\,)/g, ''));
+        }
+        var duration_in_months = 0;
+        if ($(container).children().eq(2).children().eq(1).children().val()){
+          duration_in_months = parseInt($(container).children().eq(2).children().eq(1).children().val().replace(/(\,)/g, ''));
+        }
+        var roi = (investment_amount * agreed_interest_rate_per_annum * duration_in_months) / (12 * 100);
+        roi = roi.toFixed(2);
+        $(container).children().eq(3).children().eq(1).children().val(roi.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+
+        var total_approx = (parseInt(investment_amount) + parseInt(roi));
+        $(container).children().eq(4).children().eq(1).children().val(total_approx.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+      });
+
+      // On page load
+      $(".payment_type").each(function() {
+        if ($(this).val() == "Interest ROI") {
+          $(this).parent().parent().next().show();
+          $(this).parent().parent().next().next().hide();
+        } else {
+          $(this).parent().parent().next().hide();
+          $(this).parent().parent().next().next().show();
+        }
+      });
+    </script>
+
+  <!-- To separate the numbers in a number fields with comma whenever user enters digits -->
+  <script src="/static/custom/custom_js.js"></script>
+{% endblock javascripts %}

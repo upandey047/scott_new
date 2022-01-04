@@ -1,0 +1,99 @@
+
+<a onclick="addFormAjax()" class="btn btn-primary pull-right">Add Bank</a>
+
+{% if bank_list %}
+<div class="w-20 pull-right" style="padding:0 2px;margin:0 4px;">
+    <select class="form-control" id="selectBank" >
+        <option value="0"> Select Bank </option>
+        {% for bank in select_list %}
+         <option value="{{bank.id}}">
+            {{ bank.name }}
+          </option>
+        {% endfor %}
+
+    </select>
+    </div>
+  <table id="table" class="table table-striped">
+      <thead>
+        <tr>
+         
+          <th>Bank Name</th>
+          <th>Contact Name</th>
+          <th>Postal Address</th>
+          <th>Office Phone</th>  
+          <th>Email</th>
+          <th>Edit</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for bank in bank_list %}
+        <tr>
+            
+            
+            <td>{{bank.name|default_if_none:""}}</td>
+            <td>{{bank.company|default_if_none:""}}</td>
+            <td>{{bank.address}}</td>
+            <td>{{bank.phone|default_if_none:""}}</td>
+            <td>{{bank.email|default_if_none:""}}</td>
+            
+
+            <td><a onclick="editBank(this)" title="{% url 'dashboard:deals:bank_edit' bank.id %}" class="btn btn-info btn-xs">
+                <i class="fa fa-pencil"></i> Edit</a></td>
+            <td><a onclick="deleteBank(this)" title="{% url 'dashboard:deals:bank_delete' bank.id %}"
+                   class="btn btn-danger btn-xs ve-sh-del-contact">
+                <i class="fa fa-trash-o"></i> Delete</a></td>
+           
+            
+        </tr>
+      {% endfor %}
+
+
+
+
+      </tbody>
+
+</table>
+
+
+{% else %}
+  <div class="p-4">
+    No Bank Found !
+</div>
+{% endif%}
+
+
+<script>
+
+    $('#selectBank').on('change', function (e) {
+        loadBank(this.value);
+    });
+</script>
+
+
+
+<script>
+    function addFormAjax(){
+    $('#myModal').modal('show');
+    urlPATH="{% url 'dashboard:deals:bank_create' %}";
+    $('.modal-body').load(urlPATH);
+
+    }
+
+    function editBank(tag){
+    $('#myModal').modal('show');
+    urlPATH=tag.title;
+    console.log(urlPATH);
+    $('.modal-body').load(urlPATH);
+    }
+
+    function deleteBank(tag){
+    $('#myModal').modal('show');
+    urlPATH=tag.title;
+    console.log(urlPATH);
+    $('.modal-body').load(urlPATH);
+    }
+
+</script>
+
+

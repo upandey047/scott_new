@@ -1,0 +1,274 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Inspection Details {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <style type="text/css">
+    #internal-navbar-panel, #internal-details-panel{
+      border-top: 0px !important;
+    }
+  </style>
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="x_content">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              {% include 'deals/deals_navbar.html' with deal_id=deal_id lead_id=lead_id %}
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <div class="container">
+
+                {% include 'deals/inspection/inspection_details_navbar.html' %}
+
+                <div id="internal-navbar-panel" class="x_panel">
+                  <br>
+                  <div class="tab-content">
+                    <div id="internal-div" class="tab-pane fade in active">
+
+                      {% include 'deals/inspection/internal/internal_navbar.html' with deal_id=deal_id %}
+
+                      <div id="internal-details-panel" class="x_panel">
+                        <div class="tab-content">
+                          <div class="tab-pane fade in active">
+
+                            {% if messages %}
+                              <ul class="messages">
+                                  {% for message in messages %}
+                                    {% ifequal message.tags "submitted success" %}
+                                      <div class="alert alert-success col-xs-12">
+                                        <strong class="{{ message.tags }}">{{ message }}</strong>
+                                      </div>
+                                    {% endifequal %}
+                                    {% ifequal message.tags "deleted success" %}
+                                      <div class="alert alert-success col-xs-12">
+                                        <strong class="{{ message.tags }}">{{ message }}</strong>
+                                      </div>
+                                    {% endifequal %}
+                                  {% endfor %}
+                              </ul>
+                            {% endif %}
+
+                            <form method="POST" action="" class="form-horizontal form-label-left">
+                              {% csrf_token %}
+
+                              {{ bathroom_details_formset.management_form }}
+                              {% for form in bathroom_details_formset %}
+                                  <div class="hidden">{{ form.id }}</div>
+                                  <div class="col-sm-offset-3 col-md-6 col-sm-6 col-xs-12">
+                                    <h2 class="form-title">Bathroom {{ forloop.counter }} Details
+                                      {% if bathroom_count > 1 %}
+                                        <a class="btn btn-danger ve-vi-delete-bathroom" data-toggle="modal" data-target="#ve-vi-delete-bathroom-modal">Delete</a>
+                                      {% endif %}
+                                    </h2>
+                                  </div>
+                                  <div class="x_content">
+                                    {% if form.errors %}
+                                      {% for error in form.non_field_errors %}
+                                        <div class="alert alert-danger">
+                                          <strong>{{ error|escape }}</strong>
+                                        </div>
+                                      {% endfor %}
+                                    {% endif %}
+
+                                    <div class="form-group">
+                                      <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.bath.label }}
+                                      </label>
+                                      <div class="col-md-6 col-sm-6 col-xs-12">
+                                        {{ form.bath|add_error_class:"ve-sh-error-block" }}
+                                      </div>
+                                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                        {% for error in form.bath.errors %}
+                                          {{ error|escape }}
+                                        {% endfor %}
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                      <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.hand_basin.label }}
+                                      </label>
+                                      <div class="col-md-6 col-sm-6 col-xs-12">
+                                        {{ form.hand_basin|add_error_class:"ve-sh-error-block" }}
+                                      </div>
+                                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                        {% for error in form.hand_basin.errors %}
+                                          {{ error|escape }}
+                                        {% endfor %}
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                      <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.shower.label }}
+                                      </label>
+                                      <div class="col-md-6 col-sm-6 col-xs-12">
+                                        {{ form.shower|add_error_class:"ve-sh-error-block" }}
+                                      </div>
+                                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                        {% for error in form.shower.errors %}
+                                          {{ error|escape }}
+                                        {% endfor %}
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                      <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.toilet.label }}
+                                      </label>
+                                      <div class="col-md-6 col-sm-6 col-xs-12">
+                                        {{ form.toilet|add_error_class:"ve-sh-error-block" }}
+                                      </div>
+                                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                        {% for error in form.toilet.errors %}
+                                          {{ error|escape }}
+                                        {% endfor %}
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                      <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.vanity.label }}
+                                      </label>
+                                      <div class="col-md-6 col-sm-6 col-xs-12">
+                                        {{ form.vanity|add_error_class:"ve-sh-error-block" }}
+                                      </div>
+                                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                        {% for error in form.vanity.errors %}
+                                          {{ error|escape }}
+                                        {% endfor %}
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                      <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.bathroom_comments.label }}
+                                      </label>
+                                      <div class="col-md-6 col-sm-6 col-xs-12">
+                                        {{ form.bathroom_comments|add_error_class:"ve-sh-error-block" }}
+                                      </div>
+                                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                        {% for error in form.bathroom_comments.errors %}
+                                          {{ error|escape }}
+                                        {% endfor %}
+                                      </div>
+                                    </div>
+                                    <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Dimensions</p>
+                                    <div class="form-group">
+                                      <label class="control-label col-md-3 col-sm-3 col-xs-12">Dimentions <small>(mm)</small>
+                                      </label>
+                                      <div class="col-md-2 col-sm-2 col-xs-12">
+                                        <div>
+                                          {{ form.bathroom_length|add_error_class:"ve-sh-error-block" }}
+                                        </div>
+                                        <div class='ve-sh-error-text'>
+                                          {% for error in form.bathroom_length.errors %}
+                                            {{ error }}
+                                          {% endfor %}
+                                        </div>
+                                      </div>
+                                      <div class="col-md-2 col-sm-2 col-xs-12">
+                                        <div>
+                                          {{ form.bathroom_width|add_error_class:"ve-sh-error-block" }}
+                                        </div>
+                                        <div class='ve-sh-error-text'>
+                                          {% for error in form.bathroom_width.errors %}
+                                            {{ error }}
+                                          {% endfor %}
+                                        </div>
+                                      </div>
+                                      <div class="col-md-2 col-sm-2 col-xs-12">
+                                        <div>
+                                          {{ form.bathroom_height|add_error_class:"ve-sh-error-block" }}
+                                        </div>
+                                        <div class='ve-sh-error-text'>
+                                          {% for error in form.bathroom_height.errors %}
+                                            {{ error }}
+                                          {% endfor %}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                              {% endfor %}
+                              <div class="col-md-9 col-sm-9 col-xs-12 col-sm-offset-3">
+                                <input type="submit" value="Submit" class="btn btn-success" />
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="x_panel">
+                        <div class="x_content">
+                          <a href="{% url 'dashboard:deals:inspection_bathroom_add' deal_id %}" class="btn btn-primary">Add New Bathroom</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+
+  <!-- Modal -->
+  <div id="ve-vi-delete-bathroom-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Delete Bathroom?</h4>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete this bathroom?.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" id="ve-vi-delete-bathroom-confirm">Yes</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+  <script type="text/javascript">
+    $('#property-details, #deal-card, #internal, #bathroom-details').addClass('active');
+
+    // Delete Bathroom object event
+    $('.ve-vi-delete-bathroom').on('click', function(){
+      var bathroom_id = $(this).parent().parent().prev().children().eq(0).attr('value');
+      $('#ve-vi-delete-bathroom-confirm').attr('data', bathroom_id);
+    });
+
+    $('#ve-vi-delete-bathroom-confirm').on('click', function(){
+      var bathroom_id = $(this).attr('data');
+      $.ajax({
+        url: "{% url 'dashboard:deals:inspection_bathroom_delete' deal_id %}",
+        type: "post",
+        data: JSON.stringify({'bathroom_id': bathroom_id}),
+        contentType:'application/json',
+        dataType: 'text', 
+        beforeSend: function(xhr) {
+          xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+        },
+        success: function (data) {
+          window.location.href = "{% url 'dashboard:deals:inspection_bathroom_details' deal_id %}";
+        }
+      });
+    });
+  </script>
+
+  <!-- if user clicks on Renovation in deals navbar then it is handled by an ajax call -->
+  <script src="/static/custom/custom_js.js"></script>
+
+  <script>
+    $(document).on("click", "#renovation-details", function() {
+      name("{{deal_id}}", "{{lead_id}}");
+    });
+  </script>
+{% endblock javascripts %}

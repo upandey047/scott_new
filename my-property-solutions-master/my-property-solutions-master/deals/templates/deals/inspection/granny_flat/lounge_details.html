@@ -1,0 +1,602 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Inspection Details {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <style type="text/css">
+    #internal-navbar-panel, #internal-details-panel{
+      border-top: 0px !important;
+    }
+  </style>
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="x_content">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              {% include 'deals/deals_navbar.html' with deal_id=deal_id lead_id=lead_id %}
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <div class="container">
+
+                {% include 'deals/inspection/inspection_details_navbar.html' %}
+
+                <div id="internal-navbar-panel" class="x_panel">
+                  <br>
+                  <div class="tab-content">
+                    <div id="internal-div" class="tab-pane fade in active">
+
+                      {% include 'deals/inspection/granny_flat/granny_internal_navbar.html' with deal_id=deal_id %}
+
+                      <div id="internal-details-panel" class="x_panel">
+                        <div class="tab-content">
+                          <div class="tab-pane fade in active">
+
+                            {% if messages %}
+                              <ul class="messages">
+                                  {% for message in messages %}
+                                    {% ifequal message.tags "submitted success" %}
+                                      <div class="alert alert-success col-xs-12">
+                                        <strong class="{{ message.tags }}">{{ message }}</strong>
+                                      </div>
+                                    {% endifequal %}
+                                  {% endfor %}
+                              </ul>
+                            {% endif %}
+
+                            <form method="POST" action="" class="form-horizontal form-label-left">
+                              {% csrf_token %}
+
+                              <div class="hidden">{{ form.id }}</div>
+                              <div class="col-sm-offset-3 col-md-6 col-sm-6 col-xs-12">
+                                <h2 class="form-title">Lounge {{ forloop.counter }} Details</h2>
+                              </div>
+                              <div class="x_content">
+                                {% if form.errors %}
+                                  {% for error in form.non_field_errors %}
+                                      <div class="alert alert-danger">
+                                          <strong>{{ error|escape }}</strong>
+                                      </div>
+                                  {% endfor %}
+                                {% endif %}
+
+                                <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Floor</p>
+                                <div class="form-group">
+                                  <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.floors.label }}
+                                  </label>
+                                  <div class="col-md-2 col-sm-2 col-xs-12 ve-sh-width-twenty">
+                                    <div class="form-fields">
+                                      {{ form.floors|add_error_class:"ve-sh-error-block" }}
+                                    </div>
+                                    <div class="ve-sh-error-text">
+                                      {% for error in form.floors.errors %}
+                                        {{ error|escape }}
+                                      {% endfor %}
+                                    </div>
+                                  </div>
+                                  <label class="control-label col-md-2 col-sm-2 col-xs-12 ve-sh-width-ten">{{ form.floors_condition.label }}
+                                  </label>
+                                  <div class="col-md-2 col-sm-2 col-xs-12 ve-sh-width-twenty">
+                                    <div>
+                                      {{ form.floors_condition|add_error_class:"ve-sh-error-block" }}
+                                    </div>
+                                    <div class="ve-sh-error-text">
+                                      {% for error in form.floors_condition.errors %}
+                                        {{ error|escape }}
+                                      {% endfor %}
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="control-label col-md-3 col-sm-3 col-xs-12 ve-sh-padding-null">{{ form.floors_comments.label }}
+                                  </label>
+                                  <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {{ form.floors_comments|add_error_class:"ve-sh-error-block" }}
+                                  </div>
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {% for error in form.floors_comments.errors %}
+                                      {{ error|escape }}
+                                    {% endfor %}
+                                  </div>
+                                </div>
+                                <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Ceiling</p>
+                                <div class="form-group">
+                                  <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.ceiling.label }}
+                                  </label>
+                                  <div class="col-md-2 col-sm-2 col-xs-12 ve-sh-width-twenty">
+                                    <div class="form-fields">
+                                      {{ form.ceiling|add_error_class:"ve-sh-error-block" }}
+                                    </div>
+                                    <div class="ve-sh-error-text">
+                                      {% for error in form.ceiling.errors %}
+                                        {{ error|escape }}
+                                      {% endfor %}
+                                    </div>
+                                  </div>
+                                  <label class="control-label col-md-2 col-sm-2 col-xs-12 ve-sh-width-ten">{{ form.ceiling_condition.label }}
+                                  </label>
+                                  <div class="col-md-2 col-sm-2 col-xs-12 ve-sh-width-twenty">
+                                    <div>
+                                      {{ form.ceiling_condition|add_error_class:"ve-sh-error-block" }}
+                                    </div>
+                                    <div class="ve-sh-error-text">
+                                      {% for error in form.ceiling_condition.errors %}
+                                        {{ error|escape }}
+                                      {% endfor %}
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="control-label col-md-3 col-sm-3 col-xs-12 ve-sh-padding-null">{{ form.ceiling_comments.label }}
+                                  </label>
+                                  <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {{ form.ceiling_comments|add_error_class:"ve-sh-error-block" }}
+                                  </div>
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {% for error in form.ceiling_comments.errors %}
+                                      {{ error|escape }}
+                                    {% endfor %}
+                                  </div>
+                                </div>
+                                <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Walls</p>
+                                <div class="form-group">
+                                  <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.walls.label }}
+                                  </label>
+                                  <div class="col-md-2 col-sm-2 col-xs-12 ve-sh-width-twenty">
+                                    <div class="form-fields">
+                                      {{ form.walls|add_error_class:"ve-sh-error-block" }}
+                                    </div>
+                                    <div class="ve-sh-error-text">
+                                      {% for error in form.walls.errors %}
+                                        {{ error|escape }}
+                                      {% endfor %}
+                                    </div>
+                                  </div>
+                                  <label class="control-label col-md-2 col-sm-2 col-xs-12 ve-sh-width-ten">{{ form.walls_condition.label }}
+                                  </label>
+                                  <div class="col-md-2 col-sm-2 col-xs-12 ve-sh-width-twenty">
+                                    <div>
+                                      {{ form.walls_condition|add_error_class:"ve-sh-error-block" }}
+                                    </div>
+                                    <div class="ve-sh-error-text">
+                                      {% for error in form.walls_condition.errors %}
+                                        {{ error|escape }}
+                                      {% endfor %}
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="control-label col-md-3 col-sm-3 col-xs-12 ve-sh-padding-null">{{ form.walls_comments.label }}
+                                  </label>
+                                  <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {{ form.walls_comments|add_error_class:"ve-sh-error-block" }}
+                                  </div>
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {% for error in form.walls_comments.errors %}
+                                      {{ error|escape }}
+                                    {% endfor %}
+                                  </div>
+                                </div>
+                                <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Light Fittings</p>
+                                <div class="form-group">
+                                  <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.light_fittings.label }}
+                                  </label>
+                                  <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {{ form.light_fittings|add_error_class:"ve-sh-error-block" }}
+                                  </div>
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {% for error in form.light_fittings.errors %}
+                                      {{ error|escape }}
+                                    {% endfor %}
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.light_fittings_comments.label }}
+                                  </label>
+                                  <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {{ form.light_fittings_comments|add_error_class:"ve-sh-error-block" }}
+                                  </div>
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {% for error in form.light_fittings_comments.errors %}
+                                      {{ error|escape }}
+                                    {% endfor %}
+                                  </div>
+                                </div>
+                                <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Dimensions</p>
+                                <div class="form-group">
+                                  <label class="control-label col-md-3 col-sm-3 col-xs-12">Room Dimentions <small>(mm)</small>
+                                  </label>
+                                  <div class="col-md-2 col-sm-2 col-xs-12">
+                                    <div>
+                                      {{ form.room_length|add_error_class:"ve-sh-error-block" }}
+                                    </div>
+                                    <div class='ve-sh-error-text'>
+                                      {% for error in form.room_length.errors %}
+                                        {{ error|escape }}
+                                      {% endfor %}
+                                    </div>
+                                  </div>
+                                  <div class="col-md-2 col-sm-2 col-xs-12">
+                                    <div>
+                                      {{ form.room_width|add_error_class:"ve-sh-error-block" }}
+                                    </div>
+                                    <div class='ve-sh-error-text'>
+                                      {% for error in form.room_width.errors %}
+                                        {{ error|escape }}
+                                      {% endfor %}
+                                    </div>
+                                  </div>
+                                  <div class="col-md-2 col-sm-2 col-xs-12">
+                                    <div>
+                                      {{ form.room_height|add_error_class:"ve-sh-error-block" }}
+                                    </div>
+                                    <div class='ve-sh-error-text'>
+                                      {% for error in form.room_height.errors %}
+                                        {{ error|escape }}
+                                      {% endfor %}
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="control-label col-md-3 col-sm-3 col-xs-12">Window Dimentions <small>(mm)</small>
+                                  </label>
+                                  <div class="col-md-2 col-sm-2 col-xs-12">
+                                    <div>
+                                      {{ form.window_length|add_error_class:"ve-sh-error-block" }}
+                                    </div>
+                                    <div class='ve-sh-error-text'>
+                                      {% for error in form.window_length.errors %}
+                                        {{ error|escape }}
+                                      {% endfor %}
+                                    </div>
+                                  </div>
+                                  <div class="col-md-2 col-sm-2 col-xs-12">
+                                    <div>
+                                      {{ form.window_width|add_error_class:"ve-sh-error-block" }}
+                                    </div>
+                                    <div class='ve-sh-error-text'>
+                                      {% for error in form.window_width.errors %}
+                                        {{ error|escape }}
+                                      {% endfor %}
+                                    </div>
+                                  </div>
+                                  <div class="col-md-2 col-sm-2 col-xs-12">
+                                    <div>
+                                      {{ form.window_height|add_error_class:"ve-sh-error-block" }}
+                                    </div>
+                                    <div class='ve-sh-error-text'>
+                                      {% for error in form.window_height.errors %}
+                                        {{ error|escape }}
+                                      {% endfor %}
+                                    </div>
+                                  </div>
+                                </div>
+                                <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Balcony</p>
+                                <div class="form-group">
+                                  <label class="control-label col-md-3 col-sm-3 col-xs-12">Balcony Present
+                                  </label>
+                                  <div class="col-md-6 col-sm-6 col-xs-12 present">
+                                    {{ form.balcony_present|add_error_class:"ve-sh-error-block" }}
+                                  </div>
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {% for error in form.balcony_present.errors %}
+                                      {{ error|escape }}
+                                    {% endfor %}
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="control-label col-md-3 col-sm-3 col-xs-12">Balcony Dimentions <small>(mm)</small>
+                                  </label>
+                                  <div class="col-md-2 col-sm-2 col-xs-12">
+                                    <div>
+                                      {{ form.balcony_length|add_error_class:"ve-sh-error-block" }}
+                                    </div>
+                                    <div class='ve-sh-error-text'>
+                                      {% for error in form.balcony_length.errors %}
+                                        {{ error|escape }}
+                                      {% endfor %}
+                                    </div>
+                                  </div>
+                                  <div class="col-md-2 col-sm-2 col-xs-12">
+                                    <div>
+                                      {{ form.balcony_width|add_error_class:"ve-sh-error-block" }}
+                                    </div>
+                                    <div class='ve-sh-error-text'>
+                                      {% for error in form.balcony_width.errors %}
+                                        {{ error|escape }}
+                                      {% endfor %}
+                                    </div>
+                                  </div>
+                                  <div class="col-md-2 col-sm-2 col-xs-12">
+                                    <div>
+                                      {{ form.balcony_height|add_error_class:"ve-sh-error-block" }}
+                                    </div>
+                                    <div class='ve-sh-error-text'>
+                                      {% for error in form.balcony_height.errors %}
+                                        {{ error|escape }}
+                                      {% endfor %}
+                                    </div>
+                                  </div>
+                                </div>
+                                <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Sliding Door</p>
+                                <div class="form-group">
+                                  <label class="control-label col-md-3 col-sm-3 col-xs-12">Sliding Door Present
+                                  </label>
+                                  <div class="col-md-6 col-sm-6 col-xs-12 present">
+                                    {{ form.sliding_door_present|add_error_class:"ve-sh-error-block" }}
+                                  </div>
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {% for error in form.sliding_door_present.errors %}
+                                      {{ error|escape }}
+                                    {% endfor %}
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="control-label col-md-3 col-sm-3 col-xs-12">Sliding Door Dimentions <small>(mm)</small>
+                                  </label>
+                                  <div class="col-md-2 col-sm-2 col-xs-12">
+                                    <div>
+                                      {{ form.sliding_door_length|add_error_class:"ve-sh-error-block" }}
+                                    </div>
+                                    <div class='ve-sh-error-text'>
+                                      {% for error in form.sliding_door_length.errors %}
+                                        {{ error|escape }}
+                                      {% endfor %}
+                                    </div>
+                                  </div>
+                                  <div class="col-md-2 col-sm-2 col-xs-12">
+                                    <div>
+                                      {{ form.sliding_door_width|add_error_class:"ve-sh-error-block" }}
+                                    </div>
+                                    <div class='ve-sh-error-text'>
+                                      {% for error in form.sliding_door_width.errors %}
+                                        {{ error|escape }}
+                                      {% endfor %}
+                                    </div>
+                                  </div>
+                                  <div class="col-md-2 col-sm-2 col-xs-12">
+                                    <div>
+                                      {{ form.sliding_door_height|add_error_class:"ve-sh-error-block" }}
+                                    </div>
+                                    <div class='ve-sh-error-text'>
+                                      {% for error in form.sliding_door_height.errors %}
+                                        {{ error|escape }}
+                                      {% endfor %}
+                                    </div>
+                                  </div>
+                                </div>
+                                <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Curtains</p>
+                                <div class="form-group">
+                                  <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.curtains_or_blinds.label }}
+                                  </label>
+                                  <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {{ form.curtains_or_blinds|add_error_class:"ve-sh-error-block" }}
+                                  </div>
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {% for error in form.curtains_or_blinds.errors %}
+                                      {{ error|escape }}
+                                    {% endfor %}
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.curtains_comments.label }}
+                                  </label>
+                                  <div class="col-md-6 col-sm-6 col-xs-12">
+                                    {{ form.curtains_comments|add_error_class:"ve-sh-error-block" }}
+                                  </div>
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {% for error in form.curtains_comments.errors %}
+                                      {{ error|escape }}
+                                    {% endfor %}
+                                  </div>
+                                </div>
+                                <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Features</p>
+                                <div class="form-group">
+                                  <label class="control-label ve-sh-padding-null col-md-3 col-sm-3 col-xs-9">{{ form.air_conditioning_ducted.label }}
+                                  </label>
+                                  <div class="col-md-2 col-sm-2 col-xs-3">
+                                    {{ form.air_conditioning_ducted }}
+                                  </div>
+                                  <label class="col-md-2 col-sm-2 col-xs-9">{{ form.air_conditioning_wall_mounted.label }}
+                                  </label>
+                                  <div class="col-md-2 col-sm-2 col-xs-3">
+                                    {{ form.air_conditioning_wall_mounted }}
+                                  </div>
+                                  <div class="col-sm-offset-3 col-md-2 col-sm-2 col-xs-3 ve-sh-error-text">
+                                    {% for error in form.air_conditioning_ducted.errors %}
+                                      {{ error|escape }}
+                                    {% endfor %}
+                                  </div>
+                                  <div class="col-sm-offset-2 col-md-2 col-sm-2 col-xs-3 ve-sh-error-text">
+                                    {% for error in form.air_conditioning_wall_mounted.errors %}
+                                      {{ error|escape }}
+                                    {% endfor %}
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="control-label ve-sh-padding-null col-md-3 col-sm-3 col-xs-9">{{ form.ceiling_fan.label }}
+                                  </label>
+                                  <div class="col-md-2 col-sm-2 col-xs-3">
+                                    {{ form.ceiling_fan }}
+                                  </div>
+                                  <label class="col-md-2 col-sm-2 col-xs-9">{{ form.ducted_vacuum.label }}
+                                  </label>
+                                  <div class="col-md-2 col-sm-2 col-xs-3">
+                                    {{ form.ducted_vacuum }}
+                                  </div>
+                                  <div class="col-sm-offset-3 col-md-2 col-sm-2 col-xs-3 ve-sh-error-text">
+                                    {% for error in form.ceiling_fan.errors %}
+                                      {{ error|escape }}
+                                    {% endfor %}
+                                  </div>
+                                  <div class="col-sm-offset-2 col-md-2 col-sm-2 col-xs-3 ve-sh-error-text">
+                                    {% for error in form.ducted_vacuum.errors %}
+                                      {{ error|escape }}
+                                    {% endfor %}
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="control-label ve-sh-padding-null col-md-3 col-sm-3 col-xs-9">{{ form.exposed_timber_beams.label }}
+                                  </label>
+                                  <div class="col-md-2 col-sm-2 col-xs-3">
+                                    {{ form.exposed_timber_beams }}
+                                  </div>
+                                  <label class="col-md-2 col-sm-2 col-xs-9">{{ form.fire_place_combustion.label }}
+                                  </label>
+                                  <div class="col-md-2 col-sm-2 col-xs-3">
+                                    {{ form.fire_place_combustion }}
+                                  </div>
+                                  <div class="col-sm-offset-3 col-md-2 col-sm-2 col-xs-3 ve-sh-error-text">
+                                    {% for error in form.exposed_timber_beams.errors %}
+                                      {{ error|escape }}
+                                    {% endfor %}
+                                  </div>
+                                  <div class="col-sm-offset-2 col-md-2 col-sm-2 col-xs-3 ve-sh-error-text">
+                                    {% for error in form.fire_place_combustion.errors %}
+                                      {{ error|escape }}
+                                    {% endfor %}
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="control-label ve-sh-padding-null col-md-3 col-sm-3 col-xs-9">{{ form.fire_place_gas.label }}
+                                  </label>
+                                  <div class="col-md-2 col-sm-2 col-xs-3">
+                                    {{ form.fire_place_gas }}
+                                  </div>
+                                  <label class="col-md-2 col-sm-2 col-xs-9">{{ form.intercom_system.label }}
+                                  </label>
+                                  <div class="col-md-2 col-sm-2 col-xs-3">
+                                    {{ form.intercom_system }}
+                                  </div>
+                                  <div class="col-sm-offset-3 col-md-2 col-sm-2 col-xs-3 ve-sh-error-text">
+                                    {% for error in form.fire_place_gas.errors %}
+                                      {{ error|escape }}
+                                    {% endfor %}
+                                  </div><div class="col-sm-offset-2 col-md-2 col-sm-2 col-xs-3 ve-sh-error-text">
+                                    {% for error in form.intercom_system.errors %}
+                                      {{ error|escape }}
+                                    {% endfor %}
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="control-label ve-sh-padding-null col-md-3 col-sm-3 col-xs-9">{{ form.sky_light.label }}
+                                  </label>
+                                  <div class="col-md-2 col-sm-2 col-xs-3">
+                                    {{ form.sky_light }}
+                                  </div>
+                                  <label class="col-md-2 col-sm-2 col-xs-9">{{ form.tv_outlet.label }}
+                                  </label>
+                                  <div class="col-md-2 col-sm-2 col-xs-3">
+                                    {{ form.tv_outlet }}
+                                  </div>
+                                  <div class="col-sm-offset-3 col-md-2 col-sm-2 col-xs-3 ve-sh-error-text">
+                                    {% for error in form.sky_light.errors %}
+                                      {{ error|escape }}
+                                    {% endfor %}
+                                  </div>
+                                  <div class="col-sm-offset-2 col-md-2 col-sm-2 col-xs-3 ve-sh-error-text">
+                                    {% for error in form.tv_outlet.errors %}
+                                      {{ error|escape }}
+                                    {% endfor %}
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="control-label ve-sh-padding-null col-md-3 col-sm-3 col-xs-9">{{ form.wet_bar.label }}
+                                  </label>
+                                  <div class="col-md-2 col-sm-2 col-xs-3">
+                                    {{ form.wet_bar }}
+                                  </div>
+                                  <div class="col-sm-offset-3 col-md-2 col-sm-2 col-xs-3 ve-sh-error-text">
+                                    {% for error in form.wet_bar.errors %}
+                                      {{ error|escape }}
+                                    {% endfor %}
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-9 col-sm-9 col-xs-12 col-sm-offset-3">
+                                <input type="submit" value="Submit" class="btn btn-success" />
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+  <script type="text/javascript">
+    $('#property-details, #deal-card, #granny-flat, #lounge-details').addClass('active');
+
+    $('select').on('change', function(){
+      if ($(this).parent().hasClass('present')){
+        if ($(this).val() == 'Yes'){
+          $(this).parent().parent().next().children().find('input').each(function(){
+            $(this).attr('disabled', false);
+          });
+        }
+        else{
+          $(this).parent().parent().next().children().find('input').each(function(){
+            $(this).val('');
+            $(this).attr('disabled', true);
+          });
+        }
+      }
+
+      if ($(this).parent().hasClass('form-fields')){
+        if ($(this).val() == 'None'){
+          $(this).parent().parent().next().next().children().children().attr('disabled', true);
+        } else{
+          $(this).parent().parent().next().next().children().children().attr('disabled', false);
+        }
+      }
+    });
+
+    // The below code will run on page load
+    $('.present').children().each(function(){
+      if ($(this).val() == 'Yes'){
+        $(this).parent().parent().next().children().find('input').each(function(){
+          $(this).attr('disabled', false);
+        });
+      }
+      else{
+        $(this).parent().parent().next().children().find('input').each(function(){
+          $(this).attr('disabled', true);
+        });
+      }
+    });
+
+    $('.form-fields').children().each(function(){
+      if ($(this).val() == 'None') {
+        $(this).parent().parent().next().next().children().children().attr('disabled', true);
+      } else {
+        $(this).parent().parent().next().next().children().children().attr('disabled', false);
+      }
+    });
+  </script>
+
+  <!-- if user clicks on Renovation in deals navbar then it is handled by an ajax call -->
+  <script src="/static/custom/custom_js.js"></script>
+
+  <script>
+    $(document).on("click", "#renovation-details", function() {
+      name("{{deal_id}}", "{{lead_id}}");
+    });
+  </script>
+{% endblock javascripts %}

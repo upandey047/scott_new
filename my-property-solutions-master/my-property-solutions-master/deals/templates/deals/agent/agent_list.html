@@ -1,0 +1,35 @@
+ <div class="container">
+        <a data-toggle="modal" data-target="#myModal" class="btn btn-primary pull-right">Add Agent</a><table class="table table-striped table-bordered table-responsive table-hover" id="myTable1">
+          <thead class="thalpha">
+            <tr>
+              <th rowspan = "2" style="width:100px;">Agent Name</th>
+              <th rowspan = "2" style="width:100px;">Company</th>
+              <th rowspan = "2" style="width:100px;">Postal Address</th>
+              <th rowspan = "2" style="width:50px;">Mobile</th>
+              <th rowspan = "2" style="width:50px;">Email</th>
+              <th rowspan = "2" style="width:50px;">Edit</th>
+              <th rowspan = "2" style="width:50px;">Delete</th>
+            </tr>
+
+          </thead>
+          <tbody  class="tbalpha">
+          </tbody>
+          {% for agent in agent_list %}
+          <tr id="hide">
+            <td>{{agent.name}}</td>
+            <td>{{agent.company}}</td>
+            <td>{{agent.address}}</td>
+            <td>{{agent.phone}}</td>
+            <td>{{agent.email}}</td>
+
+            <td><a href="{% url 'dashboard:deals:agentupdate' agent.id %}"  class="btn btn-primary btn-xs" >Edit</a></td>
+            <td><a href="{% url 'dashboard:deals:agentdelete' agent.id %}" class="btn btn-danger btn-xs" >Delete</a></td>
+
+          </tr>
+          {% endfor %}
+
+          </table>
+          </div>
+<script>
+   $(".modal-body").load("{% url 'dashboard:deals:agentcreate' %}");
+</script>

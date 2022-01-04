@@ -1,0 +1,291 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Offer Details {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <style type="text/css">
+    .offer_details_xpanel {
+      border-top: 0px !important;
+    }
+  </style>
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="x_content">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              {% include "deals/deals_navbar.html" with deal_id=deal_id lead_id=lead_id %}
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <div class="container">
+
+                {% include "deals/offer_details/offer_details_navbar.html" %}
+
+                <div class="x_panel offer_details_xpanel">
+                  <br>
+                  <div class="tab-content">
+                    <div id="purchase-feasibility-report-div" class="tab-pane fade in active">
+                      {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                              {% ifequal message.tags "submitted success" %}
+                                <div class="alert alert-success col-xs-12">
+                                  <strong class="{{ message.tags }}">{{ message }}</strong>
+                                </div>
+                              {% endifequal %}
+                            {% endfor %}
+                        </ul>
+                      {% endif %}
+
+                      <form method="POST" action="" class="form-horizontal form-label-left">
+                        {% csrf_token %}
+                        <div class="form-group">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.purchase_price.label }}
+                          </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                            {{ form.purchase_price|add_error_class:"ve-sh-error-block" }}
+                            {% if form.errors %}
+                              {% for error in form.purchase_price.errors %}
+                                  <div class="col-md-9 col-sm-9 col-xs-12 ve-sh-error-text ve-sh-left-pad-null">
+                                      {{ error|escape }}
+                                  </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.purchase_costs.label }}
+                          </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                            {{ form.purchase_costs|add_error_class:"ve-sh-error-block" }}
+                            {% if form.errors %}
+                              {% for error in form.purchase_costs.errors %}
+                                  <div class="col-md-9 col-sm-9 col-xs-12 ve-sh-error-text ve-sh-left-pad-null">
+                                      {{ error|escape }}
+                                  </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.renovation_costs.label }}
+                          </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                            {{ form.renovation_costs|add_error_class:"ve-sh-error-block" }}
+                            {% if form.errors %}
+                              {% for error in form.renovation_costs.errors %}
+                                  <div class="col-md-9 col-sm-9 col-xs-12 ve-sh-error-text ve-sh-left-pad-null">
+                                      {{ error|escape }}
+                                  </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.holding_costs.label }}
+                          </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                            {{ form.holding_costs|add_error_class:"ve-sh-error-block" }}
+                            {% if form.errors %}
+                              {% for error in form.holding_costs.errors %}
+                                  <div class="col-md-9 col-sm-9 col-xs-12 ve-sh-error-text ve-sh-left-pad-null">
+                                      {{ error|escape }}
+                                  </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">Estimated Sale Price
+                          </label>
+                          <div class="col-md-2 col-sm-2 col-xs-12 ve-sh-number-js">
+                            {{ form.estimated_selling_price_lower_limit|add_error_class:"ve-sh-error-block" }}
+                            {% if form.errors %}
+                              {% for error in form.estimated_selling_price_lower_limit.errors %}
+                                  <div class="col-md-9 col-sm-9 col-xs-12 ve-sh-error-text ve-sh-left-pad-null">
+                                      {{ error|escape }}
+                                  </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                          <label class="col-md-1 col-sm-1 col-xs-12" style="text-align:center;">to
+                          </label>
+                          <div class="col-md-3 col-sm-3 col-xs-12 ve-sh-number-js">
+                            {{ form.estimated_selling_price_upper_limit|add_error_class:"ve-sh-error-block" }}
+                            {% if form.errors %}
+                              {% for error in form.estimated_selling_price_upper_limit.errors %}
+                                  <div class="col-md-9 col-sm-9 col-xs-12 ve-sh-error-text ve-sh-left-pad-null">
+                                      {{ error|escape }}
+                                  </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">Potential Profit
+                          </label>
+                          <div class="col-md-2 col-sm-2 col-xs-12 ve-sh-number-js">
+                            {{ form.potential_profit_lower_limit|add_error_class:"ve-sh-error-block" }}
+                            {% if form.errors %}
+                              {% for error in form.potential_profit_lower_limit.errors %}
+                                  <div class="col-md-9 col-sm-9 col-xs-12 ve-sh-error-text ve-sh-left-pad-null">
+                                      {{ error|escape }}
+                                  </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                          <label class="col-md-1 col-sm-1 col-xs-12" style="text-align:center;">to
+                          </label>
+                          <div class="col-md-3 col-sm-3 col-xs-12 ve-sh-number-js">
+                            {{ form.potential_profit_upper_limit|add_error_class:"ve-sh-error-block" }}
+                            {% if form.errors %}
+                              {% for error in form.potential_profit_upper_limit.errors %}
+                                  <div class="col-md-9 col-sm-9 col-xs-12 ve-sh-error-text ve-sh-left-pad-null">
+                                      {{ error|escape }}
+                                  </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.comments.label }}
+                          </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                            {{ form.comments|add_error_class:"ve-sh-error-block" }}
+                            {% if form.errors %}
+                              {% for error in form.comments.errors %}
+                                  <div class="col-md-9 col-sm-9 col-xs-12 ve-sh-error-text ve-sh-left-pad-null">
+                                      {{ error|escape }}
+                                  </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-sm-offset-3">
+                          <input type="submit" value="Submit" class="btn btn-success" />
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+  <script type="text/javascript">
+    $("#offer-details, #deal-card, #purchase-feasibility-report").addClass("active");
+
+    $(".ve-sh-number-js").children().on("keyup", function(){
+      var total_purchase_amount = parseInt($("#id_purchase_price").val().replace(/(\,)/g, '')) + parseInt($("#id_purchase_costs").val().replace(/(\,)/g, '')) + parseInt($("#id_renovation_costs").val().replace(/(\,)/g, '')) + parseInt($("#id_holding_costs").val().replace(/(\,)/g, ''));
+          var estimated_selling_price_lower_limit = 0;
+          if ($("#id_estimated_selling_price_lower_limit").val()){
+            estimated_selling_price_lower_limit = parseInt($("#id_estimated_selling_price_lower_limit").val().replace(/(\,)/g, ''));
+          }
+          var estimated_selling_price_upper_limit = 0;
+          if ($("#id_estimated_selling_price_upper_limit").val()){
+            estimated_selling_price_upper_limit = parseInt($("#id_estimated_selling_price_upper_limit").val().replace(/(\,)/g, ''));
+          }
+          var potential_profit_lower_limit = estimated_selling_price_lower_limit - total_purchase_amount
+          if (isNaN(potential_profit_lower_limit)){
+            $("#id_potential_profit_lower_limit").val();
+          }
+          else{
+            $("#id_potential_profit_lower_limit").val(potential_profit_lower_limit.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+          }
+          var potential_profit_upper_limit = estimated_selling_price_upper_limit - total_purchase_amount
+          if (isNaN(potential_profit_upper_limit)){
+            $("#id_potential_profit_lower_limit").val();
+          }
+          else{
+            $("#id_potential_profit_upper_limit").val(potential_profit_upper_limit.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+          }
+          var money_partner = 0;
+          if ($("#id_money_partner").val()){
+            money_partner = parseInt($("#id_money_partner").val().replace(/(\,)/g, ''));
+          }
+          var net_profit_lower_limit = potential_profit_lower_limit - money_partner;
+          var net_profit_upper_limit = potential_profit_upper_limit - money_partner;
+          if (isNaN(net_profit_lower_limit)){
+            $("#id_net_profit_lower_limit").val();
+          }
+          else{
+            $("#id_net_profit_lower_limit").val(net_profit_lower_limit.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+          }
+          if (isNaN(net_profit_upper_limit)){
+            $("#id_net_profit_upper_limit").val();
+          }
+          else{
+            $("#id_net_profit_upper_limit").val(net_profit_upper_limit.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+          }
+    });
+
+    // On page load
+    var total_purchase_amount = parseInt($("#id_purchase_price").val().replace(/(\,)/g, '')) + parseInt($("#id_purchase_costs").val().replace(/(\,)/g, '')) + parseInt($("#id_renovation_costs").val().replace(/(\,)/g, '')) + parseInt($("#id_holding_costs").val().replace(/(\,)/g, ''));
+    var estimated_selling_price_lower_limit = 0;
+    if ($("#id_estimated_selling_price_lower_limit").val()){
+      estimated_selling_price_lower_limit = parseInt($("#id_estimated_selling_price_lower_limit").val().replace(/(\,)/g, ''));
+    }
+    var estimated_selling_price_upper_limit = 0;
+    if ($("#id_estimated_selling_price_upper_limit").val()){
+      estimated_selling_price_upper_limit = parseInt($("#id_estimated_selling_price_upper_limit").val().replace(/(\,)/g, ''));
+    }
+    var potential_profit_lower_limit = estimated_selling_price_lower_limit - total_purchase_amount
+    var potential_profit_upper_limit = estimated_selling_price_upper_limit - total_purchase_amount
+    if (isNaN(potential_profit_lower_limit)){
+      $("#id_potential_profit_lower_limit").val();
+    }
+    else{
+      $("#id_potential_profit_lower_limit").val(potential_profit_lower_limit.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+    }
+    if (isNaN(potential_profit_upper_limit)){
+      $("#id_potential_profit_upper_limit").val();
+    }
+    else{
+      $("#id_potential_profit_upper_limit").val(potential_profit_upper_limit.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+    }
+    var money_partner = 0;
+    if ($("#id_money_partner").val()){
+      money_partner = parseInt($("#id_money_partner").val().replace(/(\,)/g, ''));
+    }
+    var net_profit_lower_limit = potential_profit_lower_limit - money_partner;
+    var net_profit_upper_limit = potential_profit_upper_limit - money_partner;
+    if (isNaN(net_profit_lower_limit)){
+      $("#id_net_profit_lower_limit").val();
+    }
+    else{
+      $("#id_net_profit_lower_limit").val(net_profit_lower_limit.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+    }
+    if (isNaN(net_profit_upper_limit)){
+      $("#id_net_profit_upper_limit").val();
+    }
+    else{
+      $("#id_net_profit_upper_limit").val(net_profit_upper_limit.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+    }
+
+  </script>
+
+  <!-- if user clicks on Renovation in deals navbar then it is handled by an ajax call -->
+  <!-- To separate the numbers in a number fields with comma whenever user enters digits -->
+  <script src="/static/custom/custom_js.js"></script>
+
+  <script>
+    $(document).on("click", "#renovation-details", function() {
+      name("{{deal_id}}", "{{lead_id}}");
+    });
+  </script>
+{% endblock javascripts %}
+

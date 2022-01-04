@@ -1,0 +1,123 @@
+from django.urls import path
+from . import views
+from .forms import (
+    PropertyForm,
+    BankForm,
+    PropertyOwnerFormset,
+    WithdrawnPropertyForm,
+    BankruptcyPropertyOwnerFormset,
+    DeceasedPropertyOwnerFormset,
+    DeceasedPropertyForm,
+    DivorcePropertyForm,
+)
+from contacts.forms import (
+    RealEstateForm,
+    RealEstateFormset,
+    RealEstateFormDivorce,
+    SolicitorForm,
+    SolicitorFormSet,
+)
+
+app_name = "leads"
+
+urlpatterns = [
+    path("add-lead/", views.add_lead_view, name="add_new_lead"),
+    path("<slug:category>", views.IndexView.as_view(), name="index"),
+    path(
+        "add-lead/withdrawn",
+        views.AddLeadWizard.as_view(
+            form_list=[
+                WithdrawnPropertyForm,
+                PropertyOwnerFormset,
+                RealEstateForm,
+                BankForm,
+                SolicitorForm,
+            ]
+        ),
+        name="add_lead",
+    ),
+    path(
+        "add-lead/bankruptcy",
+        views.AddLeadWizard.as_view(
+            form_list=[
+                PropertyForm,
+                PropertyOwnerFormset,
+                RealEstateForm,
+                BankForm,
+                SolicitorForm,
+            ]
+        ),
+        name="add_lead",
+    ),
+    path(
+        "add-lead/liquidation",
+        views.AddLeadWizard.as_view(
+            form_list=[
+                PropertyForm,
+                BankruptcyPropertyOwnerFormset,
+                RealEstateForm,
+                BankForm,
+                SolicitorForm,
+            ]
+        ),
+        name="add_lead",
+    ),
+    path(
+        "add-lead/deceased",
+        views.AddLeadWizard.as_view(
+            form_list=[
+                DeceasedPropertyForm,
+                DeceasedPropertyOwnerFormset,
+                RealEstateFormset,
+                BankForm,
+                SolicitorForm,
+            ]
+        ),
+        name="add_lead",
+    ),
+    path(
+        "add-lead/divorce",
+        views.AddLeadWizard.as_view(
+            form_list=[
+                DivorcePropertyForm,
+                PropertyOwnerFormset,
+                RealEstateFormDivorce,
+                BankForm,
+                SolicitorFormSet,
+            ]
+        ),
+        name="add_lead",
+    ),
+    # Sixty days over has the same fields as withdrawn for the property
+    path(
+        "add-lead/sixty-days-over",
+        views.AddLeadWizard.as_view(
+            form_list=[
+                WithdrawnPropertyForm,
+                PropertyOwnerFormset,
+                RealEstateForm,
+                BankForm,
+                SolicitorForm,
+            ]
+        ),
+        name="add_lead",
+    ),
+    path(
+        "add-lead/<slug:category>",
+        views.AddLeadWizard.as_view(
+            form_list=[
+                PropertyForm,
+                PropertyOwnerFormset,
+                RealEstateForm,
+                BankForm,
+                SolicitorForm,
+            ]
+        ),
+        name="add_lead",
+    ),
+    path(
+        "edit-lead-status/<int:lead_id>",
+        views.EditLeadStatus.as_view(),
+        name="edit_lead_status",
+    ),
+]

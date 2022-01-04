@@ -1,0 +1,160 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Contacts{% endblock title %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="x_content">
+      <div class="">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>Contacts</h2>
+            <div class="clearfix"></div>
+          </div>
+
+          {% if messages %}
+            <ul class='messages'>
+              {% for message in messages %}
+                {% if message.tags == 'contact_created success' %}
+                  <div class='alert alert-success col-xs-12'>
+                    <strong class='{{ message.tags }}'>{{ message }}</strong>
+                  </div>
+                {% endif %}
+                {% if message.tags == 'deleted success' %}
+                  <div class="alert alert-success col-xs-12">
+                    <strong class="{{ message.tags }}">{{ message }}</strong>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          {% endif %}
+
+          <div class="x_content table-responsive">
+            <div class="">
+              <div class="x_panel table-responsive">
+                <div class="x_title">
+                  <h2>{{ contacts_sub_category|title }}</h2>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+
+                  <table class="table table-striped" id="contacts-table">
+                    <thead>
+                      <tr>
+                        <th>Company</th>
+                        {% if contacts_category == 'others' %}<th>Industry</th>{% endif %}
+                        <th>Contact Name</th>
+                        <th>Mobile</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                        {% if contacts_category != 'design' and contacts_category != 'finance' %}
+                          <th>Rate/hour</th>
+                          <th>Trade Rating</th>
+                        {% elif contacts_sub_category == 'bank' %}
+                          <th>Type</th>
+                        {% endif %}
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for contact in contacts %}
+                        <tr>
+                          <td>{{ contact.company|default_if_none:"" }}</td>
+                          {% if contacts_category == 'others' %}<td>{{ contact.industry_type|default_if_none:"" }}</td>{% endif %}
+                          <td>{{ contact.contact_name|default_if_none:"" }}</td>
+                          <td>{{ contact.mobile|default_if_none:"" }}</td>
+                          <td>{{ contact.email|default_if_none:"" }}</td>
+                          <td>{{ contact.unit|default_if_none:"" }} {{ contact.number|default_if_none:"" }} {{ contact.street|default_if_none:"" }} {{ contact.suburb|default_if_none:"" }} {{ contact.state|default_if_none:"" }} {{ contact.post_code|default_if_none:"" }}</td>
+                          {% if contacts_category != 'design' and contacts_category != 'finance' %}
+                            <td>{{ contact.rate_per_hour|default_if_none:"" }}</td>
+                            <td>{{ contact.trade_rating|default_if_none:"" }}</td>
+                          {% elif contacts_sub_category == 'bank' %}
+                            <td>{{ contact.contact_type|default_if_none:"" }}</td>
+                          {% endif %}
+                          <td>
+                              <a href="{% url 'dashboard:contacts:edit' contacts_category contacts_sub_category contact.pk %}" class="btn btn-info btn-xs">
+                                <i class="fa fa-pencil"></i> Edit
+                              </a>
+                              <a href="#" class="btn btn-danger btn-xs ve-sh-del-contact" data-toggle="modal" data-target="#ve-sh-del-contact-modal" data="{{ contact.id }}">
+                                <i class="fa fa-trash-o"></i> Delete
+                              </a>
+                          </td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>Add New {{ contacts_sub_category|title }} Contact</h2>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+              <a href="{% url 'dashboard:contacts:add' contacts_category contacts_sub_category %}" class="btn btn-primary" data-toggle="modal" data-target="">Add Contact</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+
+  <!-- Modal -->
+  <div id="ve-sh-del-contact-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content -->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Delete Contact?</h4>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete this contact?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" id="ve-sh-del-contact-confirm">Yes</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal -->
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+   <script type="text/javascript">
+     $('.side-menu').children().removeClass('active');
+     $('#contacts').addClass('active');
+     $('.table-striped').DataTable();
+
+    // Event of Delete contact's object
+    $(document).on('click', '.ve-sh-del-contact', function(){
+      $('#ve-sh-del-contact-confirm').attr('data', $(this).attr('data'));
+    });
+
+    $('#ve-sh-del-contact-confirm').on('click', function(){
+      var contact_id = $(this).attr('data');
+      $.ajax({
+        url: "/dashboard/contacts/" + contact_id,
+        type: "POST",
+        data: JSON.stringify({'contact_id': contact_id}),
+        contentType:'application/json',
+        dataType: 'text',
+        beforeSend: function(xhr) {
+          xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+        },
+        success: function (data) {
+          window.location.href = "{% url 'dashboard:contacts:index' contacts_category contacts_sub_category %}";
+        }
+      });
+    });
+   </script>
+{% endblock javascripts %}

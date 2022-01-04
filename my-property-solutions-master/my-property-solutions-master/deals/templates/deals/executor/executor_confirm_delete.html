@@ -1,0 +1,44 @@
+
+{% load widget_tweaks %}
+
+<form method="POST" id="addModelFormAjax" class="form-horizontal form-label-left myform123" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="x_content">
+                <h4 class="text-muted">Are You sure want to delete?</h4>
+            </div>
+            <div class="col-md-2">
+              <input type="submit" value="Delete" class="btn btn-danger btn-sm" />
+            </div>
+          </form>
+
+
+<script>
+ $("input").addClass("form-control");
+  $(".modal-title").html("Delete");
+    $('#addModelFormAjax').submit(function(e){
+        e.preventDefault();
+       var formData = new FormData(this);
+       $.ajax({
+            url:'{% url "dashboard:deals:executor_delete" pk %}',
+            data:formData,
+            type:"post",
+            contentType: false,
+            processData: false,
+            beforeSend: function() {
+                $(".loading").show();
+            },
+            success:function(data){
+            debugger;
+            if(data.success=="ok"){
+                $('#myModal').modal('hide');
+                loadExecutor();
+            }else{
+                $(".modal-body").html(data);
+            }
+            }
+       });
+
+   });
+</script>
+
+

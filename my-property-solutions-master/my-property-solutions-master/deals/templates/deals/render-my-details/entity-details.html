@@ -1,0 +1,38 @@
+<div class="form-group">
+  <label class="col-md-3 col-sm-3 col-xs-12 control-label">ABN/ACN
+  </label>
+  <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+    <input type="text" name="ABN/ACN" disabled="" value='{{ entity.entity.abn_or_acn_number|default_if_none:"" }}' class="form-control" />
+  </div>
+</div>
+<div class="form-group">
+  <label class="col-md-3 col-sm-3 col-xs-12 control-label">Address
+  </label>
+  <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+    {% with entity_address=entity.entity.address_set.all.first %}
+      <input type="text" name="Address" disabled="" value='{{ entity_address.unit|default_if_none:"" }} {{ entity_address.number|default_if_none:"" }} {{ entity_address.street|default_if_none:"" }} {{ entity_address.suburb|default_if_none:"" }} {{ entity_address.state|default_if_none:"" }} {{ entity_address.post_code|default_if_none:"" }}' class="form-control" />
+    {% endwith %}
+  </div>
+</div>
+<div class="form-group">
+  <label class="col-md-3 col-sm-3 col-xs-12 control-label">Email
+  </label>
+    <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+      {% for email in entity.entity.email_set.all %}
+        {% if forloop.last %}
+          <input type="text" name="Email" disabled="" value='{{ email.email }}' class="form-control" />
+        {% else %}
+          <input type="text" name="Email" disabled="" value='{{ email.email }}' class="form-control ve-sh-pad-bottom" />
+        {% endif %}
+      {% endfor %}
+    </div>
+    <div class="col-md-3"></div>
+</div>
+<div class="form-group">
+  <label class="col-md-3 col-sm-3 col-xs-12 control-label">Phone
+  </label>
+  <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+    <input type="text" name="Phone" disabled="" value='{{ entity.entity.mobile|default_if_none:"" }}' class="form-control" />
+  </div>
+</div>
+<br>

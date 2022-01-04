@@ -1,0 +1,297 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Edit Owner Details {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="x_content">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              <h2>Edit Owner Details</h2>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <form method="POST" action="" class="form-horizontal form-label-left">
+                  {{ formset.management_form }}
+                  {% for form in formset %}
+                    {% csrf_token %}
+
+                    {% if form.errors %}
+                    {% for error in form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                    {% endfor %}
+                  {% endif %}
+
+                    <div class="hidden">{{ form.id }}</div>
+
+                    {% if category == 'liquidation' %}
+                        <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12">
+                          <h2 class="form-title">Company Details</h2>
+                        </div>
+                        <div class="form-group">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.company_name.label }}
+                          </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                            {{ form.company_name|add_error_class:"ve-sh-error-block" }}
+                          </div>
+                          <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                            {% for error in form.company_name.errors %}
+                              {{ error|escape }}
+                            {% endfor %}
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.abn_or_acn.label }}
+                          </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                            {{ form.abn_or_acn|add_error_class:"ve-sh-error-block" }}
+                          </div>
+                          <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                            {% for error in form.abn_or_acn.errors %}
+                              {{ error|escape }}
+                            {% endfor %}
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.abn_or_acn_number.label }}
+                          </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                            {{ form.abn_or_acn_number|add_error_class:"ve-sh-error-block" }}
+                          </div>
+                          <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                            {% for error in form.abn_or_acn_number.errors %}
+                              {{ error|escape }}
+                            {% endfor %}
+                          </div>
+                        </div>
+                    {% endif %}
+
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12">
+                      <h2 class="form-title">Owner Details</h2>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.first_name.label }}
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{ form.first_name|add_error_class:"ve-sh-error-block" }}
+                      </div>
+                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                        {% for error in form.first_name.errors %}
+                          {{ error|escape }}
+                        {% endfor %}
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.last_name.label }}
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{ form.last_name|add_error_class:"ve-sh-error-block" }}
+                      </div>
+                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                        {% for error in form.last_name.errors %}
+                          {{ error|escape }}
+                        {% endfor %}
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.mobile.label }}
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{ form.mobile|add_error_class:"ve-sh-error-block" }}
+                      </div>
+                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                        {% for error in form.mobile.errors %}
+                          {{ error|escape }}
+                        {% endfor %}
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.email.label }}
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{ form.email|add_error_class:"ve-sh-error-block" }}
+                      </div>
+                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                        {% for error in form.email.errors %}
+                          {{ error|escape }}
+                        {% endfor %}
+                      </div>
+                    </div>
+
+                    {% if category == 'liquidation' %}
+                      <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Street Address</p>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.unit.label }}
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          {{ form.unit|add_error_class:"ve-sh-error-block" }}
+                        </div>
+                        <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                          {% for error in form.unit.errors %}
+                            {{ error|escape }}
+                          {% endfor %}
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.number.label }}
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          {{ form.number|add_error_class:"ve-sh-error-block" }}
+                        </div>
+                        <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                          {% for error in form.number.errors %}
+                            {{ error|escape }}
+                          {% endfor %}
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.street.label }}
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          {{ form.street|add_error_class:"ve-sh-error-block" }}
+                        </div>
+                        <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                          {% for error in form.street.errors %}
+                            {{ error|escape }}
+                          {% endfor %}
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.suburb.label }}
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          {{ form.suburb|add_error_class:"ve-sh-error-block" }}
+                        </div>
+                        <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                          {% for error in form.suburb.errors %}
+                            {{ error|escape }}
+                          {% endfor %}
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.state.label }}
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          {{ form.state|add_error_class:"ve-sh-error-block" }}
+                        </div>
+                        <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                          {% for error in form.state.errors %}
+                            {{ error|escape }}
+                          {% endfor %}
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.post_code.label }}
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          {{ form.post_code|add_error_class:"ve-sh-error-block" }}
+                        </div>
+                        <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                          {% for error in form.post_code.errors %}
+                            {{ error|escape }}
+                          {% endfor %}
+                        </div>
+                      </div>
+                      <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Postal Address</p>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.po_box.label }}
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          {{ form.po_box|add_error_class:"ve-sh-error-block" }}
+                        </div>
+                        <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                          {% for error in form.po_box.errors %}
+                            {{ error|escape }}
+                          {% endfor %}
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.postal_suburb.label }}
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          {{ form.postal_suburb|add_error_class:"ve-sh-error-block" }}
+                        </div>
+                        <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                          {% for error in form.postal_suburb.errors %}
+                            {{ error|escape }}
+                          {% endfor %}
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.postal_state.label }}
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          {{ form.postal_state|add_error_class:"ve-sh-error-block" }}
+                        </div>
+                        <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                          {% for error in form.postal_state.errors %}
+                            {{ error|escape }}
+                          {% endfor %}
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.postal_post_code.label }}
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          {{ form.postal_post_code|add_error_class:"ve-sh-error-block" }}
+                        </div>
+                        <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                          {% for error in form.postal_post_code.errors %}
+                            {{ error|escape }}
+                          {% endfor %}
+                        </div>
+                      </div>
+                    {% endif %}
+                  {% endfor %}
+                <div class="col-md-6 col-sm-6 col-xs-12 col-sm-offset-3">
+                  <input type="submit" value="Submit" class="btn btn-success" />
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+  <script type="text/javascript">
+    if ($('#id_abn_or_acn').val() == 'Not Present'){
+      $('#id_abn_or_acn_number').attr('disabled', true);
+    }
+
+    // If the option for ABN/ACN Number selected is 'Not Presenet', disable the ABN/ACN Number field below it
+     $('select').on('change', function(){
+        if($(this).val() == 'Not Present'){
+          $(this).parent().parent().next().find('input').val('');
+          $(this).parent().parent().next().find('input').attr('disabled', true);
+        }
+        else{
+          $(this).parent().parent().next().find('input').attr('disabled', false);
+        }
+     });
+
+     // On page load
+     $('select').each(function(){
+      if($(this).val() == 'Not Present'){
+        $(this).parent().parent().next().find('input').val('');
+        $(this).parent().parent().next().find('input').attr('disabled', true);
+      }
+      else{
+        $(this).parent().parent().next().find('input').attr('disabled', false);
+      }
+     });
+  </script>
+{% endblock javascripts %}

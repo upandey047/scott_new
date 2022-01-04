@@ -1,0 +1,69 @@
+{% load widget_tweaks %}
+
+<input type="text" class="hidden ve-sh-hidden-field" name="selected-contact-id" value="{{contact_id}}">
+<p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Street Address</p>
+<div class="form-group">
+  <label class="control-label col-md-3 col-sm-3 col-xs-12">Unit
+  </label>
+  <div class="col-md-6 col-sm-6 col-xs-12">
+    <input type="text" name="unit" disabled="" value="{{council_obj.unit|default_if_none:''}}" class="form-control">
+  </div>
+</div>
+<div class="form-group">
+  <label class="control-label col-md-3 col-sm-3 col-xs-12">Number
+  </label>
+  <div class="col-md-6 col-sm-6 col-xs-12">
+    <input type="text" name="number" disabled="" value="{{council_obj.number|default_if_none:''}}" class="form-control">
+  </div>
+</div>
+<div class="form-group">
+  <label class="control-label col-md-3 col-sm-3 col-xs-12">Street
+  </label>
+  <div class="col-md-6 col-sm-6 col-xs-12">
+    <input type="text" name="street" disabled="" value="{{council_obj.street|default_if_none:''}}" class="form-control">
+  </div>
+</div>
+<p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Postal Address</p>
+<div class="form-group">
+  <label class="control-label col-md-3 col-sm-3 col-xs-12">PO Box
+  </label>
+  <div class="col-md-6 col-sm-6 col-xs-12">
+    <input type="text" name="po_box" disabled="" value="{{council_obj.po_box|default_if_none:''}}" class="form-control">
+  </div>
+</div>
+<div class="form-group">
+  <label class="control-label col-md-3 col-sm-3 col-xs-12">Suburb
+  </label>
+  <div class="col-md-6 col-sm-6 col-xs-12">
+    <input type="text" name="suburb" disabled="" value="{{council_obj.suburb|default_if_none:''}}" class="form-control">
+  </div>
+</div>
+<div class="form-group">
+  <label class="control-label col-md-3 col-sm-3 col-xs-12">State
+  </label>
+  <div class="col-md-6 col-sm-6 col-xs-12">
+    <input type="text" name="state" disabled="" value="{{council_obj.state|default_if_none:''}}" class="form-control">
+  </div>
+</div>
+<div class="form-group">
+  <label class="control-label col-md-3 col-sm-3 col-xs-12">Post Code
+  </label>
+  <div class="col-md-6 col-sm-6 col-xs-12">
+    <input type="text" name="post_code" disabled="" value="{{council_obj.post_code|default_if_none:''}}" class="form-control">
+  </div>
+</div>
+<p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Contact Details</p>
+<div class="form-group">
+  <label class="control-label col-md-3 col-sm-3 col-xs-12">Mobile
+  </label>
+  <div class="col-md-6 col-sm-6 col-xs-12">
+    <input type="text" name="mobile" disabled="" value="{{council_obj.mobile|default_if_none:''}}" class="form-control">
+  </div>
+</div>
+<div class="form-group">
+  <label class="control-label col-md-3 col-sm-3 col-xs-12">Email
+  </label>
+  <div class="col-md-6 col-sm-6 col-xs-12">
+    <input type="text" name="email" disabled="" value="{{council_obj.email|default_if_none:''}}" class="form-control">
+  </div>
+</div>

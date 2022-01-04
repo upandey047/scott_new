@@ -1,0 +1,57 @@
+{% load deal_tags %}
+
+<div class="container-fluid">
+  <div class="card-header card-header-tabs card-header-primary bg1">
+    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+      <li class="nav-item" id="overview">
+        <a href="{% url 'dashboard:deals:deal' lead_id %}" type="button">Overview</a>
+      </li>
+      <li class="nav-item" id="owner-details">
+        <a href="{% url 'dashboard:deals:owner_details' deal_id %}" type="button">Owner Details</a>
+      </li>
+      <li class="nav-item" id="my-purchase-details">
+        <a href="{% url 'dashboard:deals:my_purchase_details' deal_id %}" type="button">My Details</a>
+      </li>
+       <li class="nav-item" id="correspondance">
+        <a href="{% url 'dashboard:deals:purchase_correspondance_documents' deal_id %}" type="button">Correspondance</a>
+      </li>
+      <li class="nav-item" id="property-details">
+        <a href="{% url 'dashboard:deals:inspection_details' deal_id %}" type="button">Property Details</a>
+      </li>
+      <li class="nav-item" id="loan-details">
+        <a href="{% url 'dashboard:deals:loan_details' deal_id %}" type="button">Loans / Title</a>
+      </li>
+       <li class="nav-item" id="offer-details">
+        <a href="{% url 'dashboard:deals:purchase_details' deal_id %}" type="button">Offer Details</a>
+      </li>
+      <li class="nav-item" id="reminders">
+        <a href="{% url 'dashboard:deals:reminders_list' deal_id %}" type="button">Reminders</a>
+      </li>
+      <li class="nav-item" id="renovation-details">
+        <a href="#" type="button">Renovation</a>
+      </li>
+      <li class="nav-item" id="list-for-sale">
+        <a href="{% url 'dashboard:deals:list_for_sale' deal_id %}" type="button">List For Sale</a>
+      </li>
+      <li class="nav-item" id="sold">
+        <a href="{% url 'dashboard:deals:sold' deal_id %}" type="button">Sold</a>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="col-md-12 col-sm-12 col-xs-12" style="padding: 0px;">
+  <div class="x_panel tile overflow_hidden">
+    <div class="x_title">
+      <h2>Deal's Information</h2>
+      <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+        <!-- <div id="deal_id">{{deal_id}}</div> -->
+      <strong>Owner's Name: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong> {% deal_owner_name deal_id %}
+      <br>
+      <strong>Property Address: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong> {% deal_property_address deal_id %}
+      <br>
+      <strong>AFCA Complaint Lodged: </strong> {% afca_complaint_lodged deal_id %}
+    </div >
+  </div>
+</div>

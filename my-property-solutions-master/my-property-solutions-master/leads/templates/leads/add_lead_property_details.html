@@ -1,0 +1,368 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Dashboard{% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              <a href="{% url 'dashboard:leads:index' category %}" class="btn btn-primary" id="go-back-btn">Go Back</a><h2>Add Lead: {{category|title}}</h2>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <br>
+              <form method="POST" action="" class="form-horizontal form-label-left">
+                {% csrf_token %}
+                {{ wizard.management_form }}
+
+                {% if form.errors %}
+                    {% for error in form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <div class="form-wizard-form">
+                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12">
+                    <h2 class="form-title">Property Details</h2>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.property_type.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.property_type|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.property_type.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.beds.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.beds|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.beds.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.bath.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.bath|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.bath.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.garage.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.garage|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.garage.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.land.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.land|add_error_class:"ve-sh-error-block" }} {{ form.land.help_text }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.land.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Street Address</p>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.unit.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.unit|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.unit.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.number.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.number|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.number.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.street.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.street|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.street.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.suburb.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.suburb|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.suburb.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.state.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.state|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.state.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.post_code.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.post_code|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.post_code.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Postal Address</p>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.po_box.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.po_box|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.po_box.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.postal_suburb.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.postal_suburb|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.postal_suburb.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.postal_state.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.postal_state|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.postal_state.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.postal_post_code.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.postal_post_code|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.postal_post_code.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+
+                  {% if category == 'withdrawn' or category == 'sixty-days-over' %}
+                    <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Additional Details</p>
+                    <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.start_list_date.label }}
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{ form.start_list_date|add_error_class:"ve-sh-error-block" }}
+                      </div>
+                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                        {% for error in form.start_list_date.errors %}
+                          {{ error|escape }}
+                        {% endfor %}
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.end_list_date.label }}
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{ form.end_list_date|add_error_class:"ve-sh-error-block" }}
+                      </div>
+                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                        {% for error in form.end_list_date.errors %}
+                          {{ error|escape }}
+                        {% endfor %}
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.start_list_price.label }}
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                        {{ form.start_list_price|add_error_class:"ve-sh-error-block" }}
+                      </div>
+                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                        {% for error in form.start_list_price.errors %}
+                          {{ error|escape }}
+                        {% endfor %}
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.end_list_price.label }}
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                        {{ form.end_list_price|add_error_class:"ve-sh-error-block" }}
+                      </div>
+                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                        {% for error in form.end_list_price.errors %}
+                          {{ error|escape }}
+                        {% endfor %}
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.difference.label }}
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                        {{ form.difference|add_error_class:"ve-sh-error-block" }}
+                      </div>
+                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                        {% for error in form.difference.errors %}
+                          {{ error|escape }}
+                        {% endfor %}
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.dom.label }}
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{ form.dom|add_error_class:"ve-sh-error-block" }}
+                      </div>
+                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                        {% for error in form.dom.errors %}
+                          {{ error|escape }}
+                        {% endfor %}
+                      </div>
+                    </div>
+                  {% endif %}
+
+                </div>
+                <div class="ln_solid"></div>
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                    {% if wizard.steps.prev %}
+                      <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.first }}" class="btn btn-primary">First Step</button>
+                      <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}" class="btn btn-primary">Prev Step</button>
+                    {% else %}
+                      <button class="btn btn-default" disabled>First Step</button>
+                      <button class="btn btn-default" disabled>Prev Step</button>
+                    {% endif %}
+                    <input type="submit" value="Submit" class="btn btn-success" />
+                    <button class="btn btn-default" disabled>Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</button>
+                  </div>
+                </div>
+
+              </form>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <div class="clearfix"></div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+  <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+  <script type="text/javascript">
+
+    // sidebar styling
+    $('.side-menu').children().removeClass('active');
+    $('#home').addClass('active');
+
+    $('#id_0-start_list_date, #id_0-end_list_date').datepicker({
+      dateFormat: "dd-mm-yy"
+    });
+
+    $('#id_0-start_list_price').on('keyup', function(){
+      var start_list_price = 0;
+      if ($("#id_0-start_list_price").val()){
+        start_list_price = parseInt($("#id_0-start_list_price").val().replace(/(\,)/g, ''));
+      }
+      var end_list_price = 0;
+      if ($("#id_0-end_list_price").val()){
+        end_list_price = parseInt($("#id_0-end_list_price").val().replace(/(\,)/g, ''));
+      }
+      var difference = end_list_price - start_list_price;
+      $('#id_0-difference').val(difference.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+    });
+
+    $('#id_0-end_list_price').on('keyup', function(){
+      var start_list_price = 0;
+      if ($("#id_0-start_list_price").val()){
+        start_list_price = parseInt($("#id_0-start_list_price").val().replace(/(\,)/g, ''));
+      }
+      var end_list_price = 0;
+      if ($("#id_0-end_list_price").val()){
+        end_list_price = parseInt($("#id_0-end_list_price").val().replace(/(\,)/g, ''));
+      }
+      var difference = end_list_price - start_list_price;
+      $('#id_0-difference').val(difference.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+    });
+
+  </script>
+
+  <!-- To separate the numbers in a number fields with comma whenever user enters digits -->
+  <script src="/static/custom/custom_js.js"></script>
+{% endblock javascripts %}

@@ -1,0 +1,224 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Entity {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="x_content">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              <h2>Trust Entity</h2>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <form method="POST" action="" class="form-horizontal form-label-left" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="col-md-9 col-sm-9 col-xs-12 col-sm-offset-3"><h2>Trust's Details</h2></div>
+                    {% for field in trust_form %}
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ field.label }}
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          {{ field|add_error_class:"ve-sh-error-block" }} {{ field.help_text }}
+                        </div>
+                        {% if trust_form.errors %}
+                          {% for error in field.errors %}
+                            <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                              {{ error|escape }}
+                            </div>
+                          {% endfor %}
+                        {% endif %}
+                      </div>
+                    {% endfor %}
+
+                    <p class="h5 col-sm-offset-3 col-sm-9 col-xs-12">Email</p>
+                    {{ email_formset.management_form }}
+                    {% for email_form in email_formset %}
+                      <div class="hidden">{{ email_form.id }}</div>
+                      <div class="email_form_div">
+                        {% for field in email_form.visible_fields %}
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ field.label }}
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              {{ field|add_error_class:"ve-sh-error-block" }} {{ field.help_text }}
+                            </div>
+                            {% if email_form.errors %}
+                              {% for error in field.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                        {% endfor %}
+                      </div>
+                    {% endfor %}
+
+                    <div class="form-group">
+                      <div class="col-md-6 col-sm-6 col-xs-12 col-sm-offset-3">
+                        <a class="btn btn-primary" id="add-email-button">Add Email</a>
+                        <a class="btn btn-primary" id="remove-email-button">Remove Email</a>
+                      </div>
+                    </div>
+
+                    <div id="shares-forms">
+                      <p class="h5 col-sm-offset-3 col-sm-9 col-xs-12">Shares</p>
+                      {{ shares_formset.management_form }}
+                      {% for share_form in shares_formset %}
+                        <div class="hidden">{{ share_form.id }}</div>
+                        <div class="shares_form_div">
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ share_form.name.label }}
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              {{ share_form.name|add_error_class:"ve-sh-error-block" }} {{ share_form.name.help_text }}
+                            </div>
+                            {% if share_form.errors %}
+                              {% for error in share_form.name.errors %}
+                                <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                  {{ error|escape }}
+                                </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ share_form.amount.label }}
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                              {{ share_form.amount|add_error_class:"ve-sh-error-block" }} {{ share_form.amount.help_text }}
+                            </div>
+                            {% if share_form.errors %}
+                              {% for error in share_form.amount.errors %}
+                                <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                  {{ error|escape }}
+                                </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                        </div>
+                      {% endfor %}
+
+                      <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-sm-offset-3">
+                          <a class="btn btn-primary" id="add-share-button">Add Share</a>
+                          <a class="btn btn-primary" id="remove-share-button">Remove Share</a>
+                        </div>
+                      </div>
+                    </div>
+                    <br>
+                    <div class="col-md-6 col-sm-6 col-xs-12 col-sm-offset-3">
+                      <input type="submit" value="Submit" class="btn btn-success" />
+                    </div>
+                  </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+{% endblock content %}
+
+
+{% block javascripts %}
+  {{ block.super}}
+   <script type="text/javascript">
+
+    // When the user selects the category Unit in Trust type, the shares form should be shown
+    $('#id_trust_type').on('change', function(){
+      if ($(this).val() == 'Unit'){
+        $('#shares-forms').show();
+      }
+      else{
+        $('#shares-forms').hide();
+      }
+    });
+
+    // This gets called when an error occurs in the form and the user has selected the category 'Unit'
+    if ($('#id_trust_type').val() == 'Unit'){
+      $('#shares-forms').show();
+    }
+    else{
+      $('#shares-forms').hide();
+    }
+
+    // When the user clicks on add email button, an extra field is displayed to the user
+    $('#add-email-button').on('click', function(){
+      cloneEmail('div.email_form_div:last', 'email_formset');
+    });
+
+    function cloneEmail(selector, type) {
+        var newElement = $(selector).clone(true);
+        var total = $('#id_' + type + '-TOTAL_FORMS').val();
+        newElement.find(':input').each(function() {
+            var name = $(this).attr('name').replace('-' + (total-1) + '-','-' + total + '-');
+            var id = 'id_' + name;
+            $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+        });
+        total++;
+        $('#id_' + type + '-TOTAL_FORMS').val(total);
+        $(selector).after(newElement);
+    }
+    // Add email script complete
+
+    // Remove an email field from the list of email fields
+    $('#remove-email-button').on('click', function(){
+      if($('div.email_form_div').length > 1){
+        deleteEmail('div.email_form_div:last', 'email_formset');
+      }
+    });
+
+    function deleteEmail(selector, type) {
+      var total = $('#id_' + type + '-TOTAL_FORMS').val();
+      total--;
+      $('#id_' + type + '-TOTAL_FORMS').val(total);
+      $('div.email_form_div:last').remove();
+    }
+
+    // When the user clicks on add share button, an extra field is displayed to the user
+    $('#add-share-button').on('click', function(){
+      cloneShare('div.shares_form_div:last', 'shares_formset');
+    });
+
+    function cloneShare(selector, type) {
+        var newElement = $(selector).clone(true);
+        var total = $('#id_' + type + '-TOTAL_FORMS').val();
+        newElement.find(':input').each(function() {
+            var name = $(this).attr('name').replace('-' + (total-1) + '-','-' + total + '-');
+            var id = 'id_' + name;
+            $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+        });
+        total++;
+        $('#id_' + type + '-TOTAL_FORMS').val(total);
+        $(selector).after(newElement);
+    }
+    // Add share script complete
+
+    // Remove a share field from the list of share fields
+    $('#remove-share-button').on('click', function(){
+      if($('div.shares_form_div').length > 1){
+        deleteShare('div.shares_form_div:last', 'shares_formset');
+      }
+    });
+
+    function deleteShare(selector, type) {
+      var total = $('#id_' + type + '-TOTAL_FORMS').val();
+      total--;
+      $('#id_' + type + '-TOTAL_FORMS').val(total);
+      $('div.shares_form_div:last').remove();
+    }
+   </script>
+
+  <!-- To separate the numbers in a number fields with comma whenever user enters digits -->
+  <script src="/static/custom/custom_js.js"></script>
+
+{% endblock javascripts %}

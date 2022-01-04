@@ -1,0 +1,68 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Edit Lead Status{% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              <a href="{% url 'dashboard:leads:index' category %}" class="btn btn-primary" id="go-back-btn">Go Back</a><h2>Edit Lead Status</h2>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <form method="POST" action="" class="form-horizontal form-label-left">
+                {% csrf_token %}
+                <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12">
+                  <h2 class="form-title">Lead Details</h2>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">Property Address
+                  </label>
+                  <div class="col-md-6 col-sm-6 col-xs-12">
+                    {{ property.unit|default_if_none:"" }} {{ property.number|default_if_none:"" }} {{ property.street|default_if_none:"" }} {{ property.suburb|default_if_none:"" }} {{ property.state|default_if_none:"" }} {{ property.post_code|default_if_none:"" }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.status.label }}
+                  </label>
+                  <div class="col-md-6 col-sm-6 col-xs-12">
+                    {{ form.status|add_error_class:"ve-sh-error-block" }}
+                  </div>
+                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                    {% for error in form.status.errors %}
+                      {{ error|escape }}
+                    {% endfor %}
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12 col-sm-offset-3">
+                  <input type="submit" value="Submit" class="btn btn-success" />
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <div class="clearfix"></div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+
+  <script type="text/javascript">
+
+    // sidebar styling
+    $('.side-menu').children().removeClass('active');
+    $('#home').addClass('active');
+
+  </script>
+{% endblock javascripts %}

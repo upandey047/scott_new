@@ -1,0 +1,53 @@
+<link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">
+<div class="nav_menu">
+  <nav>
+    <div class="nav toggle">
+      <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+    </div>
+
+    <ul class="nav navbar-nav navbar-right">
+      <li class="">
+        <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+          <img src="/static/images/anon_user.png" alt="">{{ request.user.email }}
+          <span class=" fa fa-angle-down"></span>
+        </a>
+        <ul class="dropdown-menu dropdown-usermenu pull-right">
+          <li><a href="{% url 'account_logout' %}"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+        </ul>
+      </li>
+      <li role="presentation" class="dropdown" id="notifications">
+        <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+          <i class="fa fa-bell"></i>
+          <span class="badge bg-green" id="notification-count"></span>
+        </a>
+        <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+          <li>
+            <a>
+              <span class="message">
+                No notifications to show right now!
+              </span>
+            </a>
+          </li>
+        </ul>
+      </li>
+
+    </ul>
+  </nav>
+</div>
+
+<script src="/static/vendors/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+  $('#notifications').load("{% url 'dashboard:reminders:reminders_list' %}")
+  setInterval(function() {
+    $('#notifications').load("{% url 'dashboard:reminders:reminders_list' %}")
+  }, 60000);
+
+  $(document).on('click', '.dismiss-reminder', function(){
+    $('#notifications').load("/dashboard/reminders/dismiss-reminder/" + $(this).attr('id'));
+  });
+
+  $(document).on('click', '.snooze-reminder', function(){
+    $('#notifications').load("/dashboard/reminders/snooze-reminder/" + $(this).attr('id'));
+  });
+
+</script>

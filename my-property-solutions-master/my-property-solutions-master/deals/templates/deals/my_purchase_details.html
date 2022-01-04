@@ -1,0 +1,686 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Owner Details {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="x_content">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              {% include "deals/deals_navbar.html" with deal_id=deal_id lead_id=lead_id %}
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <div class="container">
+                <div class="x_panel offer_details_xpanel">
+                  <br>
+                  <div class="tab-content">
+                    <div id="purchase-div" class="tab-pane fade in active">
+                      {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                              {% ifequal message.tags "submitted success" %}
+                                <div class="alert alert-success col-xs-12">
+                                  <strong class="{{ message.tags }}">{{ message }}</strong>
+                                </div>
+                              {% endifequal %}
+                            {% endfor %}
+                        </ul>
+                      {% endif %}
+
+                      <form method="POST" action="" class="form-horizontal form-label-left">
+                        {% csrf_token %}
+
+                        <input type="hidden" name="bank_status" id="bank_status" />
+                        <div class="col-md-3 col-sm-3"></div><h2 class="col-md-9 col-sm-9 col-xs-12">Entity Details</h2>
+                        <div class="form-group">
+                          <label class="col-md-3 col-sm-3 col-xs-12 control-label">Entity
+                          </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                            {{ form.entity|add_error_class:"ve-sh-error-block" }}
+                          </div>
+                          {% if form.errors %}
+                            {% for error in form.entity.errors %}
+                              <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                {{ error|escape }}
+                              </div>
+                            {% endfor %}
+                          {% endif %}
+                        </div>
+                        <div class="entity-details">
+                          <div class="form-group">
+                            <label class="col-md-3 col-sm-3 col-xs-12 control-label">ABN/ACN
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                              <input type="text" name="ABN/ACN" disabled="" value='{{ entity.entity.abn_or_acn_number|default_if_none:"" }}' class="form-control" />
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="col-md-3 col-sm-3 col-xs-12 control-label">Address
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                              {% with entity_address=entity.entity.address_set.all.first %}
+                                <input type="text" name="Address" disabled="" value='{{ entity_address.unit|default_if_none:"" }} {{ entity_address.number|default_if_none:"" }} {{ entity_address.street|default_if_none:"" }} {{ entity_address.suburb|default_if_none:"" }} {{ entity_address.state|default_if_none:"" }} {{ entity_address.post_code|default_if_none:"" }}' class="form-control" />
+                              {% endwith %}
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="col-md-3 col-sm-3 col-xs-12 control-label">Email
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                              {% if entity.entity.email_set.all %}
+                                {% for email in entity.entity.email_set.all %}
+                                  {% if forloop.last %}
+                                    <input type="text" name="Email" disabled="" value='{{ email.email }}' class="form-control" />
+                                  {% else %}
+                                    <input type="text" name="Email" disabled="" value='{{ email.email }}' class="form-control ve-sh-pad-bottom" />
+                                  {% endif %}
+                                {% endfor %}
+                              {% else %}
+                                <input type="text" name="Email" disabled="" value='' class="form-control" />
+                              {% endif %}
+                            </div>
+                            <div class="col-md-3"></div>
+                          </div>
+                          <div class="form-group">
+                            <label class="col-md-3 col-sm-3 col-xs-12 control-label">Phone
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                              <input type="text" name="Phone" disabled="" value='{{ entity.entity.mobile|default_if_none:"" }}' class="form-control" />
+                            </div>
+                          </div>
+                          <br>
+                        </div>
+
+                        <div class="col-md-3 col-sm-3"></div><h2 class="col-md-9 col-sm-9 col-xs-12">My Team</h2>
+                        <div id="form.accountant-div">
+                          <div class="form-group">
+                            <label class="col-md-3 col-sm-3 col-xs-12 control-label">Accountant
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js render-contact-details">
+                              {{ form.accountant|add_error_class:"ve-sh-error-block" }}
+                            </div>
+                            {% if form.errors %}
+                              {% for error in form.entity.errors %}
+                                <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                  {{ error|escape }}
+                                </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                          <div class="contact-details">
+                            <div class="form-group">
+                              <label class="col-md-3 col-sm-3 col-xs-12 control-label">Address
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                                <input type="text" name="Address" disabled="" value='{{ accountant.unit|default_if_none:"" }} {{ accountant.number|default_if_none:"" }} {{ accountant.street|default_if_none:"" }} {{ accountant.suburb|default_if_none:"" }} {{ accountant.state|default_if_none:"" }} {{ accountant.post_code|default_if_none:"" }}' class="form-control" />
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-md-3 col-sm-3 col-xs-12 control-label">Phone
+                              </label>
+                              <div class="col-md-2 col-sm-2 col-xs-12 ve-sh-number-js">
+                                <input type="text" name="Phone" disabled="" value='{{ accountant.mobile|default_if_none:"" }}' class="form-control" />
+                              </div>
+                              <label class="col-md-1 col-sm-1 col-xs-12 control-label">Email
+                              </label>
+                              <div class="col-md-3 col-sm-3 col-xs-12 ve-sh-number-js">
+                                <input type="text" name="Email" disabled="" value='{{ accountant.email|default_if_none:"" }}' class="form-control" />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <hr class="col-sm-offset-3 col-md-6 col-sm-6 col-xs-12">
+                        <div id="agent-div">
+                          <div class="form-group">
+                            <label class="col-md-3 col-sm-3 col-xs-12 control-label">Agent
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js render-contact-details">
+                              {{ form.agent|add_error_class:"ve-sh-error-block" }}
+                            </div>
+                            {% if form.errors %}
+                              {% for error in form.agent.errors %}
+                                <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                  {{ error|escape }}
+                                </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                          <div class="contact-details">
+                            <div class="form-group">
+                              <label class="col-md-3 col-sm-3 col-xs-12 control-label">Address
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                                <input type="text" name="Address" disabled="" value='{{ agent.unit|default_if_none:"" }} {{ agent.number|default_if_none:"" }} {{ agent.street|default_if_none:"" }} {{ agent.suburb|default_if_none:"" }} {{ agent.state|default_if_none:"" }} {{ agent.post_code|default_if_none:"" }}' class="form-control" />
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-md-3 col-sm-3 col-xs-12 control-label">Phone
+                              </label>
+                              <div class="col-md-2 col-sm-2 col-xs-12 ve-sh-number-js">
+                                <input type="text" name="Phone" disabled="" value='{{ agent.mobile|default_if_none:"" }}' class="form-control" />
+                              </div>
+                              <label class="col-md-1 col-sm-1 col-xs-12 control-label">Email
+                              </label>
+                              <div class="col-md-3 col-sm-3 col-xs-12 ve-sh-number-js">
+                                <input type="text" name="Email" disabled="" value='{{ agent.email|default_if_none:"" }}' class="form-control" />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <hr class="col-sm-offset-3 col-md-6 col-sm-6 col-xs-12">
+                        <div id="conveyancer-div">
+                          <div class="form-group">
+                            <label class="col-md-3 col-sm-3 col-xs-12 control-label">Conveyancer
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js render-contact-details">
+                              {{ form.conveyancer|add_error_class:"ve-sh-error-block" }}
+                            </div>
+                            {% if form.errors %}
+                              {% for error in form.conveyancer.errors %}
+                                <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                  {{ error|escape }}
+                                </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                          <div class="contact-details">
+                            <div class="form-group">
+                              <label class="col-md-3 col-sm-3 col-xs-12 control-label">Address
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                                <input type="text" name="Address" disabled="" value='{{ conveyancer.unit|default_if_none:"" }} {{ conveyancer.number|default_if_none:"" }} {{ conveyancer.street|default_if_none:"" }} {{ conveyancer.suburb|default_if_none:"" }} {{ conveyancer.state|default_if_none:"" }} {{ conveyancer.post_code|default_if_none:"" }}' class="form-control" />
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-md-3 col-sm-3 col-xs-12 control-label">Phone
+                              </label>
+                              <div class="col-md-2 col-sm-2 col-xs-12 ve-sh-number-js">
+                                <input type="text" name="Phone" disabled="" value='{{ conveyancer.mobile|default_if_none:"" }}' class="form-control" />
+                              </div>
+                              <label class="col-md-1 col-sm-1 col-xs-12 control-label">Email
+                              </label>
+                              <div class="col-md-3 col-sm-3 col-xs-12 ve-sh-number-js">
+                                <input type="text" name="Email" disabled="" value='{{ conveyancer.email|default_if_none:"" }}' class="form-control" />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <hr class="col-sm-offset-3 col-md-6 col-sm-6 col-xs-12">
+                        <div class="form-group">
+                          <label class="col-md-3 col-sm-3 col-xs-12 control-label">Money Partner
+                          </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                            {{ form.money_lender|add_error_class:"ve-sh-error-block" }}
+                          </div>
+                          {% if form.errors %}
+                            {% for error in form.money_lender.errors %}
+                              <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                {{ error|escape }}
+                              </div>
+                            {% endfor %}
+                          {% endif %}
+                        </div>
+
+                        <div id="lender-div">
+                          {% if all_private_lenders or private_lender_queryset %}
+                            {% if private_lender_queryset %}
+                              {% for private_lender in private_lender_queryset %}
+                                <div class="clone-lender-div">
+                                  <div class="hidden">{{ private_lender.id }}</div>
+                                  <div class="form-group">
+                                    <div class="col-md-3 col-sm-3 control-label"></div>
+                                    <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-left-margin-null ve-sh-left-pad-null">
+                                      <p class='h4 col-xs-6'>Lender Details</p>
+                                      <a href="#" class="btn btn-danger btn-xs ve-sh-del-lender lender-btn delete-btn" data-toggle="modal" data-target="#ve-sh-del-lender-modal" data="{{private_lender.id}}">
+                                        <i class="fa fa-trash-o"></i> Remove
+                                      </a>
+                                      <a href="{% url 'dashboard:deals:edit_lender_details' deal_id private_lender.id %}" class="btn btn-info btn-xs lender-btn">
+                                        <i class="fa fa-pencil"></i> Edit
+                                      </a>
+                                    </div>
+                                  </div>
+                                  <div class="form-group">
+                                    <label class="col-md-3 col-sm-3 col-xs-12 control-label">Select Lender
+                                    </label>
+                                    <div class="col-md-6 col-sm-6 col-xs-12 select-lender-parent">
+                                      <select class="form-control select-lender">
+                                          <option value='' id=''>---------</option>
+                                        {% for lender_obj in all_private_lenders %}
+                                          <option value='{{ lender_obj.id }}' id='id_{{ lender_obj.id }}'>{{ lender_obj }}</option>
+                                        {% endfor %}
+                                      </select>
+                                    </div>
+                                  </div>
+                                  <div class="load-lender-details">
+                                    <input type="text" class="hidden ve-sh-hidden-field" name="selected-lender-id" value="{{private_lender.id}}">
+                                    <div class="contact-details">
+                                      <div class="form-group">
+                                        <label class="col-md-3 col-sm-3 col-xs-12 control-label">Lender Name
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                                          <input type="text" name="contact_name" disabled="" value='{{ private_lender.contact_name|default_if_none:"" }}' class="form-control" />
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-3 col-sm-3 col-xs-12 control-label">Address
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                                          <input type="text" name="Address" disabled="" value='{{ private_lender.unit|default_if_none:"" }} {{ private_lender.number|default_if_none:"" }} {{ private_lender.street|default_if_none:"" }} {{ private_lender.suburb|default_if_none:"" }} {{ private_lender.state|default_if_none:"" }} {{ private_lender.post_code|default_if_none:"" }}' class="form-control" />
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-3 col-sm-3 col-xs-12 control-label">Phone
+                                        </label>
+                                        <div class="col-md-2 col-sm-2 col-xs-12 ve-sh-number-js">
+                                          <input type="text" name="Phone" disabled="" value='{{ private_lender.mobile|default_if_none:"" }}' class="form-control" />
+                                        </div>
+                                        <label class="col-md-1 col-sm-1 col-xs-12 control-label">Email
+                                        </label>
+                                        <div class="col-md-3 col-sm-3 col-xs-12 ve-sh-number-js">
+                                          <input type="text" name="Email" disabled="" value='{{ private_lender.email|default_if_none:"" }}' class="form-control" />
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-3 col-sm-3 col-xs-12 control-label">Payment type
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                                          <input type="text" name="payment_type" disabled="" value='{{ private_lender.payment_type|default_if_none:"" }}' class="form-control payment_type" />
+                                        </div>
+                                      </div>
+                                      <div class="interest-roi-div">
+                                        <div class="form-group">
+                                          <label class="col-md-3 col-sm-3 col-xs-12 control-label">Investment Amount
+                                          </label>
+                                          <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                                            <input type="text" name="investment_amount" disabled="" value='{{ private_lender.investment_amount|default_if_none:"" }}' class="form-control" />
+                                          </div>
+                                        </div>
+                                        <div class="form-group">
+                                          <label class="col-md-3 col-sm-3 col-xs-12 control-label">Agreed Interest Rate (PA)
+                                          </label>
+                                          <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                                            <input type="text" name="agreed_interest_rate_per_annum" disabled="" value='{{ private_lender.agreed_interest_rate_per_annum|default_if_none:"" }}' class="form-control" />
+                                          </div>
+                                        </div>
+                                        <div class="form-group">
+                                          <label class="col-md-3 col-sm-3 col-xs-12 control-label">Duration (Months)
+                                          </label>
+                                          <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                                            <input type="text" name="duration_in_months" disabled="" value='{{ private_lender.duration_in_months|default_if_none:"" }}' class="form-control" />
+                                          </div>
+                                        </div>
+                                        <div class="form-group">
+                                          <label class="col-md-3 col-sm-3 col-xs-12 control-label">ROI (Approx.)
+                                          </label>
+                                          <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                                            <input type="text" name="roi_approx" disabled="" value='{{ private_lender.roi_approx|default_if_none:"" }}' class="form-control" />
+                                          </div>
+                                        </div>
+                                        <div class="form-group">
+                                          <label class="col-md-3 col-sm-3 col-xs-12 control-label">Total (Approx.)
+                                          </label>
+                                          <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                                            <input type="text" name="total_approx" disabled="" value='{{ private_lender.total_approx|default_if_none:"" }}' class="form-control" />
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="profit-split-div">
+                                        <div class="form-group">
+                                          <label class="col-md-3 col-sm-3 col-xs-12 control-label">Profit Split (%)
+                                          </label>
+                                          <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                                            <input type="text" name="profit_split" disabled="" value='{{ private_lender.profit_split|default_if_none:"" }}' class="form-control" />
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              {% endfor %}
+                            {% else %}
+                              <div class="clone-lender-div">
+                                <div class="hidden">{{ private_lender.id }}</div>
+                                <div class="form-group">
+                                  <div class="col-md-3 col-sm-3 control-label"></div>
+                                  <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-left-margin-null ve-sh-left-pad-null">
+                                    <p class='h4 col-xs-6'>Lender Details</p>
+                                    <a href="#" disabled="" title="Please Submit Lender Details to activate this button." class="btn btn-danger btn-xs ve-sh-del-lender lender-btn delete-btn" data-toggle="modal" data-target="#ve-sh-del-lender-modal" data="{{private_lender.id}}">
+                                      <i class="fa fa-trash-o"></i> Remove
+                                    </a>
+                                    <a href="/dashboard/deals/{{deal_id}}/my-purchase-details/edit-lender/#" disabled="" title="Please Select Lender to activate this button." class="btn btn-info btn-xs lender-btn">
+                                      <i class="fa fa-pencil"></i> Edit
+                                    </a>
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="col-md-3 col-sm-3 col-xs-12 control-label">Select Lender
+                                  </label>
+                                  <div class="col-md-6 col-sm-6 col-xs-12 select-lender-parent">
+                                    <select class="form-control select-lender">
+                                        <option value='' id=''>---------</option>
+                                      {% for lender_obj in all_private_lenders %}
+                                        <option value='{{ lender_obj.id }}' id='id_{{ lender_obj.id }}'>{{ lender_obj }}</option>
+                                      {% endfor %}
+                                    </select>
+                                  </div>
+                                </div>
+                                <div class="load-lender-details">
+                                  <input type="text" class="hidden ve-sh-hidden-field" name="selected-lender-id" value="">
+                                  <div class="contact-details">
+                                    <div class="form-group">
+                                      <label class="col-md-3 col-sm-3 col-xs-12 control-label">Lender Name
+                                      </label>
+                                      <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                                        <input type="text" name="contact_name" disabled="" value='' class="form-control" />
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                      <label class="col-md-3 col-sm-3 col-xs-12 control-label">Address
+                                      </label>
+                                      <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                                        <input type="text" name="Address" disabled="" value='' class="form-control" />
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                      <label class="col-md-3 col-sm-3 col-xs-12 control-label">Phone
+                                      </label>
+                                      <div class="col-md-2 col-sm-2 col-xs-12 ve-sh-number-js">
+                                        <input type="text" name="Phone" disabled="" value='' class="form-control" />
+                                      </div>
+                                      <label class="col-md-1 col-sm-1 col-xs-12 control-label">Email
+                                      </label>
+                                      <div class="col-md-3 col-sm-3 col-xs-12 ve-sh-number-js">
+                                        <input type="text" name="Email" disabled="" value='' class="form-control" />
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                      <label class="col-md-3 col-sm-3 col-xs-12 control-label">Payment type
+                                      </label>
+                                      <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                                        <input type="text" name="payment_type" disabled="" value='' class="form-control payment_type" />
+                                      </div>
+                                    </div>
+                                    <div class="interest-roi-div">
+                                      <div class="form-group">
+                                        <label class="col-md-3 col-sm-3 col-xs-12 control-label">Investment Amount
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                                          <input type="text" name="investment_amount" disabled="" value='' class="form-control" />
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-3 col-sm-3 col-xs-12 control-label">Agreed Interest Rate (PA)
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                                          <input type="text" name="agreed_interest_rate_per_annum" disabled="" value='' class="form-control" />
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-3 col-sm-3 col-xs-12 control-label">Duration (Months)
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                                          <input type="text" name="duration_in_months" disabled="" value='' class="form-control" />
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-3 col-sm-3 col-xs-12 control-label">ROI (Approx.)
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                                          <input type="text" name="roi_approx" disabled="" value='' class="form-control" />
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label class="col-md-3 col-sm-3 col-xs-12 control-label">Total (Approx.)
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                                          <input type="text" name="total_approx" disabled="" value='' class="form-control" />
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="profit-split-div">
+                                      <div class="form-group">
+                                        <label class="col-md-3 col-sm-3 col-xs-12 control-label">Profit Split (%)
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                                          <input type="text" name="profit_split" disabled="" value='' class="form-control" />
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            {% endif %}
+                            <div class="form-group">
+                              <div class="col-md-3 col-sm-3 control-label"></div>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                <a class="btn btn-primary" id="add_private_lender_button">Add Private Lender</a>
+                              </div>
+                            </div>
+                          {% else %}
+                            <p class='h6 col-sm-offset-3 col-sm-9 col-xs-12'>Money-Backers / Money-Lenders Contact not available.</p>
+                            <p class='h6 col-sm-offset-3 col-sm-9 col-xs-12'>
+                              Please <a href='/dashboard/contacts/add/finance/money-backers' class="ve-sh-pointer">Click here</a> to add Money-Backers / Money-Lenders
+                            </p>
+                          {% endif %}
+                        </div>
+
+                        <div id="bank-div">
+                          <div class="form-group">
+                            <label class="col-md-3 col-sm-3 col-xs-12 control-label">Bank Name
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" name="bank" disabled="" value='{{ bank_obj.bank|default_if_none:"" }}' class="form-control">
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="col-md-3 col-sm-3 col-xs-12 control-label">Mortgage number
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" name="mortgage_number" disabled="" value='{{ bank_obj.mortgage_number|default_if_none:"" }}' class="form-control" />
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="col-md-3 col-sm-3 col-xs-12 control-label">Original Loan Amount
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" name="original_amount" disabled="" value='{{ bank_obj.original_amount|default_if_none:"" }}' class="form-control" />
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="col-md-3 col-sm-3 col-xs-12 control-label">Interest
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" name="interest" disabled="" value='{{ bank_obj.interest|default_if_none:"" }}' class="form-control" />
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="col-md-3 col-sm-3 col-xs-12 control-label">Duration (Years)
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" name="duration_in_years" disabled="" value='{{ bank_obj.duration_in_years|default_if_none:"" }}' class="form-control" />
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label class="col-md-3 col-sm-3 col-xs-12 control-label">Repayments
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              <input type="text" name="repayments" disabled="" value='{{ bank_obj.repayments|default_if_none:"" }}' class="form-control" />
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <div class="col-md-3 col-sm-3 control-label"></div>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              <a class="btn btn-primary" id="add_or_edit_bank_details">Add / Edit Bank Details</a>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-sm-offset-3">
+                          <input type="submit" value="Submit" class="btn btn-success" />
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+
+  <!-- Modal -->
+  <div id="ve-sh-del-lender-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Remove Money-Lender?</h4>
+        </div>
+        <div class="modal-body">
+          <p class="h5">Are you sure you want to remove this Lender Details?</p>
+          <p class='h6'><strong>Note: </strong>Removing Lender Details from here doesn't delete this Lender Contact. You can access this contact under Money Lenders contact section. </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" id="ve-sh-del-lender-confirm">Yes</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal -->
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+  <script type="text/javascript">
+    $('#my-purchase-details').addClass('active');
+    $('#deal-card').addClass('active');
+  </script>
+
+  <!-- if user clicks on Renovation in deals navbar then it is handled by an ajax call -->
+  <script src="/static/custom/custom_js.js"></script>
+  <script>
+    $(document).on("click", "#renovation-details", function() {
+      name("{{deal_id}}", "{{lead_id}}");
+    });
+
+    // Event of Remove lender's object
+    $(document).on('click', '.ve-sh-del-lender', function(){
+      if ($('.clone-lender-div').length > 1) {
+        $('#ve-sh-del-lender-confirm').attr('data', $(this).attr('data'));
+      }
+    });
+
+    $('#ve-sh-del-lender-confirm').on('click', function(){
+      var lender_id = $(this).attr('data');
+      $.ajax({
+        url: "/dashboard/deals/" + "{{deal_id}}" + "/my-purchase-details/remove-lender/" + lender_id,
+        type: "POST",
+        data: JSON.stringify({'lender_id': lender_id}),
+        contentType:'application/json',
+        dataType: 'text',
+        beforeSend: function(xhr) {
+          xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+        },
+        success: function (data) {
+          $('.ve-sh-del-lender').each(function() {
+            if ($(this).attr('data') == lender_id) {
+              $(this).parent().parent().parent().remove();
+            }
+          });
+        }
+      });
+    });
+
+    // Event for handling select element changes
+    $(document).on('change', 'select', function(){
+      if ($(this).parent().hasClass('render-contact-details')){
+        if ($(this).val()){
+          $(this).parent().parent().next().load('/dashboard/deals/{{deal_id}}/render-my-details/contact/' + $(this).val());
+        }
+      }
+      if ($(this).attr('id') == 'id_entity'){
+        if ($(this).val()){
+          $(this).parent().parent().next().load('/dashboard/deals/{{deal_id}}/render-my-details/entity/' + $(this).val());
+        }
+        else {
+          $(".entity-details").find(":input").each(function() {
+            $(this).val("");
+          });
+        }
+      }
+      if ($(this).attr('id') == 'id_money_lender') {
+        if ($(this).val() == 'Bank'){
+          $("#bank-div").show();
+          $("#lender-div").hide();
+        }
+        else {
+          $("#bank-div").hide();
+          $("#lender-div").show();
+        }
+      }
+      if ($(this).attr('class').split(' ')[1] == 'select-lender') {
+        if ($(this).val()) {
+          $(this).parent().parent().next().load('/dashboard/deals/{{deal_id}}/render-my-details/lender/' + $(this).val());
+        }
+      }
+    });
+
+    // Event handler on Add Private Lender Button
+    $(document).on('click', '#add_private_lender_button', function() {
+      var lender_details_block = $('.clone-lender-div:last');
+      var new_lender_details_block = lender_details_block.clone(true);
+      $(new_lender_details_block).find(':input').each(function() {
+        $(this).val('');
+      });
+      $(new_lender_details_block).find('.lender-btn').attr('disabled', true);
+      $(new_lender_details_block).find('.lender-btn').attr('title', 'Please Select Lender to activate this button.');
+      $(new_lender_details_block).find('.delete-btn').attr('title', 'Please Submit Lender Details to activate this button.');
+      lender_details_block.after(new_lender_details_block);
+    });
+
+    // On page load
+    if ($("#id_money_lender").val() == 'Bank'){
+      $("#bank-div").show();
+      $("#lender-div").hide();
+    }
+    else{
+      $("#bank-div").hide();
+      $("#lender-div").show();
+    }
+
+    $(".payment_type").each(function() {
+      if ($(this).val() == "Interest ROI") {
+        $(this).parent().parent().next().show();
+        $(this).parent().parent().next().next().hide();
+      } else {
+        $(this).parent().parent().next().hide();
+        $(this).parent().parent().next().next().show();
+      }
+    });
+
+    $(".select-lender").each(function() {
+      var lender_id = $(this).parent().parent().parent().children().eq(0).children().val();
+      if (lender_id) {
+        $(this).val(lender_id);
+      };
+    });
+
+    $("#add_or_edit_bank_details").on('click', function(event){
+      $("#bank_status").val('bank');
+      $('form').submit();
+      event.preventDefault();
+    });
+
+  </script>
+{% endblock javascripts %}

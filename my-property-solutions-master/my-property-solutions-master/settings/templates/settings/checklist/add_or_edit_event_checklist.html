@@ -1,0 +1,54 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Add Event To CheckList {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="x_content">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              <h2>{{ add_or_edit|title }} Event</h2>
+              <div class="clearfix"></div>
+            </div>
+            <form method="POST" action="" class="form-horizontal form-label-left" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="x_content">
+                {% for field in form %}
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ field.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ field|add_error_class:"ve-sh-error-block" }} {{ field.help_text }}
+                    </div>
+                  </div>
+                  {% if form.errors %}
+                    {% for error in field.errors %}
+                        <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                            {{ error|escape }}
+                        </div>
+                    {% endfor %}
+                  {% endif %}
+                {% endfor %}
+              </div>
+              <div class="col-md-6 col-sm-6 col-xs-12 col-sm-offset-3">
+                <input type="submit" value="Submit" class="btn btn-success btn-sm" />
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="clearfix"></div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+{% endblock javascripts %}

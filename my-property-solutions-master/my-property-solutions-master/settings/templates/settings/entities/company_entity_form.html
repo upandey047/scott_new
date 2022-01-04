@@ -1,0 +1,339 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Entity {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="x_content">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              <h2>Company Entity</h2>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <form method="POST" action="" class="form-horizontal form-label-left" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="col-md-9 col-sm-9 col-xs-12 col-sm-offset-3"><h2>Company's Details</h2></div>
+                    {% for field in company_form %}
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ field.label }}
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          {{ field|add_error_class:"ve-sh-error-block" }} {{ field.help_text }}
+                        </div>
+                        {% if company_form.errors %}
+                          {% for error in field.errors %}
+                              <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                  {{ error|escape }}
+                              </div>
+                          {% endfor %}
+                        {% endif %}
+                      </div>
+                    {% endfor %}
+
+                    <p class="h5 col-sm-offset-3 col-sm-9 col-xs-12">Email</p>
+                    {{ email_formset.management_form }}
+                    {% for email_form in email_formset %}
+                      <div class="email_form_div">
+                        <div class="hidden">{{ email_form.id }}</div>
+                        {% for field in email_form.visible_fields %}
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ field.label }}
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              {{ field|add_error_class:"ve-sh-error-block" }} {{ field.help_text }}
+                            </div>
+                            {% if email_form.errors %}
+                              {% for error in field.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                      {{ error|escape }}
+                                  </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                        {% endfor %}
+                      </div>
+                    {% endfor %}
+
+                    <div class="form-group">
+                      <div class="col-md-6 col-sm-6 col-xs-12 col-sm-offset-3">
+                        <a class="btn btn-primary" id="add-email-button">Add Email</a>
+                        <a class="btn btn-primary" id="remove-email-button">Remove Email</a>
+                      </div>
+                    </div>
+
+                    {% if address_form.errors %}
+                      {% for error in address_form.non_field_errors %}
+                          <div class="alert alert-danger">
+                            <strong>{{ error|escape }}</strong>
+                          </div>
+                      {% endfor %}
+                    {% endif %}
+
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-margin">
+                      <h2 class="form-title">Address</h2>
+                    </div>
+                    <p class="h5 col-sm-offset-3 col-sm-9 col-xs-12 ve-sh-margin-null">Street Address</p>
+                    <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ address_form.unit.label }}
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{ address_form.unit|add_error_class:"ve-sh-error-block" }}
+                      </div>
+                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                        {% for error in address_form.unit.errors %}
+                          {{ error|escape }}
+                        {% endfor %}
+                      </div>
+                    </div >
+                    <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ address_form.number.label }}
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{ address_form.number|add_error_class:"ve-sh-error-block" }}
+                      </div>
+                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                        {% for error in address_form.number.errors %}
+                          {{ error|escape }}
+                        {% endfor %}
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ address_form.street.label }}
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{ address_form.street|add_error_class:"ve-sh-error-block" }}
+                      </div>
+                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                        {% for error in address_form.street.errors %}
+                          {{ error|escape }}
+                        {% endfor %}
+                      </div>
+                    </div>
+                    <p class="h5 col-sm-offset-3 col-sm-9 col-xs-12">Postal Address</p>
+                    <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ address_form.po_box.label }}
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{ address_form.po_box|add_error_class:"ve-sh-error-block" }}
+                      </div>
+                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                        {% for error in address_form.po_box.errors %}
+                          {{ error|escape }}
+                        {% endfor %}
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ address_form.suburb.label }}
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{ address_form.suburb|add_error_class:"ve-sh-error-block" }}
+                      </div>
+                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                        {% for error in address_form.suburb.errors %}
+                          {{ error|escape }}
+                        {% endfor %}
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ address_form.state.label }}
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{ address_form.state|add_error_class:"ve-sh-error-block" }}
+                      </div>
+                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                        {% for error in address_form.state.errors %}
+                          {{ error|escape }}
+                        {% endfor %}
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ address_form.post_code.label }}
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{ address_form.post_code|add_error_class:"ve-sh-error-block" }}
+                      </div>
+                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                        {% for error in address_form.post_code.errors %}
+                          {{ error|escape }}
+                        {% endfor %}
+                      </div>
+                    </div>
+
+                    {% if registered_address_form.errors %}
+                      {% for error in registered_address_form.non_field_errors %}
+                          <div class="alert alert-danger">
+                              <strong>{{ error|escape }}</strong>
+                          </div>
+                      {% endfor %}
+                    {% endif %}
+
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-margin">
+                      <h2 class="form-title">Registered Address</h2>
+                    </div>
+                    <p class="h5 col-sm-offset-3 col-sm-9 col-xs-12 ve-sh-margin-null">Street Address</p>
+                    <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ registered_address_form.unit.label }}
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{ registered_address_form.unit|add_error_class:"ve-sh-error-block" }}
+                      </div>
+                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                        {% for error in registered_address_form.unit.errors %}
+                          {{ error|escape }}
+                        {% endfor %}
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ registered_address_form.number.label }}
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{ registered_address_form.number|add_error_class:"ve-sh-error-block" }}
+                      </div>
+                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                        {% for error in registered_address_form.number.errors %}
+                          {{ error|escape }}
+                        {% endfor %}
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ registered_address_form.street.label }}
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{ registered_address_form.street|add_error_class:"ve-sh-error-block" }}
+                      </div>
+                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                        {% for error in registered_address_form.street.errors %}
+                          {{ error|escape }}
+                        {% endfor %}
+                      </div>
+                    </div>
+                    <p class="h5 col-sm-offset-3 col-sm-9 col-xs-12">Postal Address</p>
+                    <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ registered_address_form.po_box.label }}
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{ registered_address_form.po_box|add_error_class:"ve-sh-error-block" }}
+                      </div>
+                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                        {% for error in registered_address_form.po_box.errors %}
+                          {{ error|escape }}
+                        {% endfor %}
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ registered_address_form.suburb.label }}
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{ registered_address_form.suburb|add_error_class:"ve-sh-error-block" }}
+                      </div>
+                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                        {% for error in registered_address_form.suburb.errors %}
+                          {{ error|escape }}
+                        {% endfor %}
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ registered_address_form.state.label }}
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{ registered_address_form.state|add_error_class:"ve-sh-error-block" }}
+                      </div>
+                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                        {% for error in registered_address_form.state.errors %}
+                          {{ error|escape }}
+                        {% endfor %}
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ registered_address_form.post_code.label }}
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        {{ registered_address_form.post_code|add_error_class:"ve-sh-error-block" }}
+                      </div>
+                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                        {% for error in registered_address_form.post_code.errors %}
+                          {{ error|escape }}
+                        {% endfor %}
+                      </div>
+                    </div>
+                    <br>
+                    <div class="col-md-6 col-sm-6 col-xs-12 col-sm-offset-3">
+                      <input type="submit" value="Submit" class="btn btn-success" />
+                    </div>
+                  </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+   <script type="text/javascript">
+
+     // If the option for ABN/ACN Number selected is 'Not Presenet', disable the ABN/ACN Number field below it
+     $('#id_abn_or_acn').on('change', function(){
+        if($(this).val() == 'Not Present'){
+          $('#id_abn_or_acn_number').attr('disabled', true);
+        }
+        else{
+          $('#id_abn_or_acn_number').attr('disabled', false);
+        }
+     });
+
+     $('#id_gst_number').attr('disabled', true); // When the page loads, the default value of the drop down is 'NO'
+     $('#id_gst_registered').on('change', function(){
+        if($(this).val() == 'NO'){
+          $('#id_gst_number').attr('disabled', true);
+        }
+        else{
+          $('#id_gst_number').attr('disabled', false);
+        }
+     });
+
+    // When the user clicks on add email button, an extra field is displayed to the user
+    $('#add-email-button').on('click', function(){
+      cloneEmail('div.email_form_div:last', 'form');
+    });
+
+    function cloneEmail(selector, type) {
+        var newElement = $(selector).clone(true);
+        var total = $('#id_' + type + '-TOTAL_FORMS').val();
+        newElement.find(':input').each(function() {
+            var name = $(this).attr('name').replace('-' + (total-1) + '-','-' + total + '-');
+            var id = 'id_' + name;
+            $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+        });
+        total++;
+        $('#id_' + type + '-TOTAL_FORMS').val(total);
+        $(selector).after(newElement);
+    }
+    // Add email script complete
+
+    // Remove an email field from the list of email fields
+    $('#remove-email-button').on('click', function(){
+      if($('div.email_form_div').length > 1){
+        deleteEmail('div.email_form_div:last', 'form');
+      }
+    });
+
+    function deleteEmail(selector, type) {
+      var total = $('#id_' + type + '-TOTAL_FORMS').val();
+      total--;
+      $('#id_' + type + '-TOTAL_FORMS').val(total);
+      $('div.email_form_div:last').remove();
+    }
+   </script>
+{% endblock javascripts %}

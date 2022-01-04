@@ -1,0 +1,97 @@
+
+<a onclick="addFormAjax()" class="btn btn-primary pull-right">Add Agent</a>
+
+{% if agent_list %}
+<div class="w-20 pull-right" style="padding:0 2px;margin:0 4px;">
+    <select class="form-control" id="selectAgent" >
+        <option value="0"> Select Agent </option>
+        {% for agent in select_list %}
+         <option value="{{agent.id}}">
+            {{ agent.name }}
+          </option>
+        {% endfor %}
+
+    </select>
+    </div>
+    <table id="table" class="table table-striped">
+      <thead>
+        <tr>
+         
+          <th>Name</th>
+          <th>Company</th>
+          <th>Postal Address</th>
+          <th>Mobile</th>  
+          <th>Email</th>
+          <th>Edit</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for agent in agent_list %}
+        <tr>
+            
+            
+            <td>{{agent.name}}</td>
+            <td>{{agent.company}}</td>
+            <td>{{agent.address}}</td>
+            <td>{{agent.phone}}</td>
+            <td>{{agent.email}}</td>
+
+            <td><a onclick="editAgent(this)" title="{% url 'dashboard:deals:agent_edit' agent.id %}" class="btn btn-info btn-xs">
+                <i class="fa fa-pencil"></i> Edit</a></td>
+            <td><a onclick="deleteAgent(this)" title="{% url 'dashboard:deals:agent_delete' agent.id %}"
+                   class="btn btn-danger btn-xs ve-sh-del-contact">
+                <i class="fa fa-trash-o"></i> Delete</a></td>
+
+        </tr>
+      {% endfor %}
+
+
+
+
+      </tbody>
+
+    </table>
+
+
+{% else %}
+  <div class="p-4">
+    No Agent Found !
+</div>
+{% endif%}
+
+
+<script>
+
+    $('#selectAgent').on('change', function (e) {
+        loadAgent(this.value);
+    });
+</script>
+
+
+
+<script>
+    function addFormAjax(){
+    $('#myModal').modal('show');
+    urlPATH="{% url 'dashboard:deals:agent_create' %}";
+    $('.modal-body').load(urlPATH);
+
+    }
+
+    function editAgent(tag){
+    $('#myModal').modal('show');
+    urlPATH=tag.title;
+    console.log(urlPATH);
+    $('.modal-body').load(urlPATH);
+    }
+
+    function deleteAgent(tag){
+    $('#myModal').modal('show');
+    urlPATH=tag.title;
+    console.log(urlPATH);
+    $('.modal-body').load(urlPATH);
+    }
+
+</script>
+
+

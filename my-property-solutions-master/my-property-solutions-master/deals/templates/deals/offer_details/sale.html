@@ -1,0 +1,444 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Offer Details {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <style type="text/css">
+    .offer_details_xpanel {
+      border-top: 0px !important;
+    }
+  </style>
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="x_content">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              {% include 'deals/deals_navbar.html' with deal_id=deal_id lead_id=lead_id %}
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <div class="container">
+
+                {% include 'deals/offer_details/offer_details_navbar.html' %}
+
+                <div class="x_panel offer_details_xpanel">
+                  <br>
+                  <div class="tab-content">
+                    <div id="sale-div" class="tab-pane fade in active">
+                      {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                              {% ifequal message.tags "submitted success" %}
+                                <div class="alert alert-success col-xs-12">
+                                  <strong class="{{ message.tags }}">{{ message }}</strong>
+                                </div>
+                              {% endifequal %}
+                            {% endfor %}
+                        </ul>
+                      {% endif %}
+
+                      <form method="POST" action="" class="form-horizontal form-label-left">
+                        {% csrf_token %}
+                        <div class="form-group">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.sale_price.label }}
+                          </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                            {{ form.sale_price|add_error_class:"ve-sh-error-block" }}
+                          </div>
+                          {% if form.errors %}
+                            {% for error in form.sale_price.errors %}
+                              <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                {{ error|escape }}
+                              </div>
+                            {% endfor %}
+                          {% endif %}
+                        </div>
+                        <div class="other_costs_div">
+                          <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Other Costs</p>
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.agent_fees.label }}
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                              {{ form.agent_fees|add_error_class:"ve-sh-error-block" }}
+                            </div>
+                            {% if form.errors %}
+                              {% for error in form.agent_fees.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                      {{ error|escape }}
+                                  </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.mortgage_payout_figure.label }}
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                              {{ form.mortgage_payout_figure|add_error_class:"ve-sh-error-block" }}
+                            </div>
+                            {% if form.errors %}
+                              {% for error in form.mortgage_payout_figure.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                      {{ error|escape }}
+                                  </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.legal_fees.label }}
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                              {{ form.legal_fees|add_error_class:"ve-sh-error-block" }}
+                            </div>
+                            {% if form.errors %}
+                              {% for error in form.legal_fees.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                      {{ error|escape }}
+                                  </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.dealing_or_withdrawal_fees.label }}
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                              {{ form.dealing_or_withdrawal_fees|add_error_class:"ve-sh-error-block" }}
+                            </div>
+                            {% if form.errors %}
+                              {% for error in form.dealing_or_withdrawal_fees.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                      {{ error|escape }}
+                                  </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.council.label }}
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                              {{ form.council|add_error_class:"ve-sh-error-block" }}
+                            </div>
+                            {% if form.errors %}
+                              {% for error in form.council.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                      {{ error|escape }}
+                                  </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.strata_fees.label }}
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                              {{ form.strata_fees|add_error_class:"ve-sh-error-block" }}
+                            </div>
+                            {% if form.errors %}
+                              {% for error in form.strata_fees.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                      {{ error|escape }}
+                                  </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.additional_cost.label }}
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                              {{ form.additional_cost|add_error_class:"ve-sh-error-block" }}
+                            </div>
+                            {% if form.errors %}
+                              {% for error in form.additional_cost.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                      {{ error|escape }}
+                                  </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.additional_cost_comments.label }}
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              {{ form.additional_cost_comments|add_error_class:"ve-sh-error-block" }}
+                            </div>
+                            {% if form.errors %}
+                              {% for error in form.additional_cost_comments.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                      {{ error|escape }}
+                                  </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.total_sale_costs.label }}
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                              {{ form.total_sale_costs|add_error_class:"ve-sh-error-block" }}
+                            </div>
+                            {% if form.errors %}
+                              {% for error in form.total_sale_costs.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                      {{ error|escape }}
+                                  </div>
+                              {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Capital Gain</p>
+                        <div class="form-group">
+                          <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.capital_gain_gross.label }}
+                          </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                            {{ form.capital_gain_gross|add_error_class:"ve-sh-error-block" }}
+                          </div>
+                          {% if form.errors %}
+                            {% for error in form.capital_gain_gross.errors %}
+                              <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                {{ error|escape }}
+                              </div>
+                            {% endfor %}
+                          {% endif %}
+                        </div>
+                        <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Profit / Loss Split</p>
+                        <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Entities</p>
+                        {{ formset.management_form }}
+                        {% for formset_form in formset %}
+                          <div class="formset-form">
+                            <div class="hidden">{{ formset_form.id }}</div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ formset_form.entity.label }}
+                              </label>
+                              <div class="col-md-2 col-sm-2 col-xs-12">
+                                {{ formset_form.entity|add_error_class:"ve-sh-error-block" }} {{ field.help_text }}
+                                <div class='ve-sh-error-text'>
+                                  {% for error in formset_form.entity.errors %}
+                                    {{ error|escape }}
+                                  {% endfor %}
+                                </div>
+                              </div>
+                              <div class="col-md-2 col-sm-2 col-xs-12">
+                                {{ formset_form.percentage|add_error_class:"ve-sh-error-block" }} {{ field.help_text }}
+                                <div class='ve-sh-error-text'>
+                                  {% for error in formset_form.percentage.errors %}
+                                    {{ error|escape }}
+                                  {% endfor %}
+                                </div>
+                              </div>
+                              <div class="col-md-2 col-sm-2 col-xs-12 ve-sh-number-js">
+                                {{ formset_form.amount|add_error_class:"ve-sh-error-block" }} {{ field.help_text }}
+                                <div class='ve-sh-error-text'>
+                                  {% for error in formset_form.amount.errors %}
+                                    {{ error|escape }}
+                                  {% endfor %}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        {% endfor %}
+
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-sm-offset-3">
+                          <a class="btn btn-default add-entity">Add Entity</a>
+                          <a class="btn btn-default remove-entity">Remove Entity</a>
+                        </div>
+
+                        <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>
+                          Money Lenders <i class="fa fa-info-circle" title="To edit or remove Money Lender Details go to My Details page."></i>
+                        </p>
+                        {% if lender_queryset %}
+                          <div class="form-group">
+                            <div class="col-sm-offset-3 col-sm-2 col-xs-12"><strong>Payment Type</strong></div>
+                            <div class="col-sm-2 col-xs-12"><strong>Total Amount / % Split</strong></div>
+                            <div class="col-sm-2 col-xs-12"><strong>Total Amount</strong></div>
+                          </div>
+                          {% for lender_obj in lender_queryset %}
+                            <div class="form-group money-lender-div">
+                              <label class="col-md-3 col-sm-3 col-xs-12 control-label">{{ lender_obj.contact_name }}
+                              </label>
+                              <div class="col-sm-2 col-xs-12 ve-sh-number-js">
+                                <input type="text" name="payment_type" disabled="" value='{{ lender_obj.payment_type|default_if_none:"" }}' class="form-control" />
+                              </div>
+                              {% if lender_obj.payment_type == 'Profit Split' %}
+                                <div class="col-sm-2 col-xs-12 ve-sh-number-js">
+                                  <input type="text" name="profit_split" disabled="" value='{{ lender_obj.profit_split|default_if_none:"" }}%' class="form-control" />
+                                </div>
+                              {% else %}
+                                <div class="col-sm-2 col-xs-12 ve-sh-number-js">
+                                  <input type="text" name="total_approx" disabled="" value='{{ lender_obj.total_approx|default_if_none:"" }}' class="form-control" />
+                                </div>
+                              {% endif %}
+                              <div class="col-sm-2 col-xs-12 ve-sh-number-js">
+                                <input type="text" name="my_amount" disabled="" value='' class="form-control" />
+                              </div>
+                            </div>
+                          {% endfor %}
+                        {% else %}
+                        <div class="form-group">
+                          <div class="col-sm-offset-3 col-sm-2 col-xs-12">
+                            <strong>No Money Lenders Found.</strong>
+                          </div>
+                        </div>
+                        {% endif %}
+
+                        <br>
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-sm-offset-3">
+                          <input type="submit" value="Submit" class="btn btn-success" />
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+  <script type="text/javascript">
+    $('#offer-details, #deal-card, #sale-details').addClass('active');
+
+    // Add property script
+    $('.add-entity').on('click', function(){
+      cloneMore('div.formset-form:last', 'form');
+    });
+
+    function cloneMore(selector, type) {
+        var newElement = $(selector).clone(true);
+        var total = $('#id_' + type + '-TOTAL_FORMS').val();
+        newElement.find(':input').each(function() {
+            var name = $(this).attr('name').replace('-' + (total-1) + '-','-' + total + '-');
+            var id = 'id_' + name;
+            $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+        });
+        total++;
+        $('#id_' + type + '-TOTAL_FORMS').val(total);
+        $(selector).after(newElement);
+    }
+    // Add property script complete
+
+    // Remove a property form from the list of property forms
+    $('.remove-entity').on('click', function(){
+      if($('div.formset-form').length > 1){
+        deleteElement('div.formset-form:last', 'form');
+      }
+    });
+
+    function deleteElement(selector, type) {
+      var total = $('#id_' + type + '-TOTAL_FORMS').val();
+      total--;
+      $('#id_' + type + '-TOTAL_FORMS').val(total);
+      $('div.formset-form:last').remove();
+    }
+
+    // Event is triggered whenever a keyup event is performed on number field
+    $(".ve-sh-number-js").children().on('keyup', function(){
+      var capital_gain = '';
+      var total = 0; // This is the total to be deducted from sale price after deducting purchase price to calculate gain
+      $(".ve-sh-number-js").children().each(function(index){
+        if (index > 0 && index < 8){
+          if($(this).val()){
+            total = total + parseInt($(this).val().replace(/(\,)/g, ''));
+          }
+        }
+      });
+      capital_gain = (parseInt($('#id_sale_price').val().replace(/(\,)/g, '')) - parseInt($('#purchase-price').html().replace(/(\,)/g, '')) - total).toString();
+      var new_total = total.toString();
+      capital_gain = nan_remover(capital_gain);
+      $('#id_total_sale_costs').val(new_total.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+      $('#id_capital_gain_gross').val(capital_gain.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+
+      $('.formset-form').find('input[type=number]').each(function(){
+        if($(this).attr('placeholder') == 'Percentage'){
+          var perc = parseInt($(this).val());
+          var value = ((parseInt($('#id_capital_gain_gross').val().replace(/(\,)/g, '')) * perc )/ 100).toString();
+          value = nan_remover(value);
+          $(this).parent().next().children().eq(0).val(value.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+        }
+      });
+
+      // For Money Lenders
+      $('.money-lender-div').each(function() {
+        var amount_field = $(this).children().eq(2).children();
+        if (amount_field.attr('name') == 'profit_split') {
+          var profit_split_value = amount_field.val();
+          profit_split_value = profit_split_value.replace('%', '');
+          var total_amount = ((parseInt(capital_gain) * parseInt(profit_split_value)) / 100).toString();
+          total_amount = nan_remover(total_amount);
+          amount_field.parent().next().children().val(total_amount.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+        } else {
+          var total_value = amount_field.val();
+          amount_field.parent().next().children().val(total_value);
+        }
+      });
+    });
+
+    // For formset forms, auto calculate the amount based on the percentage entered for an entity
+    $(document).on("keyup", "input[placeholder='Percentage']", function() {
+      var perc = parseInt($(this).val());
+      var value = ((parseInt($('#id_capital_gain_gross').val().replace(/(\,)/g, '')) * perc )/ 100).toString();
+      value = nan_remover(value);
+      $(this).parent().next().children().eq(0).val(value.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+    });
+
+    // On Page load
+    var total = 0; // This is the total to be deducted from sale price after deducting purchase price to calculate gain
+    $(".ve-sh-number-js").children().each(function(index){
+      if (index > 0 && index < 8){
+        if($(this).val()){
+          total = total + parseInt($(this).val().replace(/(\,)/g, ''));
+        }
+      }
+    });
+    var capital_gain = parseInt($('#id_sale_price').val().replace(/(\,)/g, '')) - parseInt($('#purchase-price').html().replace(/(\,)/g, '')) - total;
+    capital_gain = capital_gain.toString();
+    capital_gain = nan_remover(capital_gain);
+    var new_total = total.toString();
+    $('#id_total_sale_costs').val(new_total.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+    $('#id_capital_gain_gross').val(capital_gain.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+    $('.money-lender-div').each(function() {
+      var amount_field = $(this).children().eq(2).children();
+      if (amount_field.attr('name') == 'profit_split') {
+        var profit_split_value = amount_field.val();
+        profit_split_value = profit_split_value.replace('%', '');
+        var total_amount = ((parseInt(capital_gain) * parseInt(profit_split_value)) / 100).toString();
+        total_amount = nan_remover(total_amount);
+        amount_field.parent().next().children().val(total_amount.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+      } else {
+        var total_value = amount_field.val();
+        amount_field.parent().next().children().val(total_value);
+      }
+    });
+
+    function nan_remover(value) {
+
+      if ($.isNumeric(parseInt(value))) {
+        value = value;
+      } else {
+        value = "";
+      }
+
+      return value;
+    };
+
+  </script>
+
+  <!-- if user clicks on Renovation in deals navbar then it is handled by an ajax call -->
+  <!-- To separate the numbers in a number fields with comma whenever user enters digits -->
+  <script src="/static/custom/custom_js.js"></script>
+
+  <script>
+    $(document).on("click", "#renovation-details", function() {
+      name("{{deal_id}}", "{{lead_id}}");
+    });
+  </script>
+{% endblock javascripts %}

@@ -1,0 +1,88 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Edit Owner Details {% endblock title %}
+
+{% block stylesheets %}
+{{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="right_col" role="main">
+  <div class="x_content">
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>Solicitor Details</h2>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+
+            <div class="container">
+
+
+
+
+
+
+              <form action="" method='POST'>
+                <table class="table table-striped table-bordered table-responsive table-hover table-condensed alpha"
+                  style="width: 760px; " id="myTable1">
+                  {{form.as_table}}
+                  {% csrf_token %}
+                </table>
+                <input type="submit" value="Add Solicitor">
+              </form>
+
+
+
+
+
+              </table>
+
+
+
+
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+</div>
+{% endblock content %}
+# page = request.GET.get('page', 1)
+# paginator = Paginator(solicitors, 3)
+
+# try:
+#     solicitors_list = paginator.page(page)
+# except PageNotAnInteger:
+#     solicitors_list = paginator.page(1)
+# except EmptyPage:
+#     solicitors_list = paginator.page(paginator.num_pages)
+
+function loadAgent(){
+  $("#menu3").load("{% url 'dashboard:deals:agentlist' %}");
+}
+function loadBANK(){
+  $("#menu4").load("{% url 'dashboard:deals:banklist' %}");
+}
+
+function loadEXECUTOR(){
+  $("#menu5").load("{% url 'dashboard:deals:executorlist' %}");
+}
+
+function loadFAMILY(){
+  $("#menu6").load("{% url 'dashboard:deals:familylist' %}");
+}
+function loadLIQUIDATOR(){
+  $("#menu7").load("{% url 'dashboard:deals:liquidatorlist' %}");
+}
+
+function loadOTHER(){
+  $("#menu8").load("{% url 'dashboard:deals:otherlist' %}");
+}

@@ -1,0 +1,19 @@
+<div class="form-group">
+  <label class="col-md-3 col-sm-3 col-xs-12 control-label">Address
+  </label>
+  <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+    <input type="text" name="Address" disabled="" value='{{ contact.unit|default_if_none:"" }} {{ contact.number|default_if_none:"" }} {{ contact.street|default_if_none:"" }} {{ contact.suburb|default_if_none:"" }} {{ contact.state|default_if_none:"" }} {{ contact.post_code|default_if_none:"" }}' class="form-control" />
+  </div>
+</div>
+<div class="form-group">
+  <label class="col-md-3 col-sm-3 col-xs-12 control-label">Phone
+  </label>
+  <div class="col-md-2 col-sm-2 col-xs-12 ve-sh-number-js">
+    <input type="text" name="Phone" disabled="" value="{{ contact.mobile|default_if_none:'' }}" class="form-control" />
+  </div>
+  <label class="col-md-1 col-sm-1 col-xs-12 control-label">Email
+  </label>
+  <div class="col-md-3 col-sm-3 col-xs-12 ve-sh-number-js">
+    <input type="text" name="Email" disabled="" value="{{ contact.email|default_if_none:'' }}" class="form-control" />
+  </div>
+</div>

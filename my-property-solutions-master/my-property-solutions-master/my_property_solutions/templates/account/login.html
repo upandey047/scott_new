@@ -1,0 +1,80 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+
+{% load widget_tweaks %}
+
+{% block title %} Login {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <!-- Animate.css -->
+  <link href="/static/vendors/animate.css/animate.min.css" rel="stylesheet">
+{% endblock stylesheets %}
+
+{% block body_class %}login{% endblock body_class %}
+
+{% block body %}
+  <div>
+    <div class="login_wrapper">
+      <div class="animate form login_form">
+        <section class="login_content">
+          <img src="/static/images/logo.png" id="logo_img">
+          <br> <br>
+          <form method="POST" action="">
+            <h1>Account Login</h1>
+            {% csrf_token %}
+
+            {% if form.errors %}
+              {% for field in form %}
+                  {% for error in field.errors %}
+                      <div class="alert alert-danger">
+                          <strong>{{ error|escape }}</strong>
+                      </div>
+                  {% endfor %}
+              {% endfor %}
+              {% for error in form.non_field_errors %}
+                  <div class="alert alert-danger">
+                      <strong>{{ error|escape }}</strong>
+                  </div>
+              {% endfor %}
+          {% endif %}
+                  
+            <div class="field">
+               {{ form.login|attr:"autocomplete:off"|add_class:"form-control" }}
+            </div>
+            <div class="field">
+               {{ form.password|attr:"autocomplete:off"|add_class:"form-control" }}
+            </div>
+            <p>* By logging in, you agree to our Terms of Use and acknowledge that you read our Privacy Policy & End User License Agreement.</p>
+            Remember Me {{ form.remember }}
+            <br /> <br />
+            <div>
+              <button class="btn btn-default submit">Log in</button>
+
+              <a class="reset_pass" href="{% url 'account_reset_password' %}">Lost your password?</a>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="separator">
+              <p class="change_link">New to site?
+                <a href="{% url 'auth:signup' %}" class="to_register"> Create Account </a>
+              </p>
+
+              <div class="clearfix"></div>
+              <br />
+
+              <div>
+                <p>
+                    &copy;{% now 'Y' %} All Rights Reserved. My Property System <br>
+                    <a href="{%static 'documents/MPS_Terms_and_Conditions.pdf' %}">Privacy and Terms</a>
+                </p>
+              </div>
+            </div>
+          </form>
+        </section>
+      </div>
+
+    </div>
+  </div>
+{% endblock body %}

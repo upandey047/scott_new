@@ -1,0 +1,220 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Renovation Details {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <style type="text/css">
+    form > .x_panel {
+      border-top: 0px !important;
+    }
+  </style>
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="x_content">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              {% include 'deals/deals_navbar.html' with deal_id=deal_id lead_id=lead_id %}
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <div class="container">
+
+                {% include 'deals/renovation/renovation_details_navbar.html' %}
+
+                <div class="tab-content">
+                  <div id="land-details-div" class="tab-pane fade in active">
+                    {% if messages %}
+                      <ul class="messages">
+                          {% for message in messages %}
+                            {% ifequal message.tags "submitted success" %}
+                              <div class="alert alert-success col-xs-12">
+                                <strong class="{{ message.tags }}">{{ message }}</strong>
+                              </div>
+                            {% endifequal %}
+                          {% endfor %}
+                      </ul>
+                    {% endif %}
+                    <form method="POST" action="" class="form-horizontal form-label-left">
+                      {% csrf_token %}
+                      <div class="x_panel">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                          <div class="col-sm-offset-3 col-md-6 col-sm-6 col-xs-12">
+                            <h2 class="form-title">Overview</h2>
+                          </div>
+                          <div class="x_content">
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12"> Renovation Allowance </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js ve-sh-margin-eight">
+                                {{ renovation_obj.purchase.renovation_allowance|add_error_class:"ve-sh-error-block" }} {{ renovation_obj.purchase.renovation_allowance.help_text }}
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12"> Current Expenses </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js ve-sh-margin-eight">
+                                {{ renovation_obj.current_expenses|add_error_class:"ve-sh-error-block" }} {{ renovation_obj.current_expenses.help_text }}
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12"> {{ form.renovation_difference.label }} </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                                {{ form.renovation_difference|add_error_class:"ve-sh-error-block" }} {{ renovation_obj.renovation_difference.help_text }}
+                              </div>
+                              {% if form.errors %}
+                                {% for error in form.renovation_difference.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                    {{ error|escape }}
+                                  </div>
+                                {% endfor %}
+                              {% endif %}
+                            </div>
+                            <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'><strong>Note:</strong> Home Warranty Insurance will only be displayed when current expenses are greater than $20,000</p>
+                            <div class="home_warranty_ins" style="display: none;">
+                              <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12'>Home Warranty Insurance</p>
+                              <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12"> {{ form.insurer.label }}</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                  {{ form.insurer|add_error_class:"ve-sh-error-block" }} {{ form.insurer.help_text }}
+                                </div>
+                                {% if form.errors %}
+                                  {% for error in form.insurer.errors %}
+                                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                      {{ error|escape }}
+                                    </div>
+                                  {% endfor %}
+                                {% endif %}
+                              </div>
+                              <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12"> {{ form.policy_cost.label }}</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                                  {{ form.policy_cost|add_error_class:"ve-sh-error-block" }} {{ form.policy_cost.help_text }}
+                                </div>
+                                {% if form.errors %}
+                                  {% for error in form.policy_cost.errors %}
+                                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                      {{ error|escape }}
+                                    </div>
+                                  {% endfor %}
+                                {% endif %}
+                              </div>
+                              <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12"> {{ form.policy_cover_amount.label }}</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                                  {{ form.policy_cover_amount|add_error_class:"ve-sh-error-block" }} {{ form.policy_cover_amount.help_text }}
+                                </div>
+                                {% if form.errors %}
+                                  {% for error in form.policy_cover_amount.errors %}
+                                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                      {{ error|escape }}
+                                    </div>
+                                  {% endfor %}
+                                {% endif %}
+                              </div>
+                              <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12"> {{ form.policy_start_date.label }}</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                  {{ form.policy_start_date|add_error_class:"ve-sh-error-block" }} {{ form.policy_start_date.help_text }}
+                                </div>
+                                {% if form.errors %}
+                                  {% for error in form.policy_start_date.errors %}
+                                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                      {{ error|escape }}
+                                    </div>
+                                  {% endfor %}
+                                {% endif %}
+                              </div>
+                              <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12"> {{ form.policy_expiry_date.label }}</label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                  {{ form.policy_expiry_date|add_error_class:"ve-sh-error-block" }} {{ form.policy_expiry_date.help_text }}
+                                </div>
+                                {% if form.errors %}
+                                  {% for error in form.policy_expiry_date.errors %}
+                                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                      {{ error|escape }}
+                                    </div>
+                                  {% endfor %}
+                                {% endif %}
+                              </div>
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                  <div class="col-sm-6 col-xs-12 col-sm-offset-3">
+                                    <input type="submit" value="Submit" class="btn btn-success" />
+                                  </div>
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+  <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+  <script type="text/javascript">
+    $('#renovation-overview, #deal-card, #renovation-details').addClass('active');
+
+    $('#id_policy_start_date, #id_policy_expiry_date').datepicker({
+      dateFormat: "dd-mm-yy"
+    });
+
+    // Event when (if by using dev tools) user changed difference field.
+    var current_exp = parseInt($(".ve-sh-margin-eight").eq(1).html().replace(/(\,)/g, ''));
+    var renovation_allowance = parseInt($(".ve-sh-margin-eight").eq(0).html().replace(/(\,)/g, ''));
+    var difference = 0;
+    $("#id_renovation_difference").on("keyup", function() {
+      difference = (renovation_allowance - current_exp);
+      difference = difference.toString();
+      if (isNaN(difference)){
+        $("#id_renovation_difference").val();
+      }
+      else{
+        $("#id_renovation_difference").val(difference.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+      }
+    });
+
+    // On page load
+    // For showing/hiding Home Warranty Insurence
+    if ((current_exp) > 20000) {
+      $(".home_warranty_ins").show();
+    }
+    else {
+      $(".home_warranty_ins").hide();
+    }
+
+    // For Calculating difference
+    difference = (renovation_allowance - current_exp);
+    difference = difference.toString();
+    if (isNaN(difference)){
+      $("#id_renovation_difference").val();
+    }
+    else{
+      $("#id_renovation_difference").val(difference.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+    }
+
+  </script>
+  <!-- if user clicks on Renovation in deals navbar then it is handled by an ajax call -->
+  <!-- To separate the numbers in a number fields with comma whenever user enters digits -->
+  <script src="/static/custom/custom_js.js"></script>
+
+  <script>
+    $(document).on("click", "#renovation-details", function() {
+      name("{{deal_id}}", "{{lead_id}}");
+    });
+  </script>
+{% endblock javascripts %}

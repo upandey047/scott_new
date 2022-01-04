@@ -1,0 +1,32 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %} Add Lead{% endblock title %}
+
+{% block content %}
+    <div class="right_col" role="main">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <a href="{% url 'dashboard:index' %}" class="btn btn-primary pull-right">Go Back</a>
+                                <h2 class="text-center">Add Lead</h2>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <form method="post" action="." class="form-horizontal form-label-left">
+                            {% csrf_token %}
+                            {% include "leads/_process_form.html" with form=new_lead_form %}
+                            {% include "leads/_process_form.html" with form=new_property_owner_form %}
+                            {% include "leads/_process_form.html" with form=new_property_form %}
+                            <input type="submit" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,391 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Deal Card {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">
+  <link rel="stylesheet" type="text/css" href="/static/vendors/jonthornton-jquery-timepicker-b53338c/jquery.timepicker.min.css">
+  <style type="text/css">
+    .tab-content > div > form > .x_panel {
+      border-top: 0px !important;
+    }
+    a, a label {
+      cursor: pointer;
+    }
+  </style>
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="x_content">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              {% include 'deals/deals_navbar.html' with deal_id=deal_id lead_id=lead_id %}
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <div class="container">
+                <ul class="nav nav-tabs">
+                  <li id="deal_info"><a href="#deal-info-div">Purchase Details</a></li>
+                  <li id="deal_info1" class="active"><a href="#deal-info1-div">Sale Details</a></li>
+                  <li id="initial_research" class="checklist"><a>Check List</a></li>
+                </ul>
+
+                <div class="tab-content">
+                  <div id="deal-info-div" class="tab-pane fade in active">
+                        <form method="POST" action="" class="form-horizontal form-label-left">
+                          {% csrf_token %}
+                          {% if messages %}
+                            <ul class="messages">
+                                {% for message in messages %}
+                                  {% ifequal message.tags "submitted success" %}
+                                    <div class="alert alert-success col-xs-12">
+                                      <strong class="{{ message.tags }}">{{ message }}</strong>
+                                    </div>
+                                  {% endifequal %}
+                                {% endfor %}
+                            </ul>
+                          {% endif %}
+                          <div class="x_panel">
+                            <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12">
+                            <!-- <h2 class="form-title">Purchase Deal Details</h2> -->
+                          </div>
+                          <div class="form-group" style="display:none;">
+                              <label for="" class="control-label col-md-3 col-sm-3 col-xs-12">{{ lead_status_form.status.label }}</label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ lead_status_form.status|add_error_class:"ve-sh-error-block" }}
+                              </div>
+                          </div>
+                          <div class="form-group" style="display:none;">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.exchange.label }}
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              {{ form.exchange|add_error_class:"ve-sh-error-block" }} {{ form.exchange.help_text }}
+                            </div>
+                            {% if form.errors %}
+                              {% for error in form.exchange.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                      {{ error|escape }}
+                                  </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                          <div class="form-group" style="display:none;">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.settlement.label }}
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              {{ form.settlement|add_error_class:"ve-sh-error-block" }} {{ form.settlement.help_text }}
+                            </div>
+                            {% if form.errors %}
+                              {% for error in form.settlement.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                      {{ error|escape }}
+                                  </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                          <div class="form-group" style="display:none;" >
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.cool_off_period_expires.label }}
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              {{ form.cool_off_period_expires|add_error_class:"ve-sh-error-block" }} {{ form.cool_off_period_expires.help_text }}
+                            </div>
+                            {% if form.errors %}
+                              {% for error in form.cool_off_period_expires.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                      {{ error|escape }}
+                                  </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                          <div class="form-group" style="display:none;">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.purchase_price.label }}
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                              {{ form.purchase_price|add_error_class:"ve-sh-error-block" }} {{ form.purchase_price.help_text }}
+                            </div>
+                            {% if form.errors %}
+                              {% for error in form.purchase_price.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                      {{ error|escape }}
+                                  </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                          <div class="form-group" style="display:none;">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.renovation_cost.label }}
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                              {{ form.renovation_cost|add_error_class:"ve-sh-error-block" }} {{ form.renovation_cost.help_text }}
+                            </div>
+                            {% if form.errors %}
+                              {% for error in form.renovation_cost.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                      {{ error|escape }}
+                                  </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+
+                          {% if category == 'withdrawn' or category == 'sixty-days-over' %}
+                            <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12' style="display:none;">Additional Details</p>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ additional_property_details_form.start_list_date.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ additional_property_details_form.start_list_date|add_error_class:"ve-sh-error-block" }}
+                              </div>
+                              <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                {% for error in additional_property_details_form.start_list_date.errors %}
+                                  {{ error|escape }}
+                                {% endfor %}
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ additional_property_details_form.end_list_date.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ additional_property_details_form.end_list_date|add_error_class:"ve-sh-error-block" }}
+                              </div>
+                              <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                {% for error in additional_property_details_form.end_list_date.errors %}
+                                  {{ error|escape }}
+                                {% endfor %}
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ additional_property_details_form.start_list_price.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                                {{ additional_property_details_form.start_list_price|add_error_class:"ve-sh-error-block" }}
+                              </div>
+                              <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                {% for error in additional_property_details_form.start_list_price.errors %}
+                                  {{ error|escape }}
+                                {% endfor %}
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ additional_property_details_form.end_list_price.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                                {{ additional_property_details_form.end_list_price|add_error_class:"ve-sh-error-block" }}
+                              </div>
+                              <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                {% for error in additional_property_details_form.end_list_price.errors %}
+                                  {{ error|escape }}
+                                {% endfor %}
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ additional_property_details_form.difference.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                                {{ additional_property_details_form.difference|add_error_class:"ve-sh-error-block" }}
+                              </div>
+                              <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                {% for error in additional_property_details_form.difference.errors %}
+                                  {{ error|escape }}
+                                {% endfor %}
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ additional_property_details_form.dom.label }}
+                              </label>
+                              <div class="col-md-6 col-sm-6 col-xs-12">
+                                {{ additional_property_details_form.dom|add_error_class:"ve-sh-error-block" }}
+                              </div>
+                              <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                {% for error in additional_property_details_form.dom.errors %}
+                                  {{ error|escape }}
+                                {% endfor %}
+                              </div>
+                            </div>
+                          {% else %}
+                            <!-- <p class='h5 col-sm-offset-3 col-sm-9 col-xs-12' >Auction Details</p> -->
+                            {% for field in auction_form %}
+                              <div class="form-group" style="display:none;">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ field.label }}
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                  {{ field|add_error_class:"ve-sh-error-block" }}
+                                </div>
+                                <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                  {% for error in field.errors %}
+                                    {{ error|escape }}
+                                  {% endfor %}
+                                </div>
+                              </div>
+                            {% endfor %}
+                          {% endif %}
+
+                          <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12">
+                            <h2 class="form-title">Sale Deal Details</h2>
+                          </div>
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ sale_deal_info_form.exchange.label }}
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              {{ sale_deal_info_form.exchange|add_error_class:"ve-sh-error-block" }} {{ sale_deal_info_form.exchange.help_text }}
+                            </div>
+                            {% if sale_deal_info_form.errors %}
+                              {% for error in sale_deal_info_form.exchange.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                      {{ error|escape }}
+                                  </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ sale_deal_info_form.settlement.label }}
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              {{ sale_deal_info_form.settlement|add_error_class:"ve-sh-error-block" }} {{ sale_deal_info_form.settlement.help_text }}
+                            </div>
+                            {% if sale_deal_info_form.errors %}
+                              {% for error in sale_deal_info_form.settlement.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                      {{ error|escape }}
+                                  </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ sale_deal_info_form.cool_off_period_expires.label }}
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                              {{ sale_deal_info_form.cool_off_period_expires|add_error_class:"ve-sh-error-block" }} {{ sale_deal_info_form.cool_off_period_expires.help_text }}
+                            </div>
+                            {% if sale_deal_info_form.errors %}
+                              {% for error in sale_deal_info_form.cool_off_period_expires.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                      {{ error|escape }}
+                                  </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ sale_deal_info_form.sale_price.label }}
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                              {{ sale_deal_info_form.sale_price|add_error_class:"ve-sh-error-block" }} {{ sale_deal_info_form.sale_price.help_text }}
+                            </div>
+                            {% if sale_deal_info_form.errors %}
+                              {% for error in sale_deal_info_form.sale_price.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                      {{ error|escape }}
+                                  </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                          <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ sale_deal_info_form.commission_paid.label }}
+                            </label>
+                            <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                              {{ sale_deal_info_form.commission_paid|add_error_class:"ve-sh-error-block" }} {{ sale_deal_info_form.commission_paid.help_text }}
+                            </div>
+                            {% if sale_deal_info_form.errors %}
+                              {% for error in sale_deal_info_form.commission_paid.errors %}
+                                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                      {{ error|escape }}
+                                  </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+
+                          <div class="col-md-6 col-sm-6 col-xs-12 col-sm-offset-3">
+                            <input type="submit" value="Submit" class="btn btn-success" />
+                          </div>
+                        </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+  <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+  <script type="text/javascript" src="/static/vendors/jonthornton-jquery-timepicker-b53338c/jquery.timepicker.js"></script>
+  <script type="text/javascript">
+    $('#deal-card, #overview').addClass('active');
+
+    // Use Jquery datepicker for date fields
+    $('#id_purchase_deal-exchange, #id_purchase_deal-settlement, #id_purchase_deal-cool_off_period_expires, #id_date').datepicker({
+      dateFormat: "dd-mm-yy"
+    });
+
+    $('#id_sale_deal-exchange, #id_sale_deal-settlement, #id_sale_deal-cool_off_period_expires, #id_date').datepicker({
+      dateFormat: "dd-mm-yy"
+    });
+
+    $("#id_time").timepicker({
+      'timeFormat': 'H:i:s'
+    });
+
+    $('#deal_info').addClass('active');
+
+    $('#deal_info').on('click', function(){
+      window.location.href = '/dashboard/deals/deal/{{ lead_id }}/'
+    });
+
+    $('#deal_info1').on('click', function(){
+      window.location.href = '/dashboard/deals/dealsale/{{ lead_id }}/'
+    });
+
+    $('.checklist').on('click', function(){
+      window.location.href = '/dashboard/deals/{{ deal_id }}/checklist/' + $(this).attr('id');
+    });
+
+    $('#id_start_list_date, #id_end_list_date').datepicker({
+      dateFormat: "dd-mm-yy"
+    });
+
+    $('#id_start_list_price').on('keyup', function(){
+      var start_list_price = 0;
+      if ($("#id_start_list_price").val()){
+        start_list_price = parseInt($("#id_start_list_price").val().replace(/(\,)/g, ''));
+      }
+      var end_list_price = 0;
+      if ($("#id_end_list_price").val()){
+        end_list_price = parseInt($("#id_end_list_price").val().replace(/(\,)/g, ''));
+      }
+      var difference = end_list_price - start_list_price;
+      $('#id_difference').val(difference.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+    });
+
+    $('#id_end_list_price').on('keyup', function(){
+      var start_list_price = 0;
+      if ($("#id_start_list_price").val()){
+        start_list_price = parseInt($("#id_start_list_price").val().replace(/(\,)/g, ''));
+      }
+      var end_list_price = 0;
+      if ($("#id_end_list_price").val()){
+        end_list_price = parseInt($("#id_end_list_price").val().replace(/(\,)/g, ''));
+      }
+      var difference = end_list_price - start_list_price;
+      $('#id_difference').val(difference.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+    });
+  </script>
+
+  <!-- if user clicks on Renovation in deals navbar then it is handled by an ajax call -->
+  <!-- To separate the numbers in a number fields with comma whenever user enters digits -->
+  <script src="/static/custom/custom_js.js"></script>
+
+  <script>
+    $(document).on("click", "#renovation-details", function() {
+      name("{{deal_id}}", "{{lead_id}}");
+    });
+  </script>
+{% endblock javascripts %}

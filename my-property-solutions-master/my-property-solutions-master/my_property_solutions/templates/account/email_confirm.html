@@ -1,0 +1,54 @@
+{% extends "dashboard/base.html" %}
+
+{% load account %}
+
+{% load widget_tweaks %}
+
+{% block title %} Confirm E-mail Address {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <!-- Animate.css -->
+  <link href="/static/vendors/animate.css/animate.min.css" rel="stylesheet">
+{% endblock stylesheets %}
+
+{% block body_class %}login{% endblock body_class %}
+
+{% block body %}
+  <div>
+    <div class="login_wrapper">
+      <div class="animate form login_form">
+        <section class="login_content">
+            <img src="/static/images/logo.png" id="logo_img">
+
+			{% if confirmation %}
+
+	            <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+	                <h1>Confirm E-mail</h1>
+
+					{% user_display confirmation.email_address.user as user_display %}
+
+					<p>{% with confirmation.email_address.email as email %}Please confirm that <a href="mailto:{{ email }}"><strong>{{ email }}</strong></a> is an e-mail address for user <strong>{{ user_display }}</strong>.{% endwith %}</p>
+
+					{% csrf_token %}
+					<div>
+		              <button class="btn btn-default submit">Confirm</button>
+		            </div>
+		        </form>
+
+			{% else %}
+
+				<form>
+					<h1>Link Expired</h1>
+					{% url 'account_email' as email_url %}
+					<p>This e-mail confirmation link has expired or is invalid. Please <a href="{{ email_url }}">issue a new e-mail confirmation request.</a></p>
+
+            	</form>
+
+        	{% endif %}
+        </section>
+      </div>
+
+    </div>
+  </div>
+{% endblock body %}

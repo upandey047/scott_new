@@ -1,0 +1,48 @@
+
+{% load widget_tweaks %}
+
+
+
+<form method="POST" id="addModelFormAjax" class="form-horizontal form-label-left myform123" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" value="11" id="d_id">
+            <div class="x_content">
+                <table>
+                    {{form.as_p}}
+                </table>
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-12 col-sm-offset-3">
+              <input type="submit" value="Submit" class="btn btn-success btn-sm" />
+            </div>
+          </form>
+
+
+<script>
+aa= $("#deal_id").html();
+$("#d_id").val(aa);
+ $("input").addClass("form-control");
+ $(".modal-title").html("Add Other");
+    $('#addModelFormAjax').submit(function(e){
+        e.preventDefault();
+       var formData = new FormData(this);
+       $.ajax({
+            url:'{% url "dashboard:deals:other_create"%}',
+            data:formData,
+            type:"post",
+            contentType: false,
+            processData: false,
+            beforeSend: function() {
+                $(".loading").show();
+            },
+            success:function(data){
+            $(".modal-body").html(data);
+            $('#myModal').modal('hide');
+            loadOther();
+
+            }
+       });
+
+   });
+</script>
+
+

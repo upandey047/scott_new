@@ -1,0 +1,174 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Reminders {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="x_content">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              {% include 'deals/deals_navbar.html' with deal_id=deal_id lead_id=lead_id %}
+              <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+              <div class="container">
+
+                <ul class="nav nav-tabs">
+                  <li id="loans" class="ve-sh-pointer active"><a href="">Reminders</a></li>
+                </ul>
+
+                <br>
+
+                <div class="tab-content">
+                  <div id="land-details-div" class="tab-pane fade in active">
+                    {% if messages %}
+                      <ul class="messages">
+                          {% for message in messages %}
+                            {% ifequal message.tags "submitted success" %}
+                              <div class="alert alert-success col-xs-12">
+                                <strong class="{{ message.tags }}">{{ message }}</strong>
+                              </div>
+                            {% endifequal %}
+                            {% if message.tags == 'deleted success' %}
+                              <div class="alert alert-success col-xs-12">
+                                <strong class="{{ message.tags }}">{{ message }}</strong>
+                              </div>
+                            {% endif %}
+                          {% endfor %}
+                      </ul>
+                    {% endif %}
+                    <!-- Contact Table -->
+                    <div class="x_title">
+                      <h2>Reminders</h2>
+                      <div class="clearfix"></div>
+                    </div>
+
+                    <div class="x_content table-responsive">
+                      <div class="">
+                        <div class="x_panel table-responsive">
+                          <div class="x_content">
+
+                            <table class="table table-striped" id="reminders-table">
+                              <thead>
+                                <tr>
+                                  <th>Date</th>
+                                  <th>Time</th>
+                                  <th>Reminder Notes</th>
+                                  <th>Status</th>
+                                  <th>Action</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% for reminder in reminders %}
+                                  <tr>
+                                    <td>{{ reminder.datetime|date:"d-m-Y"|default_if_none:"" }}</td>
+                                    <td>{{ reminder.datetime|date:"P"|default_if_none:"" }}</td>
+                                    <td>{{ reminder.notes|default_if_none:"No note available" }}</td>
+                                    <td>{{ reminder.status }}</td>
+                                    <td>
+                                        <a href="{% url 'dashboard:deals:edit_reminder' deal_id reminder.id %}" class="btn btn-info btn-xs">
+                                          <i class="fa fa-pencil"></i> Edit
+                                        </a>
+                                        <a href="#" class="btn btn-danger btn-xs del-reminder" data-toggle="modal" data-target="#del-reminder-modal" data="{{ reminder.id }}">
+                                          <i class="fa fa-trash-o"></i> Delete
+                                        </a>
+                                    </td>
+                                  </tr>
+                                {% endfor %}
+                              </tbody>
+                            </table>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="x_panel">
+                      <div class="x_title">
+                        <h2>Add Reminders</h2>
+                        <div class="clearfix"></div>
+                      </div>
+                      <div class="x_content">
+                          <a href="{% url 'dashboard:deals:add_reminder' deal_id %}" class="btn btn-primary" data-toggle="modal" data-target="">Add A Reminder</a>
+                      </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <!-- Contact Table -->
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+
+  <div id="del-reminder-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content -->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Delete Reminder?</h4>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete this reminder?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" id="del-reminder-confirm">Yes</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+  <script src="/static/custom/custom_js.js"></script>
+  <script type="text/javascript">
+    $('#deal-card').addClass('active');
+    $('#reminders').addClass('active');
+
+    $(document).on("click", "#renovation-details", function() {
+      name("{{deal_id}}", "{{lead_id}}");
+    });
+
+    $('table').dataTable();
+
+    // Event of Delete contact's object
+    $(document).on('click', '.del-reminder', function(){
+      $('#del-reminder-confirm').attr('data', $(this).attr('data'));
+    });
+
+    $('#del-reminder-confirm').on('click', function(){
+      var reminder_id = $(this).attr('data');
+      $.ajax({
+        url: "/dashboard/deals/{{ deal_id }}/delete-reminder/" + reminder_id,
+        type: "POST",
+        data: JSON.stringify({'reminder_id': reminder_id}),
+        contentType:'application/json',
+        dataType: 'text',
+        beforeSend: function(xhr) {
+          xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+        },
+        success: function (data) {
+          window.location.href = "{% url 'dashboard:deals:reminders_list' deal_id %}";
+        }
+      });
+    });
+
+  </script>
+{% endblock javascripts %}

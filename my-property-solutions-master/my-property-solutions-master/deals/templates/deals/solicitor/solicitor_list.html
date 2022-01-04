@@ -1,0 +1,45 @@
+<div class="">
+            <a onclick="addFormAjax()" class="btn btn-primary pull-right">Add Solicitor</a>
+            <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Law Firm</th>
+                          <th>Contact Name</th>
+                          <th>Postal Address</th>
+                          <th>Mobile</th>
+                          <th>Office Phone</th>
+                          <th>Office Fax</th>
+                          <th>Email</th>
+                          <!-- <th>Created By</th> -->
+                          <th>Edit</th>
+                          <th>Delete</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for solicitor in solicitor_list %}
+                          <tr>
+                            <td>{{solicitor.id}}</td>
+                            <td>{{solicitor.lawFirm}}</td>
+                            <td>{{solicitor.contactName}}</td>
+                            <td>{{solicitor.postalAddress}}</td>
+                            <td>{{solicitor.mobile}}</td>
+                            <td>{{solicitor.officePhone}}</td>
+                            <td>{{solicitor.officeFax}}</td>
+                            <td>{{solicitor.email}}</td>
+                            <!-- <td>{{solicitor.created_by}}</td> -->
+                            <td><a  href="{% url 'dashboard:deals:solicitorupdate' solicitor.id %}" class="btn btn-info btn-xs">
+                              <i class="fa fa-pencil"></i> Edit</a></td>
+                            <td><a href="{% url 'dashboard:deals:solicitordelete' solicitor.id %}" class="btn btn-danger btn-xs ve-sh-del-contact">
+                              <i class="fa fa-trash-o"></i> Delete</a></td>
+                            <!-- <td><a href="/initial/letter-update/{{letter.id}}" class="btn btn-primary">Edit</a></td>
+                            <td><a href="/initial/letter-delete/{{letter.id}}" class="btn btn-danger">Delete</a></td> -->
+
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+          </div>
+
+
+

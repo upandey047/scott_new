@@ -1,0 +1,49 @@
+ <div class="container">
+        <a data-toggle="modal" data-target="#myModal" class="btn btn-primary pull-right">Add Liquidator</a>
+
+        <table class="table table-striped table-bordered table-responsive table-hover">
+          <thead class="thalpha">
+            <tr>
+
+              <th rowspan = "2" style="width:100px;">Liquidator Name</th>
+              <th rowspan = "2" style="width:100px;">Company</th>
+              <th rowspan = "2" style="width:100px;">Postal Address</th>
+              <th rowspan = "2" style="width:50px;">Mobile</th>
+
+              <th rowspan = "2" style="width:50px;">Email</th>
+              <th rowspan = "2" style="width:50px;">Edit</th>
+              <th rowspan = "2" style="width:50px;">Delete</th>
+            </tr>
+
+          </thead>
+
+          <tbody  class="tbalpha">
+
+
+          </tbody>
+          {% for liquidator in liquidator_list %}
+          <tr id="hide">
+
+            <td>{{liquidator.name}}</td>
+            <td>{{liquidator.company}}</td>
+            <td>{{liquidator.address}}</td>
+            <td>{{liquidator.phone}}</td>
+            <td>{{liquidator.email}}</td>
+
+
+
+            <td><a href="{% url 'dashboard:deals:liquidatorupdate' liquidator.id %}" class="btn btn-info btn-xs" style="float:right">Edit</a></td>
+            <td><a href="{% url 'dashboard:deals:liquidatordelete' liquidator.id %}" class="btn btn-danger btn-xs" style="float:right">Delete</a></td>
+
+          </tr>
+          {% endfor %}
+
+
+
+          </table>
+
+ </div>
+
+ <script>
+   $(".modal-body").load("{% url 'dashboard:deals:liquidatorcreate' %}");
+</script>

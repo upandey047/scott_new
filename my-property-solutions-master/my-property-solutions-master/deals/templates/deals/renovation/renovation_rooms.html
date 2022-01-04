@@ -1,0 +1,124 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Renovation Rooms {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <style type="text/css">
+    form > .x_panel {
+      border-top: 0px !important;
+    }
+  </style>
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="x_content">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              {% include 'deals/deals_navbar.html' with deal_id=deal_id lead_id=lead_id %}
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <div class="container">
+
+                {% include 'deals/renovation/renovation_details_navbar.html' %}
+                <br>
+                <div class="tab-content">
+                  <div id="land-details-div" class="tab-pane fade in active">
+                    {% if messages %}
+                      <ul class="messages">
+                          {% for message in messages %}
+                            {% ifequal message.tags "submitted success" %}
+                              <div class="alert alert-success col-xs-12">
+                                <strong class="{{ message.tags }}">{{ message }}</strong>
+                              </div>
+                            {% endifequal %}
+                          {% endfor %}
+                      </ul>
+                    {% endif %}
+                    <div class="x_title">
+                      <h2>Renovation Rooms</h2>
+                      <div class="clearfix"></div>
+                    </div>
+
+                    <!-- Rooms Table -->
+					          <div class="x_content table-responsive">
+					            <div class="">
+					              <div class="x_panel table-responsive">
+					                <div class="x_content">
+
+					                  <table class="table table-striped" id="contacts-table">
+					                    <thead>
+					                      <tr>
+					                        <th>Location</th>
+                                  <th>Start Date</th>
+                                  <th>Completion Due</th>
+					                        <th>Duration (Days)</th>
+					                        <th>Budget ($)</th>
+                                  <th>Current Exp ($)</th>
+                                  <th>Difference ($)</th>
+                                  <th>Status</th>
+					                      </tr>
+					                    </thead>
+					                    <tbody>
+					                      {% for room in rooms %}
+					                        <tr id="{{room.id}}" class="rooms-redirect" data-toggle="tooltip" title="Open Details Card!" data-placement="bottom">
+					                          <td>
+                                      {{ room }}
+                                    </td>
+                                      {{ room.room_name|default_if_none:"" }}
+					                          <td>{{ room.start_date|default_if_none:"" }}</td>
+                                    <td>{{ room.completion_date|default_if_none:"" }}</td>
+                                    <td>{{ room.duration|default_if_none:"" }}</td>
+                                    <td>{{ room.room_budget|default_if_none:"" }}</td>
+                                    <td>{{ room.room_total_cost|default_if_none:"" }}</td>
+                                    <td>{{ room.room_difference }}</td>
+                                    <td>{{ room.status }}</td>
+					                        </tr>
+					                      {% endfor %}
+					                    </tbody>
+					                  </table>
+
+					                </div>
+					              </div>
+					            </div>
+					          </div>
+                    <!-- Rooms Table -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+  <script type="text/javascript">
+    $("#renovation-rooms, #deal-card, #renovation-details").addClass('active');
+    $(".table-striped").DataTable();
+
+    // When user clicks on a particular table-row then he is redirected to that room's details page
+    $(document).on("click", ".rooms-redirect", function() {
+    	room_id = $(this).attr("id");
+    	window.location.href = "/dashboard/deals/{{deal_id}}/renovation-details/rooms/" + room_id + "/overview";
+    });
+  </script>
+
+  <!-- if user clicks on Renovation in deals navbar then it is handled by an ajax call -->
+  <script src="/static/custom/custom_js.js"></script>
+
+  <script>
+    $(document).on("click", "#renovation-details", function() {
+      name("{{deal_id}}", "{{lead_id}}");
+    });
+  </script>
+{% endblock javascripts %}

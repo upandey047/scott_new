@@ -1,0 +1,137 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} AFCA Complaint Lodged {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="right_col" role="main">
+  <div class="x_content">
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            {% include "deals/deals_navbar.html" with deal_id=deal_id lead_id=lead_id %}
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+            <div class="container">
+              <div class="x_panel offer_details_xpanel">
+                <div class="tab-content">
+                  <div id="sold-div" class="tab-pane fade in active">
+                    {% if messages %}
+                      <ul class="messages">
+                          {% for message in messages %}
+                            {% ifequal message.tags "submitted success" %}
+                              <div class="alert alert-success col-xs-12">
+                                <strong class="{{ message.tags }}">{{ message }}</strong>
+                              </div>
+                            {% endifequal %}
+                          {% endfor %}
+                      </ul>
+                    {% endif %}
+
+                    <div class="form-group">
+                      <h2 class="col-sm-9 col-xs-12 col-sm-offset-3">Sold Details</h2>
+                    </div>
+
+                    <form method="POST" action="" class="form-horizontal form-label-left">
+                      {% csrf_token %}
+
+                      <div class="form-group">
+                        <label class="col-md-3 col-sm-3 col-xs-12 control-label">{{ form.date_sold.label_tag }}
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          {{ form.date_sold|add_error_class:"ve-sh-error-block" }}
+                        </div>
+                        {% if form.errors %}
+                          {% for error in form.date_sold.errors %}
+                            <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                              {{ error|escape }}
+                            </div>
+                          {% endfor %}
+                        {% endif %}
+                      </div>
+                      <div class="form-group">
+                        <label class="col-md-3 col-sm-3 col-xs-12 control-label">{{ form.exchange_date.label_tag }}
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          {{ form.exchange_date|add_error_class:"ve-sh-error-block" }}
+                        </div>
+                        {% if form.errors %}
+                          {% for error in form.exchange_date.errors %}
+                            <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                              {{ error|escape }}
+                            </div>
+                          {% endfor %}
+                        {% endif %}
+                      </div>
+                      <div class="form-group">
+                        <label class="col-md-3 col-sm-3 col-xs-12 control-label">{{ form.completion_time.label_tag }} <small>(# of days)</small>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          {{ form.completion_time|add_error_class:"ve-sh-error-block" }}
+                        </div>
+                        {% if form.errors %}
+                          {% for error in form.completion_time.errors %}
+                            <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                              {{ error|escape }}
+                            </div>
+                          {% endfor %}
+                        {% endif %}
+                      </div>
+                      <div class="form-group">
+                        <label class="col-md-3 col-sm-3 col-xs-12 control-label">{{ form.settlement_date.label_tag }}
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                          {{ form.settlement_date|add_error_class:"ve-sh-error-block" }}
+                        </div>
+                        {% if form.errors %}
+                          {% for error in form.settlement_date.errors %}
+                            <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                              {{ error|escape }}
+                            </div>
+                          {% endfor %}
+                        {% endif %}
+                      </div>
+                      <div class="col-md-6 col-sm-6 col-xs-12 col-sm-offset-3">
+                        <input type="submit" value="Submit" class="btn btn-success" />
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+  <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+  <script type="text/javascript">
+    $('#sold').addClass('active');
+    $('#deal-card').addClass('active');
+
+    $('#id_date_sold, #id_exchange_date, #id_completion_date, #id_settlement_date').datepicker({
+      dateFormat: "dd-mm-yy"
+    });
+
+  </script>
+
+  <!-- if user clicks on Renovation in deals navbar then it is handled by an ajax call -->
+  <script src="/static/custom/custom_js.js"></script>
+  <script>
+    $(document).on("click", "#renovation-details", function() {
+      name("{{deal_id}}", "{{lead_id}}");
+    });
+  </script>
+{% endblock javascripts %}

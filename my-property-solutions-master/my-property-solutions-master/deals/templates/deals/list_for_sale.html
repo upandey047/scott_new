@@ -1,0 +1,229 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} AFCA Complaint Lodged {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="x_content">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              {% include "deals/deals_navbar.html" with deal_id=deal_id lead_id=lead_id %}
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <div class="container">
+                <div class="x_panel offer_details_xpanel">
+                  <div class="tab-content">
+                    <div id="afca-complaint-lodged-div" class="tab-pane fade in active">
+                      {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                              {% ifequal message.tags "submitted success" %}
+                                <div class="alert alert-success col-xs-12">
+                                  <strong class="{{ message.tags }}">{{ message }}</strong>
+                                </div>
+                              {% endifequal %}
+                            {% endfor %}
+                        </ul>
+                      {% endif %}
+
+                      <div class="form-group">
+                        <h2 class="col-sm-9 col-xs-12 col-sm-offset-3">List For Sale Details</h2>
+                      </div>
+
+                      <form method="POST" action="" class="form-horizontal form-label-left">
+                        {% csrf_token %}
+
+                        <div class="form-group">
+                          <label class="col-md-3 col-sm-3 col-xs-12 control-label">{{ form.real_estate_company_agent.label_tag }}
+                          </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                            {{ form.real_estate_company_agent|add_error_class:"ve-sh-error-block" }}
+                          </div>
+                          {% if form.errors %}
+                            {% for error in form.real_estate_company_agent.errors %}
+                              <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                {{ error|escape }}
+                              </div>
+                            {% endfor %}
+                          {% endif %}
+                        </div>
+                        <div class="form-group">
+                          <label class="col-md-3 col-sm-3 col-xs-12 control-label">{{ form.commission_percentage.label_tag }}
+                          </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                            {{ form.commission_percentage|add_error_class:"ve-sh-error-block" }}
+                          </div>
+                          {% if form.errors %}
+                            {% for error in form.commission_percentage.errors %}
+                              <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                {{ error|escape }}
+                              </div>
+                            {% endfor %}
+                          {% endif %}
+                        </div>
+                        <div class="form-group">
+                          <label class="col-md-3 col-sm-3 col-xs-12 control-label">{{ form.agreement_date.label_tag }}
+                          </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                            {{ form.agreement_date|add_error_class:"ve-sh-error-block" }}
+                          </div>
+                          {% if form.errors %}
+                            {% for error in form.agreement_date.errors %}
+                              <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                {{ error|escape }}
+                              </div>
+                            {% endfor %}
+                          {% endif %}
+                        </div>
+                        <div class="form-group">
+                          <label class="col-md-3 col-sm-3 col-xs-12 control-label">{{ form.agreement_market_value.label_tag }}
+                          </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                            {{ form.agreement_market_value|add_error_class:"ve-sh-error-block" }}
+                          </div>
+                          {% if form.errors %}
+                            {% for error in form.agreement_market_value.errors %}
+                              <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                {{ error|escape }}
+                              </div>
+                            {% endfor %}
+                          {% endif %}
+                        </div>
+                        <div class="form-group">
+                          <label class="col-md-3 col-sm-3 col-xs-12 control-label">{{ form.price_drop.label_tag }}
+                          </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                            {{ form.price_drop|add_error_class:"ve-sh-error-block" }}
+                          </div>
+                          {% if form.errors %}
+                            {% for error in form.price_drop.errors %}
+                              <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                {{ error|escape }}
+                              </div>
+                            {% endfor %}
+                          {% endif %}
+                        </div>
+                        <div class="form-group">
+                          <label class="col-md-3 col-sm-3 col-xs-12 control-label">{{ form.sale_method.label_tag }}
+                          </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                            {{ form.sale_method|add_error_class:"ve-sh-error-block" }}
+                          </div>
+                          {% if form.errors %}
+                            {% for error in form.sale_method.errors %}
+                              <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                {{ error|escape }}
+                              </div>
+                            {% endfor %}
+                          {% endif %}
+                        </div>
+                        <div class="form-group">
+                          <label class="col-md-3 col-sm-3 col-xs-12 control-label">{{ form.auction_date.label_tag }}
+                          </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                            {{ form.auction_date|add_error_class:"ve-sh-error-block" }}
+                          </div>
+                          {% if form.errors %}
+                            {% for error in form.auction_date.errors %}
+                              <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                {{ error|escape }}
+                              </div>
+                            {% endfor %}
+                          {% endif %}
+                        </div>
+                        <div class="form-group">
+                          <label class="col-md-3 col-sm-3 col-xs-12 control-label">{{ form.advertising_costs.label_tag }}
+                          </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                            {{ form.advertising_costs|add_error_class:"ve-sh-error-block" }}
+                          </div>
+                          {% if form.errors %}
+                            {% for error in form.advertising_costs.errors %}
+                              <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                {{ error|escape }}
+                              </div>
+                            {% endfor %}
+                          {% endif %}
+                        </div>
+                        <div class="form-group">
+                          <label class="col-md-3 col-sm-3 col-xs-12 control-label">{{ form.result.label_tag }}
+                          </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                            {{ form.result|add_error_class:"ve-sh-error-block" }}
+                          </div>
+                          {% if form.errors %}
+                            {% for error in form.result.errors %}
+                              <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                {{ error|escape }}
+                              </div>
+                            {% endfor %}
+                          {% endif %}
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-sm-offset-3">
+                          <input type="submit" value="Submit" class="btn btn-success" />
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+  <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+  <script type="text/javascript">
+    $('#list-for-sale').addClass('active');
+    $('#deal-card').addClass('active');
+
+    $('#id_auction_date, #id_agreement_date').datepicker({
+      dateFormat: "dd-mm-yy"
+    });
+
+    $("#id_sale_method").on("change", function(){
+      if ($(this).val() != "Auction"){
+        $("#id_auction_date").attr("disabled", true);
+        $("#id_advertising_costs").attr("disabled", true);
+      }
+      else {
+        $("#id_auction_date").attr("disabled", false);
+        $("#id_advertising_costs").attr("disabled", false);
+      }
+    });
+
+    // On page load
+    if ($("#id_sale_method").val() != "Auction"){
+      $("#id_auction_date").attr("disabled", true);
+      $("#id_advertising_costs").attr("disabled", true);
+    }
+    else {
+      $("#id_auction_date").attr("disabled", false);
+      $("#id_advertising_costs").attr("disabled", false);
+    }
+  </script>
+
+  <!-- if user clicks on Renovation in deals navbar then it is handled by an ajax call -->
+  <script src="/static/custom/custom_js.js"></script>
+  <script>
+    $(document).on("click", "#renovation-details", function() {
+      name("{{deal_id}}", "{{lead_id}}");
+    });
+
+  </script>
+{% endblock javascripts %}

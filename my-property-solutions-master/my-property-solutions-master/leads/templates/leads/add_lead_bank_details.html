@@ -1,0 +1,474 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Dashboard{% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              <a href="{% url 'dashboard:leads:index' category %}" class="btn btn-primary" id="go-back-btn">Go Back</a><h2>Add Lead: {{category|title}}</h2>
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <br>
+
+              <div class="alert alert-danger mortgage-number-error" style="display:none;">
+                <strong>Please fill the mortgage number.</strong>
+              </div>
+
+              <form method="POST" action="" class="form-horizontal form-label-left" id="bank-form">
+                {% csrf_token %}
+                {{ wizard.management_form }}
+
+                {% if form.errors %}
+                    {% for error in form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <div class="form-wizard-form">
+                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12">
+                    <h2 class="form-title">Is The Property Mortgaged</h2>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.mortgaged.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.mortgaged|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.mortgaged.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12">
+                    <h2 class="form-title">Bank Details</h2>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.bank.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.bank|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.bank.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.reference.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.reference|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.reference.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.legal_representative.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.legal_representative|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.legal_representative.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12">
+                    <p class="h5">Street Address</p>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.unit.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.unit|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.unit.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.number.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.number|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.number.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.street.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.street|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.street.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.suburb.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.suburb|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.suburb.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.state.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.state|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.state.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.post_code.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.post_code|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.post_code.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12">
+                    <p class="h5">Postal Address</p>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.po_box.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.po_box|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.po_box.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.postal_suburb.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.postal_suburb|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.postal_suburb.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.postal_state.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.postal_state|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.postal_state.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.postal_post_code.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.postal_post_code|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.postal_post_code.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12">
+                    <p class="h5">Contact Details</p>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.office_phone.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.office_phone|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.office_phone.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.office_fax.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.office_fax|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.office_fax.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.email.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.email|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.email.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12">
+                    <h2 class="form-title">Mortgage Details</h2>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.mortgage_number.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.mortgage_number|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.mortgage_number.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.original_amount.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                      {{ form.original_amount|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.original_amount.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.interest.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.interest|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.interest.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.duration_in_years.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.duration_in_years|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.duration_in_years.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.repayments.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                      {{ form.repayments|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                      {% for error in form.repayments.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="ln_solid"></div>
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                    {% if wizard.steps.prev %}
+                      <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.first }}" class="btn btn-primary">First Step</button>
+                      <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}" class="btn btn-primary">Prev Step</button>
+                    {% else %}
+                      <button class="btn btn-default" disabled>First Step</button>
+                      <button class="btn btn-default" disabled>Prev Step</button>
+                    {% endif %}
+                    <input type="submit" value="Submit" class="btn btn-success" id="bank-form-submit" />
+                    <button class="btn btn-default" disabled>Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</button>
+                  </div>
+                </div>
+
+              </form>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <div class="clearfix"></div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+  <script type="text/javascript">
+
+    // sidebar styling
+    $('.side-menu').children().removeClass('active');
+    $('#home').addClass('active');
+
+    if ($('#id_3-mortgaged').val() == 'No'){
+      $('input').each(function(){
+        if ($(this).attr('type') != 'hidden') if ($(this).attr('type') != 'submit') {
+          $(this).attr('disabled', true);
+        }
+      });
+    }
+
+    $('#id_3-mortgaged').on('change', function(){
+      if ($(this).val() == 'No'){
+        $('input').each(function(){
+          if ($(this).attr('type') != 'hidden') if ($(this).attr('type') != 'submit') {
+            $(this).val('');
+            $(this).attr('disabled', true);
+          }
+        });
+      }
+      else{
+        $('input').each(function(){
+          if ($(this).attr('type') != 'hidden') if ($(this).attr('type') != 'submit') {
+            $(this).attr('disabled', false);
+          }
+        });
+      }
+    });
+
+    $('#bank-form-submit').on('click', function(event){
+      if( $('#id_3-mortgaged').val() == 'Yes' && $('#id_3-mortgage_number').val() == '') {
+        $("html, body").animate({ scrollTop: 0 }, "slow");
+        $(".mortgage-number-error").slideDown(500).delay(5000).slideUp();
+      }
+      else{
+        $('#bank-form').submit();
+      }
+      event.preventDefault();
+    });
+
+    $("#id_3-original_amount").on("keyup", function(){
+      var original_loan_amount = 0;
+      if ($("#id_3-original_amount").val()){
+        original_loan_amount = parseInt($("#id_3-original_amount").val().replace(/(\,)/g, ''));
+      }
+      var interest = 0;
+      if ($("#id_3-interest").val()){
+        interest = $("#id_3-interest").val();
+      }
+      var duration_in_years = 0;
+      if ($("#id_3-duration_in_years").val()){
+        duration_in_years = $("#id_3-duration_in_years").val();
+      }
+      /* Formula for repayments
+      M = P * r(1+r)^n
+         --------------
+         (1+r)^n - 1
+      */
+      var r = interest/1200;
+      var exp = Math.pow(1+r, duration_in_years*12);
+      var repayments = original_loan_amount * r * exp / (exp - 1);
+      repayments = repayments.toFixed(2);
+      $("#id_3-repayments").val(repayments.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+    });
+
+    $("#id_3-interest").on("keyup", function(){
+      var original_loan_amount = 0;
+      if ($("#id_3-original_amount").val()){
+        original_loan_amount = parseInt($("#id_3-original_amount").val().replace(/(\,)/g, ''));
+      }
+      var interest = 0;
+      if ($("#id_3-interest").val()){
+        interest = $("#id_3-interest").val();
+      }
+      var duration_in_years = 0;
+      if ($("#id_3-duration_in_years").val()){
+        duration_in_years = $("#id_3-duration_in_years").val();
+      }
+      /* Formula for repayments
+      M = P * r(1+r)^n
+         --------------
+         (1+r)^n - 1
+      */
+      var r = interest/1200;
+      var exp = Math.pow(1+r, duration_in_years*12);
+      var repayments = original_loan_amount * r * exp / (exp - 1);
+      repayments = repayments.toFixed(2);
+      $("#id_3-repayments").val(repayments.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+    });
+
+    $("#id_3-duration_in_years").on("keyup", function(){
+      var original_loan_amount = 0;
+      if ($("#id_3-original_amount").val()){
+        original_loan_amount = parseInt($("#id_3-original_amount").val().replace(/(\,)/g, ''));
+      }
+      var interest = 0;
+      if ($("#id_3-interest").val()){
+        interest = $("#id_3-interest").val();
+      }
+      var duration_in_years = 0;
+      if ($("#id_3-duration_in_years").val()){
+        duration_in_years = $("#id_3-duration_in_years").val();
+      }
+      /* Formula for repayments
+      M = P * r(1+r)^n
+         --------------
+         (1+r)^n - 1
+      */
+      var r = interest/1200;
+      var exp = Math.pow(1+r, duration_in_years*12);
+      var repayments = original_loan_amount * r * exp / (exp - 1);
+      repayments = repayments.toFixed(2);
+      $("#id_3-repayments").val(repayments.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+    });
+
+  </script>
+
+  <!-- To separate the numbers in a number fields with comma whenever user enters digits -->
+  <script src="/static/custom/custom_js.js"></script>
+{% endblock javascripts %}

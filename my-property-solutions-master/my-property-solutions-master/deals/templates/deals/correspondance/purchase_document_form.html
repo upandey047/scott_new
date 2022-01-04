@@ -1,0 +1,31 @@
+<div class="form-group">
+  <div class="hidden">{{ form.id }}</div>
+  <div class="col-md-3 col-sm-3 col-xs-12 btn-pad-null" style="height: 170px; width: 330px;">
+    {% if form.document.value %}
+      <img src="/media/{{ form.document.value }}" style="height: 160px; width: 320px;">
+    {% else %}
+      <img src="" style="height: 160px; width: 320px; display: none;">
+      <p>Please choose a document.</p>
+    {% endif %}
+  </div>
+  <div class="col-md-3 col-sm-3 col-xs-12 ve-sh-pad-bottom">
+    {{ form.document }}
+    {% if form.errors %}
+      {% for error in form.document.errors %}
+        <div class="col-md-6 col-xs-12 ve-sh-error-text ve-sh-left-pad-null">
+          {{ error|escape }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+  <div class="col-md-6 col-xs-12">
+    {{ form.note }}
+    {% if form.errors %}
+      {% for error in form.note.errors %}
+        <div class="col-md-6 col-xs-12 ve-sh-error-text ve-sh-left-pad-null">
+          {{ error|escape }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+</div>

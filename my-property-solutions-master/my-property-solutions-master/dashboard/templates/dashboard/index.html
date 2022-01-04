@@ -1,0 +1,124 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Dashboard{% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <!-- top tiles -->
+    <div class="">
+      <div class="x_panel">
+        <div class="x_content table-responsive">
+          <div class="">
+            <div class="x_panel table-responsive">
+              <div class="x_title">
+                  <a href="{% url 'dashboard:leads:add_new_lead' %}" class="btn btn-default btn-primary pull-right">Add Lead</a>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+
+                <table class="table table-striped" id="example-table">
+                  <thead>
+                    <tr>
+                        <th>Address</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th>Bed</th>
+                        <th>Bath</th>
+                        <th>Garage</th>
+                        <th>m&#178;</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for lead in leads %}
+                        <tr>
+                            <td><a href="{% url 'dashboard:deals:deal' lead.id %}">{{ lead.property.address }}</a></td>
+                            <td>{{ lead.get_category_display }}</td>
+                            <td>{{ lead.get_status_display }}</td>
+                            <td>{{ lead.property.beds }}</td>
+                            <td>{{ lead.property.bath }}</td>
+                            <td>{{ lead.property.garage }}</td>
+                            <td>{{ lead.property.land }}</td>
+                            
+                        </tr>
+                    {% empty %}
+                        <p>There are currently no leads available.</p>
+                    {% endfor %}
+                  </tbody>
+                </table>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="x_content">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2>Personal Notes</h2>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+
+                {% if messages %}
+                  <ul class='messages'>
+                    {% for message in messages %}
+                      {% if message.tags == 'submitted success' %}
+                        <div class='alert alert-success col-xs-12'>
+                          <strong class='{{ message.tags }}'>{{ message }}</strong>
+                        </div>
+                      {% endif %}
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+
+                <form method="POST" action="" class="form-horizontal form-label-left">
+                  {% csrf_token %}
+
+                  {% if form.errors %}
+                    {% for error in form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                    {% endfor %}
+                  {% endif %}
+
+                  <div class="form-group">
+                    <label class="col-xs-12">{{ form.note.label }}
+                    </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                      {{ form.note|add_error_class:"ve-sh-error-block" }}
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-error-text">
+                      {% for error in form.note.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12">
+                    <input type="submit" value="Submit" class="btn btn-success" id="bank-form-submit" />
+                  </div>
+                </form>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+
+  <script type="text/javascript">
+    $('.side-menu').children().removeClass('active');
+    $('#home').addClass('active');
+    $('.table-striped').DataTable();
+  </script>
+{% endblock javascripts %}

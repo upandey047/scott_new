@@ -1,0 +1,15 @@
+{% for field in form %}
+    <div class="row form-group {% if field.errors %}has-error{% endif %}">
+        <div class="col-md-1"></div>
+        <div class="col-md-2 text-right">
+            <label for="{{ field.name }}">{{ field.label }}{% if field.field.required %}*{% endif %}</label>
+        </div>
+        <div class="col-md-6">
+            {{ field }}
+            {% for error in field.errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+    <div class="col-md-3"></div>
+    </div>
+{% endfor %}

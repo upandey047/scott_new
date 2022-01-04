@@ -1,0 +1,79 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Individual Entity {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="x_content">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              <h2>Individual Entity</h2>
+
+              <div class="clearfix"></div>
+            </div>
+
+            {% if messages %}
+              <ul class='messages'>
+                {% for message in messages %}
+                  {% if message.tags == 'details_added success' %}
+                    <div class='alert alert-success col-xs-12'>
+                      <strong class='{{ message.tags }}'>{{ message }}</strong>
+                    </div>
+                  {% endif %}
+                {% endfor %}
+              </ul>
+            {% endif %}
+
+            <div class="x_content table-responsive">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Individual Details Table</h2>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Mobile</th>
+                          <th>Email</th>
+                          <th>Address</th>
+                          <th>Edit</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>{{ user.individual.name|default_if_none:"" }}</td>
+                          <td>{{ user.individual.mobile|default_if_none:"" }}</td>
+                          <td>{% for email in user.individual.email_set.all %}{{ email|default_if_none:"" }}<br>{% endfor %}</td>
+                          <td>{{ user.individual.address_set.first.unit|default_if_none:"" }} {{ user.individual.address_set.first.number|default_if_none:"" }} {{ user.individual.address_set.first.street|default_if_none:"" }} {{ user.individual.address_set.first.suburb|default_if_none:"" }} {{ user.individual.address_set.first.state|default_if_none:"" }} {{ user.individual.address_set.first.post_code|default_if_none:"" }}</td>
+                          <td><a href="{% url 'dashboard:settings:edit_individual_entity' user.pk %}" class="btn btn-xs btn-primary">Edit</a></td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+{% endblock javascripts %}

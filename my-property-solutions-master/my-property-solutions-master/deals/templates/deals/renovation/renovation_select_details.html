@@ -1,0 +1,122 @@
+{% load widget_tweaks %}
+<div class="ve-sh-select-details">
+  <input type="text" class="hidden ve-sh-hidden-field" name="selected-room-id" value="{{room_id}}">
+  <div class="form-group ">
+    <label class="control-label col-md-3 col-sm-3 col-xs-12"> {{ selected_room_form.room_name.label }}</label>
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      {{ selected_room_form.room_name|add_error_class:"ve-sh-error-block" }} {{ selected_room_form.room_name.help_text }}
+    </div>
+    {% if selected_room_form.errors %}
+      {% for error in selected_room_form.room_name.errors %}
+        <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+          {{ error|escape }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+  <div class="form-group ">
+    <label class="control-label col-md-3 col-sm-3 col-xs-12"> {{ selected_room_form.start_date.label }}</label>
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      {{ selected_room_form.start_date|add_error_class:"ve-sh-error-block" }} {{ selected_room_form.start_date.help_text }}
+    </div>
+    {% if selected_room_form.errors %}
+      {% for error in selected_room_form.start_date.errors %}
+        <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+          {{ error|escape }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+  <div class="form-group ">
+    <label class="control-label col-md-3 col-sm-3 col-xs-12"> {{ selected_room_form.completion_date.label }}</label>
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      {{ selected_room_form.completion_date|add_error_class:"ve-sh-error-block" }} {{ selected_room_form.completion_date.help_text }}
+    </div>
+    {% if selected_room_form.errors %}
+      {% for error in selected_room_form.completion_date.errors %}
+        <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+          {{ error|escape }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+  <div class="form-group ">
+    <label class="control-label col-md-3 col-sm-3 col-xs-12"> {{ selected_room_form.duration.label }} <small>(Days)</small> </label>
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      {{ selected_room_form.duration|add_error_class:"ve-sh-error-block" }} {{ selected_room_form.duration.help_text }}
+    </div>
+    {% if selected_room_form.errors %}
+      {% for error in selected_room_form.duration.errors %}
+        <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+          {{ error|escape }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+  <div class="form-group ">
+    <label class="control-label col-md-3 col-sm-3 col-xs-12"> {{ selected_room_form.room_budget.label }} <small>($)</small> </label>
+    <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js" title="Enter Value">
+      {{ selected_room_form.room_budget|add_error_class:"ve-sh-error-block" }} {{ selected_room_form.room_budget.help_text }}
+    </div>
+    {% if selected_room_form.errors %}
+      {% for error in selected_room_form.room_budget.errors %}
+        <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+          {{ error|escape }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+  <div class="form-group ">
+    <label class="control-label col-md-3 col-sm-3 col-xs-12"> {{ selected_room_form.status.label }} </label>
+    <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js" title="Enter Value">
+      {{ selected_room_form.status|add_error_class:"ve-sh-error-block" }} {{ selected_room_form.status.help_text }}
+    </div>
+    {% if selected_room_form.errors %}
+      {% for error in selected_room_form.status.errors %}
+        <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+          {{ error|escape }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+  {% include 'deals/renovation/renovation_room_navbar.html' %}
+  <br>
+  <div class="x_title">
+    <h2>Room Overview</h2>
+    <div class="clearfix"></div>
+  </div>
+  <div class="form-group ">
+    <label class="control-label col-md-3 col-sm-3 col-xs-12"> {{ selected_room_form.room_thoughts.label }} </label>
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      {{ selected_room_form.room_thoughts|add_error_class:"ve-sh-error-block" }} {{ selected_room_form.room_thoughts.help_text }}
+    </div>
+    {% if selected_room_form.errors %}
+      {% for error in selected_room_form.room_thoughts.errors %}
+        <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+          {{ error|escape }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+  <div class="col-xs-12">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+      <div class="col-sm-offset-3 col-sm-6 col-xs-12 ve-sh-left-pad-null">
+        <input type="submit" value="Submit" class="btn btn-success" />
+      </div>
+    </div>
+  </div>
+</div>
+{% block extra_javascripts %}
+
+  <script type="text/javascript">
+    $("#renovation-room-overview").addClass("active");
+
+    $('#id_start_date, #id_completion_date').datepicker({
+      dateFormat: "dd-mm-yy"
+    });
+  </script>
+
+  <!-- To separate the numbers in a number fields with comma whenever user enters digits -->
+  <script src="/static/custom/custom_js.js"></script>
+
+{% endblock extra_javascripts %}

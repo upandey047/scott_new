@@ -1,0 +1,142 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Inspection Details {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <style type="text/css">
+    #internal-navbar-panel, #internal-details-panel{
+      border-top: 0px !important;
+    }
+  </style>
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="x_content">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              {% include 'deals/deals_navbar.html' with deal_id=deal_id lead_id=lead_id %}
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <div class="container">
+
+                {% include 'deals/inspection/inspection_details_navbar.html' %}
+
+                <div id="internal-navbar-panel" class="x_panel">
+                  <br>
+                  <div class="tab-content">
+                    <div id="internal-div" class="tab-pane fade in active">
+
+                      {% include 'deals/inspection/internal/internal_navbar.html' with deal_id=deal_id %}
+
+                      <div id="internal-details-panel" class="x_panel">
+                        <div class="tab-content">
+                          <div class="tab-pane fade in active">
+
+                            {% if messages %}
+                              <ul class="messages">
+                                  {% for message in messages %}
+                                    {% ifequal message.tags "submitted success" %}
+                                      <div class="alert alert-success col-xs-12">
+                                        <strong class="{{ message.tags }}">{{ message }}</strong>
+                                      </div>
+                                    {% endifequal %}
+                                  {% endfor %}
+                              </ul>
+                            {% endif %}
+
+                            <form method="POST" action="" class="form-horizontal form-label-left">
+                              {% csrf_token %}
+
+                              {% with laundry_details_form as form %}
+                                  <div class="hidden">{{ form.id }}</div>
+                                  <div class="col-sm-offset-3 col-md-6 col-sm-6 col-xs-12">
+                                    <h2 class="form-title">Laundry Details</h2>
+                                  </div>
+                                  <div class="x_content">
+                                    {% if form.errors %}
+                                      {% for error in form.non_field_errors %}
+                                          <div class="alert alert-danger">
+                                              <strong>{{ error|escape }}</strong>
+                                          </div>
+                                      {% endfor %}
+                                    {% endif %}
+
+                                    <div class="form-group">
+                                      <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.tub.label }}
+                                      </label>
+                                      <div class="col-md-6 col-sm-6 col-xs-12">
+                                        {{ form.tub|add_error_class:"ve-sh-error-block" }}
+                                      </div>
+                                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                        {% for error in form.tub.errors %}
+                                          {{ error|escape }}
+                                        {% endfor %}
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                      <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.bench.label }}
+                                      </label>
+                                      <div class="col-md-6 col-sm-6 col-xs-12">
+                                        {{ form.bench|add_error_class:"ve-sh-error-block" }}
+                                      </div>
+                                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                        {% for error in form.bench.errors %}
+                                          {{ error|escape }}
+                                        {% endfor %}
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                      <label class="control-label col-md-3 col-sm-3 col-xs-12">{{ form.laundry_comments.label }}
+                                      </label>
+                                      <div class="col-md-6 col-sm-6 col-xs-12">
+                                        {{ form.laundry_comments|add_error_class:"ve-sh-error-block" }}
+                                      </div>
+                                      <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                        {% for error in form.laundry_comments.errors %}
+                                          {{ error|escape }}
+                                        {% endfor %}
+                                      </div>
+                                    </div>
+                                  </div>
+                              {% endwith %}
+                              <div class="col-md-9 col-sm-9 col-xs-12 col-sm-offset-3">
+                                <input type="submit" value="Submit" class="btn btn-success" />
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+  <script type="text/javascript">
+    $('#property-details, #deal-card, #internal, #laundry-details').addClass('active');
+  </script>
+
+  <!-- if user clicks on Renovation in deals navbar then it is handled by an ajax call -->
+  <script src="/static/custom/custom_js.js"></script>
+
+  <script>
+    $(document).on("click", "#renovation-details", function() {
+      name("{{deal_id}}", "{{lead_id}}");
+    });
+  </script>
+{% endblock javascripts %}

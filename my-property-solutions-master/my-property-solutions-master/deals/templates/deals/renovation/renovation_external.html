@@ -1,0 +1,131 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Renovation External Details {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <style type="text/css">
+    form > .x_panel {
+      border-top: 0px !important;
+    }
+  </style>
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="x_content">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              {% include 'deals/deals_navbar.html' with deal_id=deal_id lead_id=lead_id %}
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <div class="container">
+
+                {% include 'deals/renovation/renovation_details_navbar.html' %}
+                <br>
+                <div class="tab-content">
+                  <div id="external-details-div" class="tab-pane fade in active">
+                    {% if messages %}
+                      <ul class="messages">
+                          {% for message in messages %}
+                            {% ifequal message.tags "submitted success" %}
+                              <div class="alert alert-success col-xs-12">
+                                <strong class="{{ message.tags }}">{{ message }}</strong>
+                              </div>
+                            {% endifequal %}
+                          {% endfor %}
+                      </ul>
+                    {% endif %}
+                    <div class="x_title">
+                      <h2>Renovation External Details</h2>
+                      <div class="clearfix"></div>
+                    </div>
+
+                    <!-- Rooms Table -->
+					          <div class="x_content table-responsive">
+					            <div class="">
+					              <div class="x_panel table-responsive">
+					                <div class="x_content">
+
+					                  <table class="table table-striped" id="contacts-table">
+					                    <thead>
+					                      <tr>
+					                        <th>Location</th>
+                                  <th>Start Date</th>
+                                  <th>Completion Due</th>
+					                        <th>Duration (Days)</th>
+					                        <th>Budget ($)</th>
+                                  <th>Current Exp ($)</th>
+                                  <th>Difference ($)</th>
+                                  <th>Status</th>
+					                      </tr>
+					                    </thead>
+					                    <tbody>
+					                      {% for location in external_locations %}
+					                        <tr id="{{location.id}}" class="locations-redirect" data-toggle="tooltip" title="Open Details Card!" data-placement="bottom">
+					                          <td>{{ location }}</td>
+                                    <td>{{ location.start_date|default_if_none:"" }}</td>
+                                    <td>{{ location.completion_date|default_if_none:"" }}</td>
+					                          <td>{{ location.duration|default_if_none:"" }}</td>
+                                    <td>{{ location.budget|default_if_none:"" }}</td>
+                                    <td>{{ location.total_cost|default_if_none:"" }}</td>
+                                    <td>{{ location.difference }}</td>
+                                    <td>{{ location.status }}</td>
+					                        </tr>
+					                      {% endfor %}
+					                    </tbody>
+					                  </table>
+
+					                </div>
+					              </div>
+					            </div>
+					          </div>
+                    <!-- Rooms Table -->
+                  </div>
+
+                  <div class="x_panel">
+                    <div class="x_title">
+                      <h2>Add / Edit External Location Names</h2>
+                      <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <a href="{% url 'dashboard:deals:add_or_edit_external_locations' deal_id %}" class="btn btn-primary" data-toggle="modal" data-target="">Add / Edit</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+  <script type="text/javascript">
+    $("#renovation-external, #deal-card, #renovation-details").addClass('active');
+    $(".table-striped").DataTable();
+
+    // When user clicks on a particular table-row then he is redirected to that location's details page
+    $(document).on("click", ".locations-redirect", function() {
+    	location_id = $(this).attr("id");
+    	window.location.href = "/dashboard/deals/{{deal_id}}/renovation-details/external/" + location_id + "/overview";
+    });
+  </script>
+
+  <!-- if user clicks on Renovation in deals navbar then it is handled by an ajax call -->
+  <script src="/static/custom/custom_js.js"></script>
+
+  <script>
+    $(document).on("click", "#renovation-details", function() {
+      name("{{deal_id}}", "{{lead_id}}");
+    });
+  </script>
+{% endblock javascripts %}

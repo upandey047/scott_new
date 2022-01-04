@@ -1,0 +1,48 @@
+
+{% load widget_tweaks %}
+
+<h2>{{ add_or_edit|title }}</h2>
+
+<form method="POST" id="addModelFormAjax" class="form-horizontal form-label-left myform123" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="x_content">
+                <table>
+                    {{form.as_p}}
+                </table>
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-12 col-sm-offset-3">
+              <input type="submit" value="Submit" class="btn btn-success btn-sm" />
+            </div>
+          </form>
+
+
+<script>
+ $("input").addClass("form-control");
+    $('#addModelFormAjax').submit(function(e){
+        e.preventDefault();
+       var formData = new FormData(this);
+       $(".modal-title").html("Edit Agent");
+       $.ajax({
+            url:'{% url "dashboard:deals:agent_edit" pk %}',
+            data:formData,
+            type:"post",
+            contentType: false,
+            processData: false,
+            beforeSend: function() {
+                $(".loading").show();
+            },
+            success:function(data){
+            debugger;
+            if(data.success=="ok"){
+                $('#myModal').modal('hide');
+                loadAgent();
+            }else{
+                $(".modal-body").html(data);
+            }
+            }
+       });
+
+   });
+</script>
+
+

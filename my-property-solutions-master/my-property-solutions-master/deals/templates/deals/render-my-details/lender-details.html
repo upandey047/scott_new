@@ -1,0 +1,117 @@
+{% load widget_tweaks %}
+<input type="text" class="hidden ve-sh-hidden-field" name="selected-lender-id" value="{{private_lender.id}}">
+<div class="contact-details">
+  <div class="form-group">
+    <label class="col-md-3 col-sm-3 col-xs-12 control-label">Lender Name
+    </label>
+    <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+      <input type="text" name="contact_name" disabled="" value='{{ private_lender.contact_name|default_if_none:"" }}' class="form-control" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-md-3 col-sm-3 col-xs-12 control-label">Address
+    </label>
+    <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+      <input type="text" name="Address" disabled="" value='{{ private_lender.unit|default_if_none:"" }} {{ private_lender.number|default_if_none:"" }} {{ private_lender.street|default_if_none:"" }} {{ private_lender.suburb|default_if_none:"" }} {{ private_lender.state|default_if_none:"" }} {{ private_lender.post_code|default_if_none:"" }}' class="form-control" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-md-3 col-sm-3 col-xs-12 control-label">Phone
+    </label>
+    <div class="col-md-2 col-sm-2 col-xs-12 ve-sh-number-js">
+      <input type="text" name="Phone" disabled="" value='{{ private_lender.mobile|default_if_none:"" }}' class="form-control" />
+    </div>
+    <label class="col-md-1 col-sm-1 col-xs-12 control-label">Email
+    </label>
+    <div class="col-md-3 col-sm-3 col-xs-12 ve-sh-number-js">
+      <input type="text" name="Email" disabled="" value='{{ private_lender.email|default_if_none:"" }}' class="form-control" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-md-3 col-sm-3 col-xs-12 control-label">Payment type
+    </label>
+    <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+      <input type="text" name="payment_type" disabled="" value='{{ private_lender.payment_type|default_if_none:"" }}' class="form-control payment_type" />
+    </div>
+  </div>
+  <div class="interest-roi-div">
+    <div class="form-group">
+      <label class="col-md-3 col-sm-3 col-xs-12 control-label">Investment Amount
+      </label>
+      <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+        <input type="text" name="investment_amount" disabled="" value='{{ private_lender.unit|default_if_none:"" }}' class="form-control" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-md-3 col-sm-3 col-xs-12 control-label">Agreed Interest Rate (PA)
+      </label>
+      <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+        <input type="text" name="agreed_interest_rate_per_annum" disabled="" value='{{ private_lender.agreed_interest_rate_per_annum|default_if_none:"" }}' class="form-control" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-md-3 col-sm-3 col-xs-12 control-label">Duration (Months)
+      </label>
+      <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+        <input type="text" name="duration_in_months" disabled="" value='{{ private_lender.duration_in_months|default_if_none:"" }}' class="form-control" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-md-3 col-sm-3 col-xs-12 control-label">ROI (Approx.)
+      </label>
+      <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+        <input type="text" name="roi_approx" disabled="" value='{{ private_lender.roi_approx|default_if_none:"" }}' class="form-control" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-md-3 col-sm-3 col-xs-12 control-label">Total (Approx.)
+      </label>
+      <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+        <input type="text" name="total_approx" disabled="" value='{{ private_lender.total_approx|default_if_none:"" }}' class="form-control" />
+      </div>
+    </div>
+  </div>
+  <div class="profit-split-div">
+    <div class="form-group">
+      <label class="col-md-3 col-sm-3 col-xs-12 control-label">Profit Split (%)
+      </label>
+      <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+        <input type="text" name="profit_split" disabled="" value='{{ private_lender.profit_split|default_if_none:"" }}' class="form-control" />
+      </div>
+    </div>
+  </div>
+</div>
+
+{% block extra_javascripts %}
+  <!-- To separate the numbers in a number fields with comma whenever user enters digits -->
+  <script src="/static/custom/custom_js.js"></script>
+
+  <script type="text/javascript">
+    // On page load
+    $(".payment_type").each(function() {
+      if ($(this).val() == "Interest ROI") {
+        $(this).val("Interest ROI");
+        $(this).parent().parent().next().next().hide();
+        $(this).parent().parent().next().show();
+      } else {
+        $(this).val("Profit Split");
+        $(this).parent().parent().next().next().show();
+        $(this).parent().parent().next().hide();
+      }
+    });
+
+    // On page load enable the Edit and remove button
+    $('.ve-sh-hidden-field').each(function() {
+      if ($(this).val() ===  '{{private_lender.id}}') {
+        $(this).parent().parent().children().eq(1).children().eq(1).children().eq(2).attr('disabled', false);
+        $(this).parent().parent().children().eq(1).children().eq(1).children().eq(2).attr('title', '');
+        var edit_btn = $(this).parent().parent().children().eq(1).children().eq(1).children().eq(2);
+        var url = edit_btn.attr('href');
+        var url_list = url.split('/');
+        url_list[6] = "{{private_lender.id}}";
+        url = url_list.join('/');
+        $(edit_btn).attr('href', url);
+      }
+    });
+  </script>
+{% endblock extra_javascripts %}

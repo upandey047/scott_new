@@ -1,0 +1,385 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Offer Details {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <style type="text/css">
+    .offer_details_xpanel {
+      border-top: 0px !important;
+    }
+  </style>
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="x_content">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              {% include "deals/deals_navbar.html" with deal_id=deal_id lead_id=lead_id %}
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <div class="container">
+
+                {% include "deals/offer_details/offer_details_navbar.html" %}
+
+                <div class="x_panel offer_details_xpanel">
+                  <br>
+                  <div class="tab-content">
+                    <div id="purchase-div" class="tab-pane fade in active">
+                      {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                              {% ifequal message.tags "submitted success" %}
+                                <div class="alert alert-success col-xs-12">
+                                  <strong class="{{ message.tags }}">{{ message }}</strong>
+                                </div>
+                              {% endifequal %}
+                            {% endfor %}
+                        </ul>
+                      {% endif %}
+
+                      <form method="POST" action="" class="form-horizontal form-label-left">
+                        {% csrf_token %}
+                        <div class="form-group">
+                          <label class="col-md-3 col-sm-3 col-xs-12">Market Value/ Listed Value
+                          </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                            {{ form.market_value|add_error_class:"ve-sh-error-block" }}
+                          </div>
+                          {% if form.errors %}
+                            {% for error in form.market_value.errors %}
+                              <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                {{ error|escape }}
+                              </div>
+                            {% endfor %}
+                          {% endif %}
+                        </div>
+                        <br>
+
+                        <label class="col-md-offset-3 col-md-9 col-sm-12 col-xs-12">Purchase Costs</label><br><br>
+                        <div class="purchase_costs_div">
+                          <label class="col-md-offset-3 col-md-3 col-sm-6 col-xs-12">Name</label>
+                          <label class="col-md-3 col-sm-6 col-xs-12">Amount ($)</label>
+                          {{ purchase_costs_formset.management_form }}
+                          {% for cost_form in purchase_costs_formset %}
+                            <div class="single-purchase-cost-div">
+                              <div class="hidden">{{ cost_form.id }}</div>
+                              <div class="form-group">
+                                <div class="col-md-offset-3 col-md-3 col-sm-6 col-xs-12 disabled">
+                                  {{ cost_form.name|add_error_class:"ve-sh-error-block" }} {{ field.help_text }}
+                                  {% if cost_form.errors %}
+                                    {% for error in cost_form.name.errors %}
+                                        <div class="col-md-9 col-sm-9 col-xs-12 ve-sh-error-text ve-sh-left-pad-null">
+                                            {{ error|escape }}
+                                        </div>
+                                    {% endfor %}
+                                  {% endif %}
+                                </div>
+                                <div class="col-md-3 col-sm-6 col-xs-12 ve-sh-number-js purchase-cost-parent-div">
+                                  {{ cost_form.amount|add_error_class:"ve-sh-error-block" }} {{ field.help_text }}
+                                  {% if cost_form.errors %}
+                                    {% for error in cost_form.amount.errors %}
+                                        <div class="col-md-9 col-sm-9 col-xs-12 ve-sh-error-text ve-sh-left-pad-null">
+                                            {{ error|escape }}
+                                        </div>
+                                    {% endfor %}
+                                  {% endif %}
+                                </div>
+                              </div>
+                              {% if forloop.counter == 5 %}
+                                <p class='h5 col-md-offset-3 col-md-6 col-xs-12 ve-sh-margin-null'>
+                                  <b>Note:</b> Please confirm this Stamp Duty figure through your individual state government website
+                                </p>
+                              {% endif %}
+                            </div>
+                          {% endfor %}
+                          <div class="form-group">
+                            <div class="col-md-offset-3 col-md-3 col-sm-6 col-xs-12 disabled">
+                              <input type="text" placeholder="Total" value="Total" maxlength="50" class="form-control">
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-xs-12 ve-sh-number-js">
+                              <input type="text" value="0" placeholder="Purchase Total" id="purchase_costs_total" name="purchase_costs_total" maxlength="50" class="form-control">
+                            </div>
+                          </div>
+                          <br>
+
+                          <label class="col-md-offset-3 col-md-9 col-sm-12 col-xs-12">Holding Costs</label><br><br>
+                          <div class="holding_costs_div">
+                            <label class="col-md-offset-3 col-md-3 col-sm-6 col-xs-12">Name</label>
+                            <label class="col-md-3 col-sm-6 col-xs-12">Amount ($)</label>
+                            {{ holding_costs_formset.management_form }}
+                            {% for cost_form in holding_costs_formset %}
+                              <div class="single-holding-cost-div">
+                                <div class="hidden">{{ cost_form.id }}</div>
+                                <div class="form-group">
+                                  <div class="col-md-offset-3 col-md-3 col-sm-6 col-xs-12">
+                                    {{ cost_form.name|add_error_class:"ve-sh-error-block" }} {{ field.help_text }}
+                                    {% if cost_form.errors %}
+                                      {% for error in cost_form.name.errors %}
+                                          <div class="col-md-9 col-sm-9 col-xs-12 ve-sh-error-text ve-sh-left-pad-null">
+                                              {{ error|escape }}
+                                          </div>
+                                      {% endfor %}
+                                    {% endif %}
+                                  </div>
+                                  <div class="col-md-3 col-sm-6 col-xs-12 ve-sh-number-js holding-cost-parent-div">
+                                    {{ cost_form.amount|add_error_class:"ve-sh-error-block" }} {{ field.help_text }}
+                                    {% if cost_form.errors %}
+                                      {% for error in cost_form.amount.errors %}
+                                          <div class="col-md-9 col-sm-9 col-xs-12 ve-sh-error-text ve-sh-left-pad-null">
+                                              {{ error|escape }}
+                                          </div>
+                                      {% endfor %}
+                                    {% endif %}
+                                  </div>
+                                </div>
+                                {% if forloop.counter == 6 %}
+                                  <p class='h5 col-md-offset-3 col-md-6 col-xs-12 ve-sh-margin-null'>
+                                    <b>Note:</b> Please confirm this Land Tax figure through your individual state government website
+                                  </p>
+                                {% endif %}
+                              </div>
+                            {% endfor %}
+
+                            <div class="form-group">
+                              <div class="col-md-offset-3 col-md-3 col-sm-6 col-xs-12 disabled">
+                                <input type="text" placeholder="Total" value="Total" maxlength="50" class="form-control">
+                              </div>
+                              <div class="col-md-3 col-sm-6 col-xs-12 ve-sh-number-js">
+                                <input type="text" value="0" placeholder="Holding Total" id="holding_costs_total" name="holding_costs_total" maxlength="50" class="form-control">
+                              </div>
+                            </div>
+
+                          <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <a class="btn btn-default add-cost">Add Cost</a>
+                            <a class="btn btn-default remove-cost">Remove Cost</a>
+                          </div>
+                        </div>
+                        <br><br><br>
+                        <div class="form-group" style="display: none;">
+                          <label class="col-md-offset-3 col-md-3 col-sm-3 col-xs-12">{{ form.renovation_required.label }}
+                          </label>
+                          <div class="col-md-3 col-sm-6 col-xs-12">
+                            {{ form.renovation_required|add_error_class:"ve-sh-error-block" }}
+                            {% if form.errors %}
+                              {% for error in form.renovation_required.errors %}
+                                  <div class="col-md-9 col-sm-9 col-xs-12 ve-sh-error-text ve-sh-left-pad-null">
+                                      {{ error|escape }}
+                                  </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="col-md-offset-3 col-md-3 col-sm-3 col-xs-12">{{ form.renovation_allowance.label }}
+                          </label>
+                          <div class="col-md-3 col-sm-6 col-xs-12 ve-sh-number-js">
+                            {{ form.renovation_allowance|add_error_class:"ve-sh-error-block" }}
+                            {% if form.errors %}
+                              {% for error in form.renovation_allowance.errors %}
+                                  <div class="col-md-9 col-sm-9 col-xs-12 ve-sh-error-text ve-sh-left-pad-null">
+                                      {{ error|escape }}
+                                  </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="col-md-offset-3 col-md-3 col-sm-3 col-xs-12">{{ form.minimum_profit.label }}
+                          </label>
+                          <div class="col-md-3 col-sm-6 col-xs-12 ve-sh-number-js">
+                            {{ form.minimum_profit|add_error_class:"ve-sh-error-block" }} {{ field.help_text }}
+                            {% if form.errors %}
+                              {% for error in form.minimum_profit.errors %}
+                                  <div class="col-md-9 col-sm-9 col-xs-12 ve-sh-error-text ve-sh-left-pad-null">
+                                      {{ error|escape }}
+                                  </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="col-md-offset-3 col-md-3 col-sm-3 col-xs-12">{{ form.total_purchase_costs.label }}
+                          </label>
+                          <div class="col-md-3 col-sm-6 col-xs-12 ve-sh-number-js">
+                            {{ form.total_purchase_costs|add_error_class:"ve-sh-error-block" }}
+                            {% if form.errors %}
+                              {% for error in form.total_purchase_costs.errors %}
+                                  <div class="col-md-9 col-sm-9 col-xs-12 ve-sh-error-text ve-sh-left-pad-null">
+                                      {{ error|escape }}
+                                  </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                        </div>
+                        <hr>
+                        <div class="form-group">
+                          <label class="col-md-3 col-sm-3 col-xs-12">{{ form.maximum_offer.label }}
+                          </label>
+                          <div class="col-sm-6 col-xs-12 ve-sh-number-js">
+                            {{ form.maximum_offer|add_error_class:"ve-sh-error-block" }}
+                          </div>
+                          {% if form.errors %}
+                            {% for error in form.maximum_offer.errors %}
+                              <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
+                                {{ error|escape }}
+                              </div>
+                            {% endfor %}
+                          {% endif %}
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-sm-offset-3">
+                          <input type="submit" value="Submit" class="btn btn-success" />
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+  <script type="text/javascript">
+    const currencyOptions = { style: 'currency', currency: 'AUD',  minimumFractionDigits: 2, maximumFractionDigits: 2 };
+
+    /**
+     * Convert a value from a numeric form field to a js number
+     * @param {string} strVal The value to convert to a number
+     * @returns {number}
+     */
+    function parseNumberField (strVal) {
+        return parseFloat(strVal.replace(/[^\d.]/g, '')) || 0
+    }
+
+    /**
+     * Format a value as a currency string
+     * @param value
+     * @returns {string}
+     */
+    function adjustToString(value){
+        return new Intl.NumberFormat('en-AU', currencyOptions).format(value).toString().replace("$", "")
+    }
+
+    /**
+     * Calculate the purchase and holding costs, as well as the maximum offer.
+     */
+    function recalculateTotals () {
+        var total = 0;
+        var purchase_costs_total = 0;
+        var holding_costs_total = 0;
+        var offer_value = 0;
+        var new_total = 0;
+        $(".ve-sh-number-js").children().each(function(index){
+        if ($(this).attr('placeholder') === 'Amount'){
+            if ($(this).parent().hasClass("purchase-cost-parent-div")){
+              purchase_costs_total += parseNumberField($(this).val());
+            }
+            else{
+              holding_costs_total += parseNumberField($(this).val());
+            }
+          }
+        });
+        var renovation_allowance = parseNumberField($("#id_renovation_allowance").val());
+        var minimum_profit = parseNumberField($("#id_minimum_profit").val());
+        var market_value = parseNumberField($("#id_market_value").val());
+
+        total = purchase_costs_total + holding_costs_total + renovation_allowance + minimum_profit;
+        purchase_costs_total = adjustToString(purchase_costs_total);
+        holding_costs_total = adjustToString(holding_costs_total);
+        offer_value = adjustToString(market_value - total);
+        total = adjustToString(total);
+        new_total = total.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+        $("#purchase_costs_total").val(purchase_costs_total.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+        $("#holding_costs_total").val(holding_costs_total.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+        $("#id_total_purchase_costs").val(new_total);
+        $("#id_maximum_offer").val(offer_value.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+    }
+
+    $("#offer-details, #deal-card, #purchase-details").addClass("active");
+
+    // When the user clicks on add cost button, an extra form is displayed to the user
+    $(".add-cost").on("click", function(){
+      cloneMore("div.single-holding-cost-div:last", "holding_costs_formset");
+    });
+
+    function cloneMore(selector, type) {
+        var newElement = $(selector).clone(true);
+        var total = $("#id_" + type + "-TOTAL_FORMS").val();
+        newElement.find(":input").each(function() {
+            var name = $(this).attr("name").replace("-" + (total-1) + "-","-" + total + "-");
+            var id = "id_" + name;
+            $(this).attr({"name": name, "id": id}).val("").removeAttr("checked");
+        });
+        total++;
+        $("#id_" + type + "-TOTAL_FORMS").val(total);
+        $(selector).after(newElement);
+    }
+    // Add cost script complete
+
+    // Remove a cost form from the list of cost forms
+    $(".remove-cost").on("click", function(){
+      if($("div.single-holding-cost-div").length > 1){
+        $("div.single-holding-cost-div:last").children().eq(1).children().eq(1).children().eq(0).val("");
+        $("div.single-holding-cost-div:last").children().eq(1).children().eq(1).children().eq(0).trigger("keyup");
+        deleteElement("div.single-holding-cost-div:last", "holding_costs_formset");
+      }
+    });
+
+    function deleteElement(selector, type) {
+      var total = $("#id_" + type + "-TOTAL_FORMS").val();
+      total--;
+      $("#id_" + type + "-TOTAL_FORMS").val(total);
+      $("div.single-holding-cost-div:last").remove();
+      $("#id_minimum_profit").keyup();
+    }
+
+    // Event performed on keyup event of number field
+    $(".ve-sh-number-js").children().on("keyup", recalculateTotals);
+
+    recalculateTotals();
+
+    // If the property is not renovated then disable renovation allowance field (default: not renovated)
+    var id = "#id_renovation_required";
+    if ($(id).val() == "Yes") {
+      $("#id_renovation_allowance").attr("disabled", false);
+    }
+    else {
+      $("#id_renovation_allowance").attr("disabled", true);
+    }
+
+    // If renovated is changed then disable/enable renovation allowance accordingly
+    $(id).on("change", function() {
+      if ($(id).val() == "Yes") {
+        $("#id_renovation_allowance").attr("disabled", false);
+      }
+      else {
+        $("#id_renovation_allowance").val("");
+        $("#id_renovation_allowance").trigger("keyup");
+        $("#id_renovation_allowance").attr("disabled", true);
+      }
+    });
+  </script>
+
+  <!-- if user clicks on Renovation in deals navbar then it is handled by an ajax call -->
+  <!-- To separate the numbers in a number fields with comma whenever user enters digits -->
+  <script src="/static/custom/custom_js.js"></script>
+
+  <script>
+    $(document).on("click", "#renovation-details", function() {
+      name("{{deal_id}}", "{{lead_id}}");
+    });
+  </script>
+{% endblock javascripts %}
+

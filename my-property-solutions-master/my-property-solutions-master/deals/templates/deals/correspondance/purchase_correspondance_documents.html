@@ -1,0 +1,119 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Owner Details {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="x_content">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              {% include 'deals/deals_navbar.html' with deal_id=deal_id lead_id=lead_id %}
+              <div class="clearfix"></div>
+            </div>
+
+            <div class="x_content">
+              <div class="container">
+
+                <ul class="nav nav-tabs">
+                  <li id="loans" class="ve-sh-pointer active"><a href="">Documents</a></li>
+                </ul>
+
+                <br>
+
+                <div class="tab-content">
+                  <div id="land-details-div" class="tab-pane fade in active">
+                    {% if messages %}
+                      <ul class="messages">
+                          {% for message in messages %}
+                            {% ifequal message.tags "submitted success" %}
+                              <div class="alert alert-success col-xs-12">
+                                <strong class="{{ message.tags }}">{{ message }}</strong>
+                              </div>
+                            {% endifequal %}
+                            {% if message.tags == 'deleted success' %}
+                              <div class="alert alert-success col-xs-12">
+                                <strong class="{{ message.tags }}">{{ message }}</strong>
+                              </div>
+                            {% endif %}
+                          {% endfor %}
+                      </ul>
+                    {% endif %}
+                    <!-- Contact Table -->
+                    <div class="x_title">
+                      <h2>Documents</h2>
+                      <div class="clearfix"></div>
+                    </div>
+
+                    <div class="x_content table-responsive">
+                      <div class="">
+                        <div class="x_panel table-responsive">
+                          <div class="x_content">
+
+                            <table class="table table-striped" id="contacts-table">
+                              <thead>
+                                <tr>
+                                  <th>Document Note</th>
+                                  <th>Download</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% for document in correspondance_documents_queryset %}
+                                  <tr>
+                                    <td>{{ document.note|default_if_none:"No note available" }}</td>
+                                    <td><a class="btn btn-sm btn-primary download-document" href="{% url 'dashboard:deals:download_purchase_correspondance_document'  deal_id document.id  %}">Download</a></td>
+                                  </tr>
+                                {% endfor %}
+                              </tbody>
+                            </table>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="x_panel">
+                      <div class="x_title">
+                        <h2>Add / Edit Documents</h2>
+                        <div class="clearfix"></div>
+                      </div>
+                      <div class="x_content">
+                          <a href="{% url 'dashboard:deals:add_or_edit_purchase_correspondance_documents' deal_id %}" class="btn btn-primary" data-toggle="modal" data-target="">Add / Edit Documents</a>
+                      </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <!-- Contact Table -->
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+  <script src="/static/custom/custom_js.js"></script>
+  <script type="text/javascript">
+    $('#deal-card').addClass('active');
+    $('#correspondance').addClass('active');
+
+    $(document).on("click", "#renovation-details", function() {
+      name("{{deal_id}}", "{{lead_id}}");
+    });
+
+    $('table').dataTable();
+
+  </script>
+{% endblock javascripts %}

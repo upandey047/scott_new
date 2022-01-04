@@ -1,0 +1,175 @@
+{% extends "dashboard/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %} Offer Details {% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+  <style type="text/css">
+    .offer_details_xpanel {
+      border-top: 0px !important;
+    }
+  </style>
+{% endblock stylesheets %}
+
+{% block content %}
+  <div class="right_col" role="main">
+    <div class="x_content">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+          <div class="x_panel">
+            <div class="x_title">
+              {% include 'deals/deals_navbar.html' with deal_id=deal_id lead_id=lead_id %}
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+              <div class="container">
+
+                {% include 'deals/offer_details/offer_details_navbar.html' with deal_id=deal_id %}
+
+                <div class="x_panel offer_details_xpanel">
+                  <br>
+                  <div class="tab-content">
+                    <div id="comparable-sales-div" class="tab-pane fade in active">
+                      {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                              {% ifequal message.tags "submitted success" %}
+                                <div class="alert alert-success col-xs-12">
+                                  <strong class="{{ message.tags }}">{{ message }}</strong>
+                                </div>
+                              {% endifequal %}
+                              {% ifequal message.tags "deleted success" %}
+                                <div class="alert alert-success col-xs-12">
+                                  <strong class="{{ message.tags }}">{{ message }}</strong>
+                                </div>
+                              {% endifequal %}
+                            {% endfor %}
+                        </ul>
+                      {% endif %}
+                      <div class="col-xs-12">
+                        <div class="x_panel table-responsive">
+                          <div class="x_title">
+                            <h2>Comparable Sales</h2>
+                            <div class="clearfix"></div>
+                          </div>
+                          <div class="x_content">
+
+                            <table class="table table-striped">
+                              <thead>
+                                <tr>
+                                  <th>Address</th>
+                                  <th>Settlement</th>
+                                  <th>Sale Price</th>
+                                  <th>Beds</th>
+                                  <th>Bath</th>
+                                  <th>Garage</th>
+                                  <th>Land</th>
+                                  <th>Action</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% for comparable_sale in comparable_sales %}
+                                  <tr>
+                                    <td>{{ comparable_sale.address|default_if_none:"" }}</td>
+                                    <td>{{ comparable_sale.sale_date|default_if_none:"" }}</td>
+                                    <td>{{ comparable_sale.sale_price|default_if_none:"" }}</td>
+                                    <td>{{ comparable_sale.beds|default_if_none:"" }}</td>
+                                    <td>{{ comparable_sale.bath|default_if_none:"" }}</td>
+                                    <td>{{ comparable_sale.garage|default_if_none:"" }}</td>
+                                    <td>{{ comparable_sale.land|default_if_none:"" }}</td>
+                                    <td><a href="{% url 'dashboard:deals:purchase_comparable_sale_details' deal_id comparable_sale.pk %}" class="btn btn-xs btn-primary">
+                                          <i class="fa fa-folder"></i> View
+                                        </a>
+                                        <a href="{% url 'dashboard:deals:edit_purchase_comparable_sale' deal_id comparable_sale.pk %}" class="btn btn-info btn-xs">
+                                          <i class="fa fa-pencil"></i> Edit
+                                        </a>
+                                        <a href="#" class="btn btn-danger btn-xs ve-sh-del-purchase" data-toggle="modal" data-target="#ve-sh-del-purchase-modal" data="{{ comparable_sale.id }}">
+                                          <i class="fa fa-trash-o"></i> Delete
+                                        </a>
+                                    </td>
+                                  </tr>
+                                {% endfor %}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="x_panel">
+                  <div class="x_content">
+                    <a href="{% url 'dashboard:deals:add_purchase_comparable_sale' deal_id %}" class="btn btn-primary">Add New Sale</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+
+  <!-- Modal -->
+  <div id="ve-sh-del-purchase-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content -->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Delete Comparable Purchase Property?</h4>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete this comparable purchase property?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" id="ve-sh-del-purchase-confirm">Yes</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal -->
+{% endblock content %}
+
+{% block javascripts %}
+  {{ block.super}}
+  <script type="text/javascript">
+    $('#offer-details, #deal-card, #comparable-sales').addClass('active');
+    $('.table-striped').DataTable();
+
+    // Delete comparable purchase property object event
+    $('.ve-sh-del-purchase').on('click', function(){
+      $('#ve-sh-del-purchase-confirm').attr('data', $(this).attr('data'));
+    });
+
+    $('#ve-sh-del-purchase-confirm').on('click', function(){
+      var comparable_purchase_id = $(this).attr('data');
+      $.ajax({
+        url: "{% url 'dashboard:deals:del_purchase_comparable_sale' deal_id %}",
+        type: "POST",
+        data: JSON.stringify({'comparable_purchase_id': comparable_purchase_id}),
+        contentType:'application/json',
+        dataType: 'text', 
+        beforeSend: function(xhr) {
+          xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+        },
+        success: function (data) {
+          window.location.href = "{% url 'dashboard:deals:purchase_comparable_sales' deal_id %}";
+        }
+      });
+    });
+  </script>
+
+  <!-- if user clicks on Renovation in deals navbar then it is handled by an ajax call -->
+  <script src="/static/custom/custom_js.js"></script>
+
+  <script>
+    $(document).on("click", "#renovation-details", function() {
+      name("{{deal_id}}", "{{lead_id}}");
+    });
+  </script>
+{% endblock javascripts %}
