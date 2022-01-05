@@ -11,9 +11,13 @@ def deal_owner_name(deal_id):
     """
     deal_obj = Deal.objects.get(pk=deal_id)
     property_owner = deal_obj.lead.property.property_owner.first()
-    if property_owner.first_name or property_owner.last_name is None:
+    if property_owner.first_name is not None and property_owner.last_name is not None:
+        return str(property_owner.first_name) + " " + str(property_owner.last_name)
+    elif property_owner.first_name is None and property_owner.last_name is None:
+        # print(property_owner.first_name,property_owner.last_name)
         return "--"
-    return property_owner.first_name + " " + property_owner.last_name
+        
+        
 
 
 @register.simple_tag
