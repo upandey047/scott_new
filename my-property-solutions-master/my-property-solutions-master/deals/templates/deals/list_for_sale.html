@@ -46,7 +46,8 @@
                           <label class="col-md-3 col-sm-3 col-xs-12 control-label">{{ form.real_estate_company_agent.label_tag }}
                           </label>
                           <div class="col-md-6 col-sm-6 col-xs-12">
-                            {{ form.real_estate_company_agent|add_error_class:"ve-sh-error-block" }}
+                            <!-- {{ form.real_estate_company_agent|add_error_class:"ve-sh-error-block" }} -->
+                            {{form.agent|add_error_class:"ve-sh-error-block"}}
                           </div>
                           {% if form.errors %}
                             {% for error in form.real_estate_company_agent.errors %}

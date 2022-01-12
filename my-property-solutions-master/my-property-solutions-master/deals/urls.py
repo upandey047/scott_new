@@ -66,7 +66,6 @@ urlpatterns = [
     path('owner-details/otherDelete/<int:pk>/',views.OtherDeleteView.as_view(),name='otherdelete'),
     path("deal/<int:lead_id>/", views.DealCardView.as_view(), name="deal"),
     path("dealsale/<int:lead_id>/", views.DealSaleCardView.as_view(), name="dealsale"),
-    
     path(
         "<int:deal_id>/checklist/<slug:category>",
         views.CheckListView.as_view(),

@@ -4738,8 +4738,8 @@ class MyPurchaseDetailsView(LoginRequiredMixin, View):
         form.fields["accountant"].queryset = contacts_queryset.filter(
             sub_category="accountants"
         )
-        form.fields["agent"].queryset = contacts_queryset.filter(
-            sub_category="agents"
+        form.fields["agent"].queryset = Agent.objects.filter(
+            created_by=self.request.user
         )
         form.fields["conveyancer"].queryset = contacts_queryset.filter(
             sub_category="conveyancers"
@@ -6566,9 +6566,9 @@ class ListForSaleView(LoginRequiredMixin, View):
         else:
             list_for_sale_form = ListForSaleForm()
         list_for_sale_form.fields[
-            "real_estate_company_agent"
-        ].queryset = Contact.objects.filter(
-            user=self.request.user, sub_category="agents"
+            "agent"
+        ].queryset = Agent.objects.filter(
+            created_by=self.request.user
         )
         ctx = {
             "form": list_for_sale_form,
@@ -6895,7 +6895,9 @@ class OtherDeleteView(DeleteView):
     template_name='deals/other/other_confirm_delete.html'
 
 from .models import BankNew
-from .forms import SolicitorForm,AgentForm,ExecutorForm,FamilyForm,LiquidatorForm,OtherForm,BankNewForm
+from .forms import (SolicitorForm,AgentForm,ExecutorForm,FamilyForm,LiquidatorForm,
+                    OtherForm,BankNewForm,SolicitorForm2,AgentForm2,BankNewForm2,ExecutorForm2,
+                    FamilyForm2,LiquidatorForm2,OtherForm2)
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
 
@@ -6904,7 +6906,7 @@ from django.contrib.auth.decorators import login_required
 def solicitor_list(request):
     context={}
     id=request.POST.get('id',0)
-    # deal = Deal.objects.get(deal_id='4')
+    # deal_id = request.Post.get()
     solicitors=Solicitor.objects.filter(created_by=str(request.user)).order_by('-id')
     select_list=solicitors
 
@@ -6914,17 +6916,21 @@ def solicitor_list(request):
     context['select_list']=select_list
     return render(request,'deals/solicitor/solicitor_listing.html',context)
 
-def solicitor_add(request,**kwargs):
+def solicitor_add(request):
     context={}
-    
+    # print(request.get_full_path())
     form =SolicitorForm(request.POST or None)
-   
+    
     if form.is_valid():
         myform =form.save(commit=False)
         myform.created_by=str(request.user)
-        d_id = request.POST.get('d_id')
+        # deal = Deal.objects.get(lead_id=17)
+        # myform.deal=myform
+        # d_id = request.POST.get('d_id')
         # print(d_id)
         # myform.owner_id="1"
+        # print(deal)
+        # print("before save")
         myform.save()
         return JsonResponse({'success':"ok"})
     context['form']=form
@@ -6934,12 +6940,14 @@ def solicitor_edit(request,pk=None):
     context={}
     context['pk']=pk
     s_obj =Solicitor.objects.get(pk=pk)
-    form =SolicitorForm(request.POST or None, instance=s_obj)
+    form =SolicitorForm2(request.POST or None, instance=s_obj)
     if form.is_valid():
         form.save()
         return JsonResponse({'success':"ok"})
     context['form']=form
     return render(request,'deals/solicitor/solicitor_form_edit.html',context)
+# def get_queryset(self, *args, **kwargs):
+#     return Deal.objects.filter(deal_id=self.kwargs['pk'])
 
 def solicitor_delete(request,pk=None):
     context={}
@@ -6965,6 +6973,7 @@ def agent_list(request):
 
 def agent_add(request):
     context={}
+   
     form =AgentForm(request.POST or None)
     if form.is_valid():
         myform =form.save(commit=False)
@@ -6980,7 +6989,7 @@ def agent_edit(request,pk=None):
     context={}
     context['pk']=pk
     s_obj =Agent.objects.get(pk=pk)
-    form =AgentForm(request.POST or None, instance=s_obj)
+    form =AgentForm2(request.POST or None, instance=s_obj)
     if form.is_valid():
         form.save()
         return JsonResponse({'success':"ok"})
@@ -7029,7 +7038,7 @@ def bank_edit(request,pk=None):
     context={}
     context['pk']=pk
     s_obj =BankNew.objects.get(pk=pk)
-    form =BankNewForm(request.POST or None, instance=s_obj)
+    form =BankNewForm2(request.POST or None, instance=s_obj)
     if form.is_valid():
         form.save()
         return JsonResponse({'success':"ok"})
@@ -7076,7 +7085,7 @@ def executor_edit(request,pk=None):
     context={}
     context['pk']=pk
     s_obj =Executor.objects.get(pk=pk)
-    form =ExecutorForm(request.POST or None, instance=s_obj)
+    form =ExecutorForm2(request.POST or None, instance=s_obj)
     if form.is_valid():
         form.save()
         return JsonResponse({'success':"ok"})
@@ -7122,7 +7131,7 @@ def family_edit(request,pk=None):
     context={}
     context['pk']=pk
     s_obj =Family.objects.get(pk=pk)
-    form =FamilyForm(request.POST or None, instance=s_obj)
+    form =FamilyForm2(request.POST or None, instance=s_obj)
     if form.is_valid():
         form.save()
         return JsonResponse({'success':"ok"})
@@ -7168,7 +7177,7 @@ def liquidator_edit(request,pk=None):
     context={}
     context['pk']=pk
     s_obj =Liquidator.objects.get(pk=pk)
-    form =LiquidatorForm(request.POST or None, instance=s_obj)
+    form =LiquidatorForm2(request.POST or None, instance=s_obj)
     if form.is_valid():
         form.save()
         return JsonResponse({'success':"ok"})
@@ -7214,7 +7223,7 @@ def other_edit(request,pk=None):
     context={}
     context['pk']=pk
     s_obj =Other.objects.get(pk=pk)
-    form =OtherForm(request.POST or None, instance=s_obj)
+    form =OtherForm2(request.POST or None, instance=s_obj)
     if form.is_valid():
         form.save()
         return JsonResponse({'success':"ok"})
@@ -7230,7 +7239,75 @@ def other_delete(request,pk=None):
         return JsonResponse({'success':"ok"})
     return render(request,'deals/other/other_confirm_delete.html',context)
 
+# class SolicitorView(LoginRequiredMixin, View):
+#     def get(self, request, *args, **kwargs):
+#         ctx = self.get_context_data(*args, **kwargs)
+#         return render(request, "deals/solicitor/solicitor_listing.html", ctx)
 
+#     def get_context_data(self, *args, **kwargs):
+#         deal = Deal.objects.select_related("lead__user", "lead").get(
+#             pk=kwargs["deal_id"]
+#         )
+#         if deal.lead.user != self.request.user:
+#             raise Http404
+#         solicitor = Solicitor.objects.filter(deal=deal)
+#         if solicitor:
+#             solicitor_form = SolicitorForm(
+#                 instance=solicitor.first()
+#             )
+#         else:
+#             solicitor_form = SolicitorForm()
+#         ctx = {
+#             "form": solicitor_form,
+#             "lead_id": deal.lead.pk,
+#             "deal_id": deal.pk,
+#         }
+#         return ctx
+
+#     def get_success_url(self):
+#         messages.success(
+#             self.request,
+#             "The details have been saved successfully!",
+#             extra_tags="submitted",
+#         )
+#         return reverse_lazy(
+#             "dashboard:deals:solicitorlisting",
+#             kwargs={"deal_id": self.kwargs["deal_id"]},
+#         )
+
+#     def post(self, request, *args, **kwargs):
+#         deal = Deal.objects.select_related("lead__user").get(
+#             pk=kwargs["deal_id"]
+#         )
+#         if deal.lead.user != self.request.user:
+#             raise Http404
+#         solicitor = Solicitor.objects.filter(deal=deal)
+#         if solicitor:
+#             solicitor_form = SolicitorForm(
+#                 request.POST, instance=Solicitor.first()
+#             )
+#         else:
+#             solicitor_form = SolicitorForm(request.POST)
+#         if solicitor_form.is_valid():
+#             return self.form_valid(SolicitorForm)
+#         else:
+#             return self.form_invalid(SolicitorForm)
+
+#     def form_valid(self, form):
+#         deal = Deal.objects.get(pk=self.kwargs["deal_id"])
+#         solicitor_obj = form.save(commit=False)
+#         solicitor_obj.deal = deal
+#         solicitor_obj.save()
+#         return HttpResponseRedirect(self.get_success_url())
+
+#     def form_invalid(self, form):
+#         deal = Deal.objects.select_related("lead").get(
+#             pk=self.kwargs["deal_id"]
+#         )
+#         ctx = {"form": form, "lead_id": deal.lead.pk, "deal_id": deal.pk}
+#         return render(
+#             self.request, "deals/solicitor/solicitor_listing.html", ctx
+        # )
 
 
 

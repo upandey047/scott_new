@@ -454,11 +454,17 @@ class AFCAComplaintLodgedForm(FormFormatter):
         model = AFCAComplaintLodged
         widgets = {"comments": forms.Textarea(attrs={"cols": 80, "rows": 2})}
 
+# from urllib import request
 
 class ListForSaleForm(FormFormatter):
+    # agent=forms.OneToOneField()
     class Meta:
         exclude = ["deal"]
         model = ListForSale
+        
+        def __init__(self, user, *args, **kwargs):
+            super(ListForSaleForm, self).__init__(*args, **kwargs)
+            self.fields['agent'].queryset = Agent.objects.filter(created_by=self.request.user)
 
 
 class SoldForm(FormFormatter):
@@ -470,41 +476,103 @@ from .models import Solicitor,Agent,Executor,Liquidator,Family,Other
 class SolicitorForm(forms.ModelForm):
     class Meta:
         model =Solicitor
+        exclude=("created_by","select","deal")
+        
+class SolicitorForm2(forms.ModelForm):
+    class Meta:
+        model =Solicitor
+        fields=('select','lawFirm','contactName','postalAddress','mobile','officePhone','officeFax','email')
         exclude=("created_by",)
+        labels = {
+            'select': '*Please tick box to show and untick to hide row'        
+        }
         
 class AgentForm(forms.ModelForm):
     class Meta:
         model =Agent
+        exclude=("created_by","select")
+        
+class AgentForm2(forms.ModelForm):
+    class Meta:
+        model =Agent
+        fields=('select','name','company','address','phone','email')
         exclude=("created_by",)
+        labels = {
+            'select': '*Please tick box to show and untick to hide row'        
+        }
         
 class BankNewForm(forms.ModelForm):
     class Meta:
         model =BankNew
-        exclude=("created_by",)
+        exclude=("created_by","select")
         # fields=['bank','unit','office_phone','email']
         # labels = {
         #     'unit': 'Postal Address'        
         # }
         
+class BankNewForm2(forms.ModelForm):
+    class Meta:
+        model =BankNew
+        fields=('select','name','company','address','phone','email')
+        exclude=("created_by",)
+        labels = {
+            'select': '*Please tick box to show and untick to hide row'        
+        }
+        
 class ExecutorForm(forms.ModelForm):
     class Meta:
         model =Executor
+        exclude=("created_by","select")
+        
+class ExecutorForm2(forms.ModelForm):
+    class Meta:
+        model =Executor
+        fields=('select','name','company','address','phone','email')
         exclude=("created_by",)
+        labels = {
+            'select': '*Please tick box to show and untick to hide row'        
+        }
+        
         
 class FamilyForm(forms.ModelForm):
     class Meta:
         model =Family
+        exclude=("created_by","select")
+        
+class FamilyForm2(forms.ModelForm):
+    class Meta:
+        model =Family
+        fields=('select','name','company','address','phone','email')
         exclude=("created_by",)
+        labels = {
+            'select': '*Please tick box to show and untick to hide row'        
+        }
         
 class LiquidatorForm(forms.ModelForm):
     class Meta:
         model =Liquidator
+        exclude=("created_by","select")
+        
+class LiquidatorForm2(forms.ModelForm):
+    class Meta:
+        model =Liquidator
+        fields=('select','name','company','address','phone','email')
         exclude=("created_by",)
+        labels = {
+            'select': '*Please tick box to show and untick to hide row'        
+        }
         
 class OtherForm(forms.ModelForm):
     class Meta:
         model =Other
-        exclude=("created_by",)
+        exclude=("created_by","select")
 
-        
+class OtherForm2(forms.ModelForm):
+    class Meta:
+        model =Other
+        fields=('select','name','company','address','phone','email')
+        exclude=("created_by",)
+        labels = {
+            'select': '*Please tick box to show and untick to hide row'        
+        }
 

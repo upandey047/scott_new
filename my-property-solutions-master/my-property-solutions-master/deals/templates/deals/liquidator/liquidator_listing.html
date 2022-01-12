@@ -14,6 +14,10 @@
     </select>
     </div>
 <table id="table" class="table table-striped">
+  <br>
+  <h4 style="text-align: left; font-weight:bold; color:rgb(6, 204, 39);"> **Note : Please click on edit button to
+    hide/show row.</h4>
+  <br>
       <thead>
         <tr>
          
@@ -29,7 +33,8 @@
       </thead>
       <tbody>
       {% for liquidator in liquidator_list %}
-        <tr>
+      {%if liquidator.select == True%}
+        <tr style="font-weight: bolder; background-color:rgb(242, 245, 105);">
             
             <td>{{liquidator.company}}</td> 
             <td>{{liquidator.name}}</td>
@@ -46,6 +51,21 @@
                 <i class="fa fa-trash-o"></i> Delete</a></td>
 
         </tr>
+        {%else%}
+    <tr>
+      <td></td>
+      <td></td>
+      <td><a onclick="editLiquidator(this)" title="{% url 'dashboard:deals:liquidator_edit' liquidator.id %}"
+          class="btn btn-info btn-xs">
+          <i class="fa fa-eye"></i> Click Here to Display Row</a></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+
+    </tr>
+    {% endif %}
+
       {% endfor %}
 
 

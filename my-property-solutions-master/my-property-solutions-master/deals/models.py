@@ -1,4 +1,5 @@
 from django.core.exceptions import ValidationError
+from django.db.models.query import QuerySet
 from leads.models import PropertyOwner
 from django.http import HttpResponse
 from django.db import models
@@ -774,7 +775,7 @@ class MyPurchaseDetails(models.Model):
         related_name="my_accountant_details",
     )
     agent = models.ForeignKey(
-        Contact,
+        "Agent",
         on_delete=models.CASCADE,
         null=True,
         blank=True,
@@ -990,6 +991,26 @@ class AFCAComplaintLodged(models.Model):
         _("Comments"), max_length=100, null=True, blank=True
     )
 
+class Agent(models.Model):
+    name = models.CharField(max_length=200)
+    company = models.CharField(max_length=200)
+    address = models.CharField(max_length=400)
+    phone = models.CharField(max_length=10)
+    email = models.EmailField()
+    created_by=models.CharField(max_length=100,blank=True,null=True)
+    select=models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('dashboard:deals:agentlist')
+
+    def clean(self):
+        model = self.__class__
+        if len(str(self.phone)) != 10:
+            raise ValidationError("Phone number must be 10 digits long!! ")
+
 
 class ListForSale(models.Model):
     SALE_METHOD_CHOICES = (
@@ -1006,8 +1027,9 @@ class ListForSale(models.Model):
         blank=True,
     )
     real_estate_company_agent = models.OneToOneField(
-        Contact, on_delete=models.CASCADE, related_name="real_estate_agent"
+        Contact, on_delete=models.CASCADE, related_name="real_estate_agent",blank=True,null=True
     )
+    agent=models.OneToOneField(Agent,on_delete=models.CASCADE,related_name='agent')
     percentage_regex = RegexValidator(
         regex=r"^[\d\,.]*$", message="Enter whole numbers."
     )
@@ -1112,6 +1134,8 @@ class Solicitor(models.Model):
     officeFax = models.PositiveIntegerField(default=0)
     email = models.EmailField()
     created_by=models.CharField(max_length=100,blank=True,null=True)
+    select=models.BooleanField(default=True)
+    deal=models.OneToOneField(Deal,on_delete=models.CASCADE,null=True,blank=True)
     # deal = models.ForeignKey(
     #     Deal, on_delete=models.CASCADE, null=True, blank=True)
 
@@ -1130,24 +1154,24 @@ class Solicitor(models.Model):
             raise ValidationError("Phone number must be 10 digits long!! ")
 
 
-class Agent(models.Model):
-    name = models.CharField(max_length=200)
-    company = models.CharField(max_length=200)
-    address = models.CharField(max_length=400)
-    phone = models.CharField(max_length=10)
-    email = models.EmailField()
-    created_by=models.CharField(max_length=100,blank=True,null=True)
+# class Agent(models.Model):
+#     name = models.CharField(max_length=200)
+#     company = models.CharField(max_length=200)
+#     address = models.CharField(max_length=400)
+#     phone = models.CharField(max_length=10)
+#     email = models.EmailField()
+#     created_by=models.CharField(max_length=100,blank=True,null=True)
 
-    def __str__(self):
-        return self.name
+#     def __str__(self):
+#         return self.name
 
-    def get_absolute_url(self):
-        return reverse('dashboard:deals:agentlist')
+#     def get_absolute_url(self):
+#         return reverse('dashboard:deals:agentlist')
 
-    def clean(self):
-        model = self.__class__
-        if len(str(self.phone)) != 10:
-            raise ValidationError("Phone number must be 10 digits long!! ")
+#     def clean(self):
+#         model = self.__class__
+#         if len(str(self.phone)) != 10:
+#             raise ValidationError("Phone number must be 10 digits long!! ")
 
 
 class BankNew(models.Model):
@@ -1157,6 +1181,7 @@ class BankNew(models.Model):
     phone = models.CharField(max_length=10)
     email = models.EmailField()
     created_by=models.CharField(max_length=100,blank=True,null=True)
+    select=models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
@@ -1177,6 +1202,7 @@ class Executor(models.Model):
     phone = models.CharField(max_length=10)
     email = models.EmailField()
     created_by=models.CharField(max_length=100,blank=True,null=True)
+    select=models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
@@ -1197,6 +1223,7 @@ class Liquidator(models.Model):
     phone = models.CharField(max_length=10)
     email = models.EmailField()
     created_by=models.CharField(max_length=100,blank=True,null=True)
+    select=models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
@@ -1217,6 +1244,7 @@ class Family(models.Model):
     phone = models.CharField(max_length=10)
     email = models.EmailField()
     created_by=models.CharField(max_length=100,blank=True,null=True)
+    select=models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
@@ -1237,6 +1265,7 @@ class Other(models.Model):
     phone = models.CharField(max_length=10)
     email = models.EmailField()
     created_by=models.CharField(max_length=100,blank=True,null=True)
+    select=models.BooleanField(default=True)
 
     def __str__(self):
         return self.name

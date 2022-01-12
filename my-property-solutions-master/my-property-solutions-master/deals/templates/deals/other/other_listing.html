@@ -1,97 +1,115 @@
-
 <a onclick="addFormAjax()" class="btn btn-primary pull-right">Add Other</a>
 
 {% if other_list %}
 <div class="w-20 pull-right" style="padding:0 2px;margin:0 4px;">
-    <select class="form-control" id="selectOther" >
-        <option value="0"> Select Other </option>
-        {% for other in select_list %}
-         <option value="{{other.id}}">
-            {{ other.name }}
-          </option>
-        {% endfor %}
+  <select class="form-control" id="selectOther">
+    <option value="0"> Select Other </option>
+    {% for other in select_list %}
+    <option value="{{other.id}}">
+      {{ other.name }}
+    </option>
+    {% endfor %}
 
-    </select>
-    </div>
-    <table id="table" class="table table-striped">
-      <thead>
-        <tr>
-         
-          <th>Name</th>
-          <th>Company</th>
-          <th>Postal Address</th>
-          <th>Mobile</th>  
-          <th>Email</th>
-          <th>Edit</th>
-          <th>Delete</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for other in other_list %}
-        <tr>
-            
-            
-            <td>{{other.name}}</td>
-            <td>{{other.company}}</td>
-            <td>{{other.address}}</td>
-            <td>{{other.phone}}</td>
-            <td>{{other.email}}</td>
+  </select>
+</div>
+<table id="table" class="table table-striped">
+  <br>
+  <h4 style="text-align: left; font-weight:bold; color:rgb(6, 204, 39);"> **Note : Please click on edit button to
+    hide/show row.</h4>
+  <br>
+  <thead>
+    <tr>
 
-            <td><a onclick="editOther(this)" title="{% url 'dashboard:deals:other_edit' other.id %}" class="btn btn-info btn-xs">
-                <i class="fa fa-pencil"></i> Edit</a></td>
-            <td><a onclick="deleteOther(this)" title="{% url 'dashboard:deals:other_delete' other.id %}"
-                   class="btn btn-danger btn-xs ve-sh-del-contact">
-                <i class="fa fa-trash-o"></i> Delete</a></td>
-
-        </tr>
-      {% endfor %}
+      <th>Name</th>
+      <th>Company</th>
+      <th>Postal Address</th>
+      <th>Mobile</th>
+      <th>Email</th>
+      <th>Edit</th>
+      <th>Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for other in other_list %}
+    {% if other.select == True %}
+    <tr style="font-weight: bolder; background-color:rgb(242, 245, 105);">
 
 
+      <td>{{other.name}}</td>
+      <td>{{other.company}}</td>
+      <td>{{other.address}}</td>
+      <td>{{other.phone}}</td>
+      <td>{{other.email}}</td>
+
+      <td><a onclick="editOther(this)" title="{% url 'dashboard:deals:other_edit' other.id %}"
+          class="btn btn-info btn-xs">
+          <i class="fa fa-pencil"></i> Edit</a></td>
+      <td><a onclick="deleteOther(this)" title="{% url 'dashboard:deals:other_delete' other.id %}"
+          class="btn btn-danger btn-xs ve-sh-del-contact">
+          <i class="fa fa-trash-o"></i> Delete</a></td>
+
+    </tr>
+    {%else%}
+    <tr>
+      <td></td>
+      <td></td>
+      <td><a onclick="editOther(this)" title="{% url 'dashboard:deals:other_edit' other.id %}"
+          class="btn btn-info btn-xs">
+          <i class="fa fa-eye"></i> Click Here to Display Row</a></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+
+    </tr>
+    {% endif %}
+
+    {% endfor %}
 
 
-      </tbody>
 
-    </table>
+
+  </tbody>
+
+</table>
 
 
 {% else %}
-  <div class="p-4">
-    No Other Found !
+<div class="p-4">
+  No Other Found !
 </div>
 {% endif%}
 
 
 <script>
 
-    $('#selectOther').on('change', function (e) {
-        loadOther(this.value);
-    });
+  $('#selectOther').on('change', function (e) {
+    loadOther(this.value);
+  });
 </script>
 
 
 
 <script>
-    function addFormAjax(){
+  function addFormAjax() {
     $('#myModal').modal('show');
-    urlPATH="{% url 'dashboard:deals:other_create' %}";
+    urlPATH = "{% url 'dashboard:deals:other_create' %}";
     $('.modal-body').load(urlPATH);
 
-    }
+  }
 
-    function editOther(tag){
+  function editOther(tag) {
     $('#myModal').modal('show');
-    urlPATH=tag.title;
+    urlPATH = tag.title;
     console.log(urlPATH);
     $('.modal-body').load(urlPATH);
-    }
+  }
 
-    function deleteOther(tag){
+  function deleteOther(tag) {
     $('#myModal').modal('show');
-    urlPATH=tag.title;
+    urlPATH = tag.title;
     console.log(urlPATH);
     $('.modal-body').load(urlPATH);
-    }
+  }
 
 </script>
-
-
