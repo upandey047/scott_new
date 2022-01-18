@@ -999,6 +999,7 @@ class Agent(models.Model):
     email = models.EmailField()
     created_by=models.CharField(max_length=100,blank=True,null=True)
     select=models.BooleanField(default=True)
+    deal_id=models.IntegerField(default=0)
 
     def __str__(self):
         return self.name
@@ -1135,7 +1136,8 @@ class Solicitor(models.Model):
     email = models.EmailField()
     created_by=models.CharField(max_length=100,blank=True,null=True)
     select=models.BooleanField(default=True)
-    deal=models.OneToOneField(Deal,on_delete=models.CASCADE,null=True,blank=True)
+    # deal=models.OneToOneField(Deal,on_delete=models.CASCADE,null=True,blank=True)
+    deal_id=models.IntegerField(default=0)
     # deal = models.ForeignKey(
     #     Deal, on_delete=models.CASCADE, null=True, blank=True)
 
@@ -1182,6 +1184,7 @@ class BankNew(models.Model):
     email = models.EmailField()
     created_by=models.CharField(max_length=100,blank=True,null=True)
     select=models.BooleanField(default=True)
+    deal_id=models.IntegerField(default=0)
 
     def __str__(self):
         return self.name
@@ -1203,6 +1206,7 @@ class Executor(models.Model):
     email = models.EmailField()
     created_by=models.CharField(max_length=100,blank=True,null=True)
     select=models.BooleanField(default=True)
+    deal_id=models.IntegerField(default=0)
 
     def __str__(self):
         return self.name
@@ -1224,6 +1228,7 @@ class Liquidator(models.Model):
     email = models.EmailField()
     created_by=models.CharField(max_length=100,blank=True,null=True)
     select=models.BooleanField(default=True)
+    deal_id=models.IntegerField(default=0)
 
     def __str__(self):
         return self.name
@@ -1245,6 +1250,7 @@ class Family(models.Model):
     email = models.EmailField()
     created_by=models.CharField(max_length=100,blank=True,null=True)
     select=models.BooleanField(default=True)
+    deal_id=models.IntegerField(default=0)
 
     def __str__(self):
         return self.name
@@ -1266,6 +1272,7 @@ class Other(models.Model):
     email = models.EmailField()
     created_by=models.CharField(max_length=100,blank=True,null=True)
     select=models.BooleanField(default=True)
+    deal_id=models.IntegerField(default=0)
 
     def __str__(self):
         return self.name

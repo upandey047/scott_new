@@ -76,6 +76,7 @@
               <div class="clearfix"></div>
             </div>
             <div class="x_content">
+              <!-- {{kwargs}} -->
                 <!-- <div id="deal_id">{{deal_id}}</div> -->
               
               {% for owner in deal.lead.property.property_owner.all %}
@@ -136,6 +137,7 @@
       <div class="tab-section">
 
         <h2 class="header"><b>ADD A PARTY</b></h2>
+        <!-- {{deal_id}} -->
         <ul class="nav nav-pills">
           <li><a data-toggle="pill" href="#menu2" onclick="loadSolicitor()">SOLICITOR</a></li>
           <li><a data-toggle="pill" href="#menu3" onclick="loadAgent()">AGENT</a></li>

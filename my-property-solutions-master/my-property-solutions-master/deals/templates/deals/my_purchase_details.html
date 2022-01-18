@@ -157,8 +157,8 @@
                             <div class="form-group">
                               <label class="col-md-3 col-sm-3 col-xs-12 control-label">Address
                               </label>
-                              <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
-                                <input type="text" name="Address" disabled="" value='{{ agent.address|default_if_none:"" }} {{ agent.number|default_if_none:"" }} {{ agent.street|default_if_none:"" }} {{ agent.suburb|default_if_none:"" }} {{ agent.state|default_if_none:"" }} {{ agent.post_code|default_if_none:"" }}' class="form-control" />
+                              <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js render-contact-details">
+                                {{ form.agent.address|add_error_class:"ve-sh-error-block" }}
                               </div>
                             </div>
                             <div class="form-group">

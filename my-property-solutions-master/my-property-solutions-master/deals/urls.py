@@ -64,6 +64,7 @@ urlpatterns = [
     path('owner-details/otherCreate',views.OtherCreateView.as_view(),name='othercreate'),
     path('owner-details/otherUpdate/<int:pk>/',views.OtherUpdateView.as_view(),name='otherupdate'),
     path('owner-details/otherDelete/<int:pk>/',views.OtherDeleteView.as_view(),name='otherdelete'),
+    # path('owner-details/newview/',views.MyView.as_view(),name='newview'),
     path("deal/<int:lead_id>/", views.DealCardView.as_view(), name="deal"),
     path("dealsale/<int:lead_id>/", views.DealSaleCardView.as_view(), name="dealsale"),
     path(

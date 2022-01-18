@@ -476,7 +476,7 @@ from .models import Solicitor,Agent,Executor,Liquidator,Family,Other
 class SolicitorForm(forms.ModelForm):
     class Meta:
         model =Solicitor
-        exclude=("created_by","select","deal")
+        exclude=("created_by","select","deal_id")
         
 class SolicitorForm2(forms.ModelForm):
     class Meta:
@@ -490,7 +490,7 @@ class SolicitorForm2(forms.ModelForm):
 class AgentForm(forms.ModelForm):
     class Meta:
         model =Agent
-        exclude=("created_by","select")
+        exclude=("created_by","select","deal_id")
         
 class AgentForm2(forms.ModelForm):
     class Meta:
@@ -504,7 +504,7 @@ class AgentForm2(forms.ModelForm):
 class BankNewForm(forms.ModelForm):
     class Meta:
         model =BankNew
-        exclude=("created_by","select")
+        exclude=("created_by","select","deal_id")
         # fields=['bank','unit','office_phone','email']
         # labels = {
         #     'unit': 'Postal Address'        
@@ -522,7 +522,7 @@ class BankNewForm2(forms.ModelForm):
 class ExecutorForm(forms.ModelForm):
     class Meta:
         model =Executor
-        exclude=("created_by","select")
+        exclude=("created_by","select","deal_id")
         
 class ExecutorForm2(forms.ModelForm):
     class Meta:
@@ -537,7 +537,7 @@ class ExecutorForm2(forms.ModelForm):
 class FamilyForm(forms.ModelForm):
     class Meta:
         model =Family
-        exclude=("created_by","select")
+        exclude=("created_by","select","deal_id")
         
 class FamilyForm2(forms.ModelForm):
     class Meta:
@@ -551,7 +551,7 @@ class FamilyForm2(forms.ModelForm):
 class LiquidatorForm(forms.ModelForm):
     class Meta:
         model =Liquidator
-        exclude=("created_by","select")
+        exclude=("created_by","select","deal_id")
         
 class LiquidatorForm2(forms.ModelForm):
     class Meta:
@@ -565,7 +565,7 @@ class LiquidatorForm2(forms.ModelForm):
 class OtherForm(forms.ModelForm):
     class Meta:
         model =Other
-        exclude=("created_by","select")
+        exclude=("created_by","select","deal_id")
 
 class OtherForm2(forms.ModelForm):
     class Meta:
