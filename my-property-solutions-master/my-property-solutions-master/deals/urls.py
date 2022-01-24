@@ -6,6 +6,15 @@ app_name = "deals"
 urlpatterns = [
     path('owner-details/solicitorListing/',views.solicitor_list,name='solicitorlisting'),
     path('owner-details/solicitorcreate/',views.solicitor_add,name='solicitor_create'),
+    #
+    path('owner-details/solicitorchangestatus/',views.solicitor_change_status,name='solicitor_change_status'),
+    path('owner-details/agentchangestatus/',views.agent_change_status,name='agent_change_status'),
+    path('owner-details/bankchangestatus/',views.bank_change_status,name='bank_change_status'),
+    path('owner-details/familychangestatus/',views.family_change_status,name='family_change_status'),
+    path('owner-details/executorchangestatus/',views.executor_change_status,name='executor_change_status'),
+    path('owner-details/liquidatorchangestatus/',views.liquidator_change_status,name='liquidator_change_status'),
+    path('owner-details/otherchangestatus/',views.other_change_status,name='other_change_status'),
+    #
     path('owner-details/solicitorupdate/<pk>/',views.solicitor_edit,name='solicitor_edit'),
     path('owner-details/solicitordelete/<pk>/',views.solicitor_delete,name='solicitor_delete'),
     path('owner-details/agentListing/',views.agent_list,name='agentlisting'),

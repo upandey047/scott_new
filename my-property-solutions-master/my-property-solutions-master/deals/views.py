@@ -6915,7 +6915,7 @@ from django.contrib.auth.decorators import login_required
 
 #SolicitorViews
 
-def solicitor_list(request,**kwargs):
+def solicitor_list(request):
     context={}
     id=request.POST.get('id',0)
     deal=request.session.get('var')
@@ -6956,13 +6956,24 @@ def solicitor_add(request):
     # print(deal_id)
     return render(request,'deals/solicitor/solicitor_form.html',context)
 
-#
+def solicitor_change_status(request):
+    d = request.body
+    print(request.body)
+    d = str(d).split(';')
+    s_obj =Solicitor.objects.get(pk=d[0].split('\'')[1])
+    if d[1].split('\'')[0] == 'true':
+        s_obj.select = True
+    else :
+        s_obj.select = False
+    s_obj.save()
+    return JsonResponse({'success':"ok"})
+
 
 def solicitor_edit(request,pk=None):
     context={}
     context['pk']=pk
     s_obj =Solicitor.objects.get(pk=pk)
-    form =SolicitorForm2(request.POST or None, instance=s_obj)
+    form =SolicitorForm(request.POST or None, instance=s_obj)
     if form.is_valid():
         form.save()
         return JsonResponse({'success':"ok"})
@@ -7010,11 +7021,23 @@ def agent_add(request):
     context['form']=form
     return render(request,'deals/agent/agent_form.html',context)
 
+def agent_change_status(request):
+    d = request.body
+    d = str(d).split(';')
+    s_obj =Agent.objects.get(pk=d[0].split('\'')[1])
+    if d[1].split('\'')[0] == 'true':
+        s_obj.select = True
+    else :
+        s_obj.select = False
+    s_obj.save()
+    return JsonResponse({'success':"ok"})
+
+
 def agent_edit(request,pk=None):
     context={}
     context['pk']=pk
     s_obj =Agent.objects.get(pk=pk)
-    form =AgentForm2(request.POST or None, instance=s_obj)
+    form =AgentForm(request.POST or None, instance=s_obj)
     if form.is_valid():
         form.save()
         return JsonResponse({'success':"ok"})
@@ -7061,11 +7084,22 @@ def bank_add(request):
     context['form']=form
     return render(request,'deals/bank/bank_form.html',context)
 
+def bank_change_status(request):
+    d = request.body
+    d = str(d).split(';')
+    s_obj =BankNew.objects.get(pk=d[0].split('\'')[1])
+    if d[1].split('\'')[0] == 'true':
+        s_obj.select = True
+    else :
+        s_obj.select = False
+    s_obj.save()
+    return JsonResponse({'success':"ok"})
+
 def bank_edit(request,pk=None):
     context={}
     context['pk']=pk
     s_obj =BankNew.objects.get(pk=pk)
-    form =BankNewForm2(request.POST or None, instance=s_obj)
+    form =BankNewForm(request.POST or None, instance=s_obj)
     if form.is_valid():
         form.save()
         return JsonResponse({'success':"ok"})
@@ -7110,11 +7144,22 @@ def executor_add(request):
     context['form']=form
     return render(request,'deals/executor/executor_form.html',context)
 
+def executor_change_status(request):
+    d = request.body
+    d = str(d).split(';')
+    s_obj =Executor.objects.get(pk=d[0].split('\'')[1])
+    if d[1].split('\'')[0] == 'true':
+        s_obj.select = True
+    else :
+        s_obj.select = False
+    s_obj.save()
+    return JsonResponse({'success':"ok"})
+
 def executor_edit(request,pk=None):
     context={}
     context['pk']=pk
     s_obj =Executor.objects.get(pk=pk)
-    form =ExecutorForm2(request.POST or None, instance=s_obj)
+    form =ExecutorForm(request.POST or None, instance=s_obj)
     if form.is_valid():
         form.save()
         return JsonResponse({'success':"ok"})
@@ -7158,11 +7203,22 @@ def family_add(request):
     context['form']=form
     return render(request,'deals/family/family_form.html',context)
 
+def family_change_status(request):
+    d = request.body
+    d = str(d).split(';')
+    s_obj =Family.objects.get(pk=d[0].split('\'')[1])
+    if d[1].split('\'')[0] == 'true':
+        s_obj.select = True
+    else :
+        s_obj.select = False
+    s_obj.save()
+    return JsonResponse({'success':"ok"})
+
 def family_edit(request,pk=None):
     context={}
     context['pk']=pk
     s_obj =Family.objects.get(pk=pk)
-    form =FamilyForm2(request.POST or None, instance=s_obj)
+    form =FamilyForm(request.POST or None, instance=s_obj)
     if form.is_valid():
         form.save()
         return JsonResponse({'success':"ok"})
@@ -7206,11 +7262,22 @@ def liquidator_add(request):
     context['form']=form
     return render(request,'deals/liquidator/liquidator_form.html',context)
 
+def liquidator_change_status(request):
+    d = request.body
+    d = str(d).split(';')
+    s_obj =Liquidator.objects.get(pk=d[0].split('\'')[1])
+    if d[1].split('\'')[0] == 'true':
+        s_obj.select = True
+    else :
+        s_obj.select = False
+    s_obj.save()
+    return JsonResponse({'success':"ok"})
+
 def liquidator_edit(request,pk=None):
     context={}
     context['pk']=pk
     s_obj =Liquidator.objects.get(pk=pk)
-    form =LiquidatorForm2(request.POST or None, instance=s_obj)
+    form =LiquidatorForm(request.POST or None, instance=s_obj)
     if form.is_valid():
         form.save()
         return JsonResponse({'success':"ok"})
@@ -7254,11 +7321,22 @@ def other_add(request):
     context['form']=form
     return render(request,'deals/other/other_form.html',context)
 
+def other_change_status(request):
+    d = request.body
+    d = str(d).split(';')
+    s_obj =Other.objects.get(pk=d[0].split('\'')[1])
+    if d[1].split('\'')[0] == 'true':
+        s_obj.select = True
+    else :
+        s_obj.select = False
+    s_obj.save()
+    return JsonResponse({'success':"ok"})
+
 def other_edit(request,pk=None):
     context={}
     context['pk']=pk
     s_obj =Other.objects.get(pk=pk)
-    form =OtherForm2(request.POST or None, instance=s_obj)
+    form =OtherForm(request.POST or None, instance=s_obj)
     if form.is_valid():
         form.save()
         return JsonResponse({'success':"ok"})

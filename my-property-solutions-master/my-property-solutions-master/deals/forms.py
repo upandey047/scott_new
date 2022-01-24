@@ -506,9 +506,9 @@ class BankNewForm(forms.ModelForm):
         model =BankNew
         exclude=("created_by","select","deal_id")
         # fields=['bank','unit','office_phone','email']
-        # labels = {
-        #     'unit': 'Postal Address'        
-        # }
+        labels = {
+            'company': 'Contact Name'        
+        }
         
 class BankNewForm2(forms.ModelForm):
     class Meta:

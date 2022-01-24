@@ -2,24 +2,19 @@
 
 {% if agent_list %}
 <div class="w-20 pull-right" style="padding:0 2px;margin:0 4px;">
-  <select class="form-control" id="selectAgent">
-    <option value="0"> Select Agent </option>
-    {% for agent in select_list %}
-    <option value="{{agent.id}}">
-      {{ agent.name }}
-    </option>
-    {% endfor %}
-
-  </select>
+  <div class="w-20 pull-right" style="padding:0 2px;margin:0 4px;">
+    <select class="form-control" id="selectAgent2">
+      <option value="active" selected>Show Active</option>
+      <option value="all">Show All </option>  
+      <option value="inactive">Show Inactive</option>
+    </select>
+  </div>
 </div>
 <table id="table" class="table table-striped">
-  <br>
-  <h4 style="text-align: left; font-weight:bold; color:rgb(6, 204, 39);"> **Note : Please click on edit button to
-    hide/show row.</h4>
-  <br>
   <thead>
     <tr>
-      <th>Name</th>
+      <th>Select</th>
+      <th>Contact Name</th>
       <th>Company</th>
       <th>Postal Address</th>
       <th>Mobile</th>
@@ -30,9 +25,14 @@
   </thead>
   <tbody>
     {% for agent in agent_list %}
-    {% if agent.select == True %}
-    <tr style="font-weight: bolder; background-color:rgb(242, 245, 105);">
-
+    <tr class="status-{{agent.select}}">
+      
+      
+      {% if agent.select == True %}
+      <td><input type="checkbox" onclick="change_s_status(this, false)" value="{{agent.id}}" checked></td>
+      {% else %}
+      <td><input type="checkbox" onclick="change_s_status(this, true)" value="{{agent.id}}"></td>
+      {% endif %}
 
       <td>{{agent.name}}</td>
       <td>{{agent.company}}</td>
@@ -46,40 +46,44 @@
       <td><a onclick="deleteAgent(this)" title="{% url 'dashboard:deals:agent_delete' agent.id %}"
           class="btn btn-danger btn-xs ve-sh-del-contact">
           <i class="fa fa-trash-o"></i> Delete</a></td>
-
     </tr>
-    {%else%}
-    <tr>
-
-      <td></td>
-      <td></td>
-      <td></td>
-      <td><a onclick="editAgent(this)" title="{% url 'dashboard:deals:agent_edit' agent.id %}"
-          class="btn btn-info btn-xs">
-          <i class="fa fa-eye"></i> Click Here to Display Row</a></td>
-      
-      <td></td>
-      <td></td>
-      <td></td>
-      
-    </tr>
-    {% endif %}
     {% endfor %}
-
-
-
-
   </tbody>
-
 </table>
-
-
 {% else %}
 <div class="p-4">
   No Agent Found !
 </div>
 {% endif%}
-
+<script>
+  $('.status-True').css('display','table-row');
+      $('.status-False').css('display','none');
+  $('#selectAgent2').on('change', function (e) {
+    if(this.value == 'all'){
+      $('.status-True').css('display','table-row');
+      $('.status-False').css('display','table-row');
+    }else if(this.value == 'active'){
+      $('.status-True').css('display','table-row');
+      $('.status-False').css('display','none');
+    }else {
+      $('.status-True').css('display','none');
+      $('.status-False').css('display','table-row');
+    }
+    //loadagent(this.value);
+  });
+  function change_s_status(x,y) {
+    var d = ''.concat(x.value).concat(';').concat(y)
+    var saveData = $.ajax({
+      type: 'POST',
+      url: "agentchangestatus/",
+      data: d,
+      headers: {"X-CSRFToken": '{{csrf_token}}'},
+      dataType: "text",
+      success: function(resultData) { loadAgent(); }
+    });
+    //saveData.error(function() { alert("Something went wrong"); });
+  }
+</script>
 
 <script>
 
@@ -112,4 +116,6 @@
     $('.modal-body').load(urlPATH);
   }
 
-</script>
+</script>   
+    
+    

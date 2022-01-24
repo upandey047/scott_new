@@ -2,24 +2,18 @@
 
 {% if executor_list %}
 <div class="w-20 pull-right" style="padding:0 2px;margin:0 4px;">
-  <select class="form-control" id="selectAgent">
-    <option value="0"> Select Executor </option>
-    {% for executor in select_list %}
-    <option value="{{executor.id}}">
-      {{ executor.name }}
-    </option>
-    {% endfor %}
-
-  </select>
+  <div class="w-20 pull-right" style="padding:0 2px;margin:0 4px;">
+    <select class="form-control" id="selectExecutor2">
+      <option value="active" selected>Show Active</option>
+      <option value="all">Show All </option>  
+      <option value="inactive">Show Inactive</option>
+    </select>
+  </div>
 </div>
 <table id="table" class="table table-striped">
-  <br>
-  <h4 style="text-align: left; font-weight:bold; color:rgb(6, 204, 39);"> **Note : Please click on edit button to
-    hide/show row.</h4>
-  <br>
   <thead>
     <tr>
-
+      <th>Select</th>
       <th>Name</th>
       <th>Company</th>
       <th>Postal Address</th>
@@ -30,9 +24,13 @@
     </tr>
   </thead>
   <tbody>
-    {% for executor in executor_list %}
-    {% if executor.select == True %}
-      <tr style="font-weight: bolder; background-color:rgb(242, 245, 105);">
+  {% for executor in executor_list %}
+    <tr class="status-{{executor.select}}"> 
+      {% if executor.select == True %}
+      <td><input type="checkbox" onclick="change_s_status(this, false)" value="{{executor.id}}" checked></td>
+      {% else %}
+      <td><input type="checkbox" onclick="change_s_status(this, true)" value="{{executor.id}}"></td>
+      {% endif %}
     
         <td>{{executor.name}}</td>
         <td>{{executor.company}}</td>
@@ -46,29 +44,9 @@
         <td><a onclick="deleteExecutor(this)" title="{% url 'dashboard:deals:executor_delete' executor.id %}"
             class="btn btn-danger btn-xs ve-sh-del-contact">
           <i class="fa fa-trash-o"></i> Delete</a></td>
-
     </tr>
-    {%else%}
-    <tr>
-      <td></td>
-      <td></td>
-      <td><a onclick="editExecutor(this)" title="{% url 'dashboard:deals:executor_edit' executor.id %}"
-          class="btn btn-info btn-xs">
-          <i class="fa fa-eye"></i> Click Here to Display Row</a></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-  
-    </tr>
-  {% endif %}
-  {% endfor %}
-
-
-
-
+  {%endfor%}
   </tbody>
-
 </table>
 
 
@@ -78,6 +56,36 @@
 </div>
 {% endif%}
 
+
+<script>
+  $('.status-True').css('display','table-row');
+      $('.status-False').css('display','none');
+  $('#selectExecutor2').on('change', function (e) {
+    if(this.value == 'all'){
+      $('.status-True').css('display','table-row');
+      $('.status-False').css('display','table-row');
+    }else if(this.value == 'active'){
+      $('.status-True').css('display','table-row');
+      $('.status-False').css('display','none');
+    }else {
+      $('.status-True').css('display','none');
+      $('.status-False').css('display','table-row');
+    }
+    //loadagent(this.value);
+  });
+  function change_s_status(x,y) {
+    var d = ''.concat(x.value).concat(';').concat(y)
+    var saveData = $.ajax({
+      type: 'POST',
+      url: "executorchangestatus/",
+      data: d,
+      headers: {"X-CSRFToken": '{{csrf_token}}'},
+      dataType: "text",
+      success: function(resultData) { loadExecutor(); }
+    });
+    
+  }
+</script>
 
 <script>
 

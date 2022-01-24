@@ -2,24 +2,22 @@
 
 {% if solicitor_list %}
 <div class="w-20 pull-right" style="padding:0 2px;margin:0 4px;">
-  <select class="form-control" id="selectSolicitor">
-    <option value="0"> Select Solicitor </option>
-    {% for solicitor in select_list %}
-    <option value="{{solicitor.id}}">
-      {{ solicitor.contactName }}
-    </option>
-    {% endfor %}
-
-  </select>
+  <div class="w-20 pull-right" style="padding:0 2px;margin:0 4px;">
+    <select class="form-control" id="selectSolicitor2">
+      <option value="active" selected>Show Active</option>
+      <option value="all">Show All </option>  
+      <option value="inactive">Show Inactive</option>
+    </select>
+  </div>
 </div>
 <table id="table" class="table table-striped">
-  <br>
+  <!-- <br>
   <h4 style="text-align: left; font-weight:bold; color:rgb(6, 204, 39);"> **Note : Please click on edit button to
     hide/show row.</h4>
-  <br>
+  <br> -->
   <thead>
     <tr>
-
+      <th>Select</th>
       <th>Law Firm</th>
       <!-- <th>Owner Name</th> -->
       <th>Contact Name</th>
@@ -35,9 +33,14 @@
   </thead>
   <tbody>
     {% for solicitor in solicitor_list %}
-    {% if solicitor.select == True %}
-    <tr style="font-weight: bolder; background-color:rgb(242, 245, 105);">
+    <tr class="status-{{solicitor.select}}">
       <!-- <td>{{solicitor.id}}</td> -->
+      
+      {% if solicitor.select == True %}
+      <td><input type="checkbox" onclick="change_s_status(this, false)" value="{{solicitor.id}}" checked></td>
+      {% else %}
+      <td><input type="checkbox" onclick="change_s_status(this, true)" value="{{solicitor.id}}"></td>
+      {% endif %}
 
       <td>{{solicitor.lawFirm}}</td>
       <!-- <td>{{solicitor.owner}}</td> -->
@@ -56,23 +59,6 @@
           class="btn btn-danger btn-xs ve-sh-del-contact">
           <i class="fa fa-trash-o"></i> Delete</a></td>
     </tr>
-    {% else %}
-    <tr>
-
-      <td></td>
-      <td></td>
-      <td></td>
-      <td><a onclick="editSolicitor(this)" title="{% url 'dashboard:deals:solicitor_edit' solicitor.id %}"
-          class="btn btn-info btn-xs">
-          <i class="fa fa-eye"></i> Click Here to Display Row</a></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <!-- <td></td> -->
-    </tr>
-    {% endif %}
     {% endfor %}
   </tbody>
 </table>
@@ -81,7 +67,35 @@
   No Solicitor Found !
 </div>
 {% endif%}
-
+<script>
+  $('.status-True').css('display','table-row');
+      $('.status-False').css('display','none');
+  $('#selectSolicitor2').on('change', function (e) {
+    if(this.value == 'all'){
+      $('.status-True').css('display','table-row');
+      $('.status-False').css('display','table-row');
+    }else if(this.value == 'active'){
+      $('.status-True').css('display','table-row');
+      $('.status-False').css('display','none');
+    }else {
+      $('.status-True').css('display','none');
+      $('.status-False').css('display','table-row');
+    }
+    //loadSolicitor(this.value);
+  });
+  function change_s_status(x,y) {
+    var d = ''.concat(x.value).concat(';').concat(y)
+    var saveData = $.ajax({
+      type: 'POST',
+      url: "solicitorchangestatus/",
+      data: d,
+      headers: {"X-CSRFToken": '{{csrf_token}}'},
+      dataType: "text",
+      success: function(resultData) { loadSolicitor(); }
+    });
+    //saveData.error(function() { alert("Something went wrong"); });
+  }
+</script>
 
 <script>
 
