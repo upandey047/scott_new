@@ -775,12 +775,17 @@ class MyPurchaseDetails(models.Model):
         related_name="my_accountant_details",
     )
     agent = models.ForeignKey(
-        "Agent",
+        Contact,
         on_delete=models.CASCADE,
         null=True,
         blank=True,
         related_name="my_agent_details",
     )
+    agent1=models.ForeignKey("Agent",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="agent1", )
     conveyancer = models.ForeignKey(
         Contact,
         on_delete=models.CASCADE,

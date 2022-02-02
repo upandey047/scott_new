@@ -44,6 +44,8 @@ class ContactsView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, *args, **kwargs):
         contacts_sub_category = self.kwargs["contacts_sub_category"]
         contacts_category = self.kwargs["contacts_category"]
+        print(self.kwargs["contacts_category"],self.kwargs["contacts_sub_category"])
+        print(contacts_category)
         contacts = Contact.objects.filter(user=self.request.user).filter(
             sub_category=contacts_sub_category
         )

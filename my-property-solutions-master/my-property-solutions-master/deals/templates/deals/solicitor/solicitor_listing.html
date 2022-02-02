@@ -4,8 +4,8 @@
 <div class="w-20 pull-right" style="padding:0 2px;margin:0 4px;">
   <div class="w-20 pull-right" style="padding:0 2px;margin:0 4px;">
     <select class="form-control" id="selectSolicitor2">
-      <option value="active" selected>Show Active</option>
-      <option value="all">Show All </option>  
+      <option value="all" selected>Show All </option>  
+      <option value="active">Show Active</option>
       <option value="inactive">Show Inactive</option>
     </select>
   </div>
@@ -68,8 +68,7 @@
 </div>
 {% endif%}
 <script>
-  $('.status-True').css('display','table-row');
-      $('.status-False').css('display','none');
+ 
   $('#selectSolicitor2').on('change', function (e) {
     if(this.value == 'all'){
       $('.status-True').css('display','table-row');

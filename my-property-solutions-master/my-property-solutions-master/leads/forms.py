@@ -37,8 +37,8 @@ class PropertyOwnerForm(FormFormatter):
 
     def __init__(self, *args, **kwargs):
         super(PropertyOwnerForm, self).__init__(*args, **kwargs)
-        self.fields["first_name"].widget.attrs["required"] = True
-        self.fields["last_name"].widget.attrs["required"] = True
+        self.fields["first_name"].widget.attrs["required"] = False
+        self.fields["last_name"].widget.attrs["required"] = False
 
 
 class DeceasedPropertyOwnerForm(FormFormatter):

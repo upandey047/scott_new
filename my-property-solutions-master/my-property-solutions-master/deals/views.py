@@ -551,7 +551,7 @@ class OwnerDetailsView(LoginRequiredMixin, View):
             pk=kwargs["deal_id"]
         )
         self.request.session['var']=deal_object.id 
-        print(deal_object.id,"hello1",self.request.session['var'])
+        # print(deal_object.id,"hello1",self.request.session['var'])
         
         if deal_object.lead.user != self.request.user:
             raise Http404
@@ -4747,7 +4747,10 @@ class MyPurchaseDetailsView(LoginRequiredMixin, View):
         form.fields["accountant"].queryset = contacts_queryset.filter(
             sub_category="accountants"
         )
-        form.fields["agent"].queryset = Agent.objects.filter(
+        form.fields["agent"].queryset = contacts_queryset.filter(
+            sub_category="agents"
+        )
+        form.fields["agent1"].queryset = Agent.objects.filter(
             created_by=self.request.user
         )
         form.fields["conveyancer"].queryset = contacts_queryset.filter(
@@ -4758,6 +4761,8 @@ class MyPurchaseDetailsView(LoginRequiredMixin, View):
         context["lead_id"] = deal_obj.lead.id
         context["accountant"] = my_purchase_details_obj.accountant
         context["agent"] = my_purchase_details_obj.agent
+        # context["agent1"] = my_purchase_details_obj.agent1
+        
         context["conveyancer"] = my_purchase_details_obj.conveyancer
         context["entity"] = entity_obj
         context["bank_obj"] = my_purchase_details_obj.bank
@@ -4879,13 +4884,13 @@ class MyPurchaseDetailsView(LoginRequiredMixin, View):
         context["lead_id"] = deal_obj.lead.id
         context["accountant"] = my_purchase_details_obj.accountant
         context["agent"] = my_purchase_details_obj.agent
+        # context["agent1"] = my_purchase_details_obj.agent1
         context["conveyancer"] = my_purchase_details_obj.conveyancer
         context["entity"] = entity_obj
         context["bank_obj"] = my_purchase_details_obj.bank
         context["all_private_lenders"] = all_private_lenders
         context["private_lender_queryset"] = property_private_lenders
         return render(self.request, "deals/my_purchase_details.html", context)
-
 
 class EditLenderDetailsView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
@@ -5044,10 +5049,8 @@ class RenderEntityDetailsView(LoginRequiredMixin, View):
 
 class RenderContactDetailsView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        return render(
-            request,
-            "deals/render-my-details/contact-details.html",
-            {"contact": Contact.objects.get(pk=kwargs["contact_id"])},
+        return render(request,"deals/render-my-details/contact-details.html",
+        {"contact": Contact.objects.get(pk=kwargs["contact_id"])},
         )
 
 
@@ -6282,8 +6285,7 @@ class RenovationExternalLocationMaterialsView(LoginRequiredMixin, View):
 
 
 class RenovationExternalLocationMaterialsSelectDetailsView(
-    LoginRequiredMixin, View
-):
+    LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         location_id = kwargs["location_id"]
         deal_obj = Deal.objects.select_related(
@@ -6565,6 +6567,7 @@ class ListForSaleView(LoginRequiredMixin, View):
         deal = Deal.objects.select_related("lead__user").get(
             pk=kwargs["deal_id"]
         )
+        # self.request.session['var']=deal
         if deal.lead.user != self.request.user:
             raise Http404
         list_for_sale = ListForSale.objects.filter(deal=deal)
@@ -6747,6 +6750,7 @@ def method_for_calculating_current_expenses(deal_id):  # NOQA: C901
 
 from .models import Solicitor,Agent,BankNew,Executor,Family,Liquidator,Family,Other
 from django.views.generic import ListView,CreateView,UpdateView,DeleteView,DetailView
+
 #Solicitor 
 class SolicitorListView(ListView):
     model=Solicitor

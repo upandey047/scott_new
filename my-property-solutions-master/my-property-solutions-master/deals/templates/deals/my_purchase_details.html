@@ -138,15 +138,15 @@
                           </div>
                         </div>
                         <hr class="col-sm-offset-3 col-md-6 col-sm-6 col-xs-12">
-                        <div id="agent-div">
+                        <div id="agent1-div">
                           <div class="form-group">
                             <label class="col-md-3 col-sm-3 col-xs-12 control-label">Agent
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js render-contact-details">
-                              {{ form.agent|add_error_class:"ve-sh-error-block" }}
+                              {{ form.agent1|add_error_class:"ve-sh-error-block" }}
                             </div>
                             {% if form.errors %}
-                              {% for error in form.agent.errors %}
+                              {% for error in form.agent1.errors %}
                                 <div class="col-sm-offset-3 col-md-9 col-sm-9 col-xs-12 ve-sh-error-text">
                                   {{ error|escape }}
                                 </div>
@@ -157,20 +157,20 @@
                             <div class="form-group">
                               <label class="col-md-3 col-sm-3 col-xs-12 control-label">Address
                               </label>
-                              <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js render-contact-details">
-                                {{ form.agent.address|add_error_class:"ve-sh-error-block" }}
+                              <div class="col-md-6 col-sm-6 col-xs-12 ve-sh-number-js">
+                                <input type="text" name="Address" disabled="" value='{{ agent1.address|default_if_none:"" }} {{ agent1.number|default_if_none:"" }} {{ agent1.street|default_if_none:"" }} {{ agent1.suburb|default_if_none:"" }} {{ agent1.state|default_if_none:"" }} {{ agent1.post_code|default_if_none:"" }}' class="form-control" />
                               </div>
                             </div>
                             <div class="form-group">
                               <label class="col-md-3 col-sm-3 col-xs-12 control-label">Phone
                               </label>
                               <div class="col-md-2 col-sm-2 col-xs-12 ve-sh-number-js">
-                                <input type="text" name="Phone" disabled="" value='{{ agent.phone|default_if_none:"" }}' class="form-control" />
+                                <input type="text" name="Phone" disabled="" value='{{ agent1.phone|default_if_none:"" }}' class="form-control" />
                               </div>
                               <label class="col-md-1 col-sm-1 col-xs-12 control-label">Email
                               </label>
                               <div class="col-md-3 col-sm-3 col-xs-12 ve-sh-number-js">
-                                <input type="text" name="Email" disabled="" value='{{ agent.email|default_if_none:"" }}' class="form-control" />
+                                <input type="text" name="Email" disabled="" value='{{ agent1.email|default_if_none:"" }}' class="form-control" />
                               </div>
                             </div>
                           </div>
