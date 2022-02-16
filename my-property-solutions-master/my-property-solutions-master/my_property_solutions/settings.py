@@ -38,9 +38,7 @@ DEFAULT_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.forms",
-    
-   
-    
+        
 ]
 
 CUSTOM_APPS = [
@@ -162,8 +160,8 @@ ACCOUNT_FORMS = {"signup": "user_profile.forms.ProfileSignupForm"}
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
-EMAIL_HOST_USER = "dummy@gmail.com"
-EMAIL_HOST_PASSWORD = "dummy12345"
+EMAIL_HOST_USER = "s.brown.property.solutions@gmail.com"
+EMAIL_HOST_PASSWORD = "solutions.property.brown.s"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DATE_INPUT_FORMATS = ("%d-%m-%Y", "%Y-%m-%d")

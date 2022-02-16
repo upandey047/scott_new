@@ -33,8 +33,8 @@ urlpatterns = [
             (
                 [
                     path("", LoginView.as_view(), name="login"),
-                    # path("signup/",SignupView.as_view(form_class=ProfileSignupForm),name="signup",),
-                    path("signup/",views.landing_page,name='signup'),
+                    path("signup/",SignupView.as_view(form_class=ProfileSignupForm),name="signup",),
+                    path("landing/",views.landing_page,name="landing"),
                 ],
                 "authsession",
             ),

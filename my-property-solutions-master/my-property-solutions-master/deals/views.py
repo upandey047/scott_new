@@ -546,6 +546,7 @@ class OwnerDetailsView(LoginRequiredMixin, View):
         return render(request, "deals/owner_details.html", ctx)
 
     def get_context_data(self, *args, **kwargs):
+        print(self.kwargs['deal_id'])
         agent_object = None
         deal_object = Deal.objects.select_related("lead__property__bank").get(
             pk=kwargs["deal_id"]
