@@ -25,7 +25,7 @@ from . import views
 # from django.templatetags.static import static
 
 from user_profile.forms import ProfileSignupForm
-
+from django.contrib.auth.decorators import login_required
 urlpatterns = [
     path(
         "",
